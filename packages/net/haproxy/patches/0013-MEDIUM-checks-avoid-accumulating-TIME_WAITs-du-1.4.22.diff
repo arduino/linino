@@ -1,0 +1,91 @@
+From 2f61455a647d9539a49392d475e7f2aeef7dcfce Mon Sep 17 00:00:00 2001
+From: Willy Tarreau <w@1wt.eu>
+Date: Sat, 29 Dec 2012 22:23:02 +0100
+Subject: MEDIUM: checks: avoid accumulating TIME_WAITs during checks
+
+Some checks which do not induce a close from the server accumulate
+local TIME_WAIT sockets because they're cleanly shut down. Typically
+TCP probes cause this. This is very problematic when there are many
+servers, when the checks are fast or when local source ports are rare.
+
+So now we'll disable lingering on the socket instead of sending a
+shutdown. Before doing this we try to drain any possibly pending data.
+That way we avoid sending an RST when the server has closed first.
+
+This change means that some servers will see more RSTs, but this is
+needed to avoid local source port starvation.
+(cherry picked from commit fd29cc537b8511db6e256529ded625c8e7f856d0)
+---
+ src/checks.c |   22 +++++++++++++++++-----
+ 1 files changed, 17 insertions(+), 5 deletions(-)
+
+diff --git a/src/checks.c b/src/checks.c
+index 0aa65c0..3d01282 100644
+--- a/src/checks.c
++++ b/src/checks.c
+@@ -833,6 +833,10 @@ static int event_srv_chk_w(int fd)
+ 
+ 			/* good TCP connection is enough */
+ 			set_server_check_status(s, HCHK_STATUS_L4OK, NULL);
++
++			/* avoid accumulating TIME_WAIT on connect-only checks */
++			setsockopt(fd, SOL_SOCKET, SO_LINGER,
++				   (struct linger *) &nolinger, sizeof(struct linger));
+ 			goto out_wakeup;
+ 		}
+ 	}
+@@ -877,7 +881,7 @@ static int event_srv_chk_r(int fd)
+ 	struct task *t = fdtab[fd].owner;
+ 	struct server *s = t->context;
+ 	char *desc;
+-	int done;
++	int done, shutr;
+ 	unsigned short msglen;
+ 
+ 	if (unlikely((s->result & SRV_CHK_ERROR) || (fdtab[fd].state == FD_STERROR))) {
+@@ -898,7 +902,7 @@ static int event_srv_chk_r(int fd)
+ 	 * with running the checks without attempting another socket read.
+ 	 */
+ 
+-	done = 0;
++	done = shutr = 0;
+ 	for (len = 0; s->check_data_len < global.tune.chksize; s->check_data_len += len) {
+ 		len = recv(fd, s->check_data + s->check_data_len, global.tune.chksize - s->check_data_len, 0);
+ 		if (len <= 0)
+@@ -906,14 +910,14 @@ static int event_srv_chk_r(int fd)
+ 	}
+ 
+ 	if (len == 0)
+-		done = 1; /* connection hangup received */
++		done = shutr = 1; /* connection hangup received */
+ 	else if (len < 0 && errno != EAGAIN) {
+ 		/* Report network errors only if we got no other data. Otherwise
+ 		 * we'll let the upper layers decide whether the response is OK
+ 		 * or not. It is very common that an RST sent by the server is
+ 		 * reported as an error just after the last data chunk.
+ 		 */
+-		done = 1;
++		done = shutr = 1;
+ 		if (!s->check_data_len) {
+ 			if (!(s->result & SRV_CHK_ERROR))
+ 				set_server_check_status(s, HCHK_STATUS_SOCKERR, NULL);
+@@ -1162,7 +1166,15 @@ static int event_srv_chk_r(int fd)
+ 	*s->check_data = '\0';
+ 	s->check_data_len = 0;
+ 
+-	/* Close the connection... */
++	/* Close the connection... We absolutely want to perform a hard close
++	 * and reset the connection if some data are pending, otherwise we end
++	 * up with many TIME_WAITs and eat all the source port range quickly.
++	 * To avoid sending RSTs all the time, we first try to drain pending
++	 * data.
++	 */
++	if (!shutr && recv(fd, trash, trashlen, MSG_NOSIGNAL|MSG_DONTWAIT) > 0)
++		setsockopt(fd, SOL_SOCKET, SO_LINGER,
++			   (struct linger *) &nolinger, sizeof(struct linger));
+ 	shutdown(fd, SHUT_RDWR);
+ 	EV_FD_CLR(fd, DIR_RD);
+ 	task_wakeup(t, TASK_WOKEN_IO);
+-- 
+1.7.1
+

@@ -1,0 +1,30 @@
+From 528595f5989ef3af64c3e480ae15363677812aaa Mon Sep 17 00:00:00 2001
+From: Willy Tarreau <w@1wt.eu>
+Date: Sun, 30 Dec 2012 00:27:36 +0100
+Subject: MINOR: http: always report PR-- flags for redirect rules
+
+Mainline commit 71241abf fixed a minor issue by which keep-alive requests
+causing a redirect did not have the PR-- flags while close requests did
+have it. This patch merges this part of the change which fixes the flags.
+---
+ src/proto_http.c |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+
+diff --git a/src/proto_http.c b/src/proto_http.c
+index e4cec6d..ffa2224 100644
+--- a/src/proto_http.c
++++ b/src/proto_http.c
+@@ -3476,6 +3476,10 @@ int http_process_req_common(struct session *s, struct buffer *req, int an_bit, s
+ 				s->rep->analysers = AN_RES_HTTP_XFER_BODY;
+ 				txn->req.msg_state = HTTP_MSG_CLOSED;
+ 				txn->rsp.msg_state = HTTP_MSG_DONE;
++				if (!(s->flags & SN_ERR_MASK))
++					s->flags |= SN_ERR_PRXCOND;
++				if (!(s->flags & SN_FINST_MASK))
++					s->flags |= SN_FINST_R;
+ 				break;
+ 			} else {
+ 				/* keep-alive not possible */
+-- 
+1.7.1
+

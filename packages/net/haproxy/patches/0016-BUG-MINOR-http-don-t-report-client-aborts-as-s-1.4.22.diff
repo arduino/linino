@@ -1,0 +1,86 @@
+From 46169a35f95f2128bbf185c06eb535d9acb7ee61 Mon Sep 17 00:00:00 2001
+From: Willy Tarreau <w@1wt.eu>
+Date: Mon, 26 Nov 2012 13:35:37 +0100
+Subject: BUG/MINOR: http: don't report client aborts as server errors
+
+If a client aborts with an abortonclose flag, the close is forwarded
+to the server and when server response is processed, the analyser thinks
+it's the server who has closed first, and logs flags "SD" or "SH" and
+counts a server error. In order to avoid this, we now first detect that
+the client has closed and log a client abort instead.
+
+This likely is the reason why many people have been observing a small rate
+of SD/SH flags without being able to find what the error was.
+
+This fix should probably be backported to 1.4.
+(cherry picked from commit f003d375ec5190e7d99cfa14a9b09e7ca6c55daf)
+---
+ src/proto_http.c |   37 +++++++++++++++++++++++++++++++++----
+ 1 files changed, 33 insertions(+), 4 deletions(-)
+
+diff --git a/src/proto_http.c b/src/proto_http.c
+index 1ad838b..ae37035 100644
+--- a/src/proto_http.c
++++ b/src/proto_http.c
+@@ -4919,6 +4919,28 @@ int http_wait_for_response(struct session *s, struct buffer *rep, int an_bit)
+ 			return 0;
+ 		}
+ 
++		/* client abort with an abortonclose */
++		else if ((rep->flags & BF_SHUTR) && ((s->req->flags & (BF_SHUTR|BF_SHUTW)) == (BF_SHUTR|BF_SHUTW))) {
++			s->fe->counters.cli_aborts++;
++			if (s->fe != s->be)
++				s->be->counters.cli_aborts++;
++			if (s->srv)
++				s->srv->counters.cli_aborts++;
++		
++			buffer_auto_close(rep);
++			rep->analysers = 0;
++			txn->status = 400;
++			buffer_ignore(rep, rep->l - rep->send_max);
++			stream_int_retnclose(rep->cons, error_message(s, HTTP_ERR_400));
++		
++			if (!(s->flags & SN_ERR_MASK))
++				s->flags |= SN_ERR_CLICL;
++			if (!(s->flags & SN_FINST_MASK))
++				s->flags |= SN_FINST_H;
++			/* process_session() will take care of the error */
++			return 0;
++		}
++
+ 		/* close from server, capture the response if the server has started to respond */
+ 		else if (rep->flags & BF_SHUTR) {
+ 			if (msg->msg_state >= HTTP_MSG_RPVER || msg->err_pos >= 0)
+@@ -5666,8 +5688,18 @@ int http_response_forward_body(struct session *s, struct buffer *res, int an_bit
+ 	}
+ 
+  missing_data:
+-	/* stop waiting for data if the input is closed before the end */
++
++	if (res->flags & BF_SHUTW)
++		goto aborted_xfer;
++
++	/* stop waiting for data if the input is closed before the end. If the
++	 * client side was already closed, it means that the client has aborted,
++	 * so we don't want to count this as a server abort. Otherwise it's a
++	 * server abort.
++	 */
+ 	if (res->flags & BF_SHUTR) {
++		if ((res->flags & BF_SHUTW_NOW) || (s->req->flags & BF_SHUTR))
++			goto aborted_xfer;
+ 		if (!(s->flags & SN_ERR_MASK))
+ 			s->flags |= SN_ERR_SRVCL;
+ 		s->be->counters.srv_aborts++;
+@@ -5676,9 +5708,6 @@ int http_response_forward_body(struct session *s, struct buffer *res, int an_bit
+ 		goto return_bad_res_stats_ok;
+ 	}
+ 
+-	if (res->flags & BF_SHUTW)
+-		goto aborted_xfer;
+-
+ 	/* we need to obey the req analyser, so if it leaves, we must too */
+ 	if (!s->req->analysers)
+ 		goto return_bad_res;
+-- 
+1.7.1
+

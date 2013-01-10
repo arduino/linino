@@ -1,0 +1,75 @@
+From 7a883f8542dffb7299a903eb9a82fed3980337fa Mon Sep 17 00:00:00 2001
+From: Willy Tarreau <w@1wt.eu>
+Date: Sat, 20 Oct 2012 10:38:09 +0200
+Subject: BUG/MEDIUM: http: set DONTWAIT on data when switching to tunnel mode
+
+Jaroslaw Bojar diagnosed an issue when haproxy switches to tunnel mode
+after a transfer. The response data are sent with the MSG_MORE flag,
+causing them to be needlessly queued in the kernel. In order to fix this,
+we set the CF_NEVER_WAIT flag on the channels when switching to tunnel
+mode.
+
+One issue remained with client-side keep-alive : if the response is sent
+before the end of the request, it suffers the same issue for the same
+reason. This is easily addressed by setting the CF_SEND_DONTWAIT flag
+on the channel when the response has been parsed and we're waiting for
+the other side.
+
+The same issue is present in 1.4 so the fix must be backported.
+(cherry picked from commit fc47f91c9cc66e3652d98deab82d6e5fe3a59711)
+---
+ src/proto_http.c |   10 ++++++++++
+ 1 files changed, 10 insertions(+), 0 deletions(-)
+
+diff --git a/src/proto_http.c b/src/proto_http.c
+index dc65cbd..2ba38f1 100644
+--- a/src/proto_http.c
++++ b/src/proto_http.c
+@@ -4178,6 +4178,7 @@ int http_sync_req_state(struct session *s)
+ 			/* if any side switches to tunnel mode, the other one does too */
+ 			buffer_auto_read(buf);
+ 			txn->req.msg_state = HTTP_MSG_TUNNEL;
++			buf->flags |= BF_NEVER_WAIT;
+ 			goto wait_other_side;
+ 		}
+ 
+@@ -4211,6 +4212,7 @@ int http_sync_req_state(struct session *s)
+ 			 */
+ 			buffer_auto_read(buf);
+ 			txn->req.msg_state = HTTP_MSG_TUNNEL;
++			buf->flags |= BF_NEVER_WAIT;
+ 		}
+ 
+ 		if (buf->flags & (BF_SHUTW|BF_SHUTW_NOW)) {
+@@ -4297,6 +4299,7 @@ int http_sync_res_state(struct session *s)
+ 			/* if any side switches to tunnel mode, the other one does too */
+ 			buffer_auto_read(buf);
+ 			txn->rsp.msg_state = HTTP_MSG_TUNNEL;
++			buf->flags |= BF_NEVER_WAIT;
+ 			goto wait_other_side;
+ 		}
+ 
+@@ -4334,6 +4337,7 @@ int http_sync_res_state(struct session *s)
+ 			 */
+ 			buffer_auto_read(buf);
+ 			txn->rsp.msg_state = HTTP_MSG_TUNNEL;
++			buf->flags |= BF_NEVER_WAIT;
+ 		}
+ 
+ 		if (buf->flags & (BF_SHUTW|BF_SHUTW_NOW)) {
+@@ -4379,6 +4383,12 @@ int http_sync_res_state(struct session *s)
+ 
+  wait_other_side:
+ 	http_silent_debug(__LINE__, s);
++
++	/* We force the response to leave immediately if we're waiting for the
++	 * other side, since there is no pending shutdown to push it out.
++	 */
++	if (!(buf->flags & BF_OUT_EMPTY))
++		buf->flags |= BF_SEND_DONTWAIT;
+ 	return txn->rsp.msg_state != old_state || buf->flags != old_flags;
+ }
+ 
+-- 
+1.7.1
+

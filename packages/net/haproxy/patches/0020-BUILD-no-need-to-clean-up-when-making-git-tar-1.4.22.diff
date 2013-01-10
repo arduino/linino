@@ -1,0 +1,28 @@
+From 24a528b3f5f09cdd9aebeb9531d7e76623329070 Mon Sep 17 00:00:00 2001
+From: Willy Tarreau <w@1wt.eu>
+Date: Thu, 20 Dec 2012 15:00:44 +0100
+Subject: BUILD: no need to clean up when making git-tar
+
+git-tar uses the repository, not the working dir, so it's useless to
+run "make clean" first.
+(cherry picked from commit 05ed29cf6ef1eb6268c95c5d38af849c487eeedd)
+---
+ Makefile |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 9350d54..7633588 100644
+--- a/Makefile
++++ b/Makefile
+@@ -584,7 +584,7 @@ tar:	clean
+ 	    -cf - haproxy-$(VERSION)/* | gzip -c9 >haproxy-$(VERSION).tar.gz
+ 	rm -f haproxy-$(VERSION)
+ 
+-git-tar: clean
++git-tar:
+ 	git archive --format=tar --prefix="haproxy-$(VERSION)/" HEAD | gzip -9 > haproxy-$(VERSION)$(SUBVERS).tar.gz
+ 
+ version:
+-- 
+1.7.1
+

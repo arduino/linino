@@ -1,6 +1,6 @@
 --- a/doc/configuration.txt
 +++ b/doc/configuration.txt
-@@ -1337,6 +1337,7 @@ bind [<address>]:<port_range> [, ...] tr
+@@ -1339,6 +1339,7 @@ bind [<address>]:<port_range> [, ...] tr
  bind [<address>]:<port_range> [, ...] id <id>
  bind [<address>]:<port_range> [, ...] name <name>
  bind [<address>]:<port_range> [, ...] defer-accept
@@ -8,7 +8,7 @@
    Define one or several listening addresses and/or ports in a frontend.
    May be used in sections :   defaults | frontend | listen | backend
                                    no   |    yes   |   yes  |   no
-@@ -1417,6 +1418,19 @@ bind [<address>]:<port_range> [, ...] de
+@@ -1419,6 +1420,19 @@ bind [<address>]:<port_range> [, ...] de
                    with front firewalls which would see an established
                    connection while the proxy will only see it in SYN_RECV.
  
@@ -28,7 +28,7 @@
    It is possible to specify a list of address:port combinations delimited by
    commas. The frontend will then listen on all of these addresses. There is no
    fixed limit to the number of addresses and ports which can be listened on in
-@@ -1427,8 +1441,10 @@ bind [<address>]:<port_range> [, ...] de
+@@ -1429,8 +1443,10 @@ bind [<address>]:<port_range> [, ...] de
          listen http_proxy
              bind :80,:443
              bind 10.0.0.1:10080,10.0.0.1:10443
@@ -40,7 +40,7 @@
  
  
  bind-process [ all | odd | even | <number 1-32> ] ...
-@@ -7215,7 +7231,9 @@ marked with a star ('*') after the field
+@@ -7231,7 +7247,9 @@ marked with a star ('*') after the field
  
  Detailed fields description :
    - "client_ip" is the IP address of the client which initiated the TCP
@@ -51,7 +51,7 @@
  
    - "client_port" is the TCP port of the client which initiated the connection.
  
-@@ -7388,7 +7406,9 @@ with a star ('*') after the field name b
+@@ -7404,7 +7422,9 @@ with a star ('*') after the field name b
  
  Detailed fields description :
    - "client_ip" is the IP address of the client which initiated the TCP
@@ -152,7 +152,7 @@
   * socket. The listener provides the protocol-specific accept() function to
 --- a/src/cfgparse.c
 +++ b/src/cfgparse.c
-@@ -1466,6 +1466,16 @@ int cfg_parse_listen(const char *file, i
+@@ -1467,6 +1467,16 @@ int cfg_parse_listen(const char *file, i
  #endif
  			}
  
@@ -169,7 +169,7 @@
  			if (!strcmp(args[cur_arg], "name")) {
  				struct listener *l;
  
-@@ -1518,7 +1528,7 @@ int cfg_parse_listen(const char *file, i
+@@ -1519,7 +1529,7 @@ int cfg_parse_listen(const char *file, i
  				continue;
  			}
  
@@ -178,7 +178,7 @@
  			      file, linenum, args[0]);
  			err_code |= ERR_ALERT | ERR_FATAL;
  			goto out;
-@@ -5731,6 +5741,9 @@ out_uri_auth_compat:
+@@ -5732,6 +5742,9 @@ out_uri_auth_compat:
  			listener->handler = process_session;
  			listener->analysers |= curproxy->fe_req_ana;
  
@@ -392,7 +392,7 @@
   */
 --- a/src/proto_http.c
 +++ b/src/proto_http.c
-@@ -4087,7 +4087,8 @@ void http_end_txn_clean_session(struct s
+@@ -4127,7 +4127,8 @@ void http_end_txn_clean_session(struct s
  	if (s->rep->lr >= s->rep->data + s->rep->size)
  		s->rep->lr -= s->req->size;
  
@@ -402,7 +402,7 @@
  	s->rep->analysers = 0;
  
  	http_silent_debug(__LINE__, s);
-@@ -7624,7 +7625,6 @@ void http_reset_txn(struct session *s)
+@@ -7670,7 +7671,6 @@ void http_reset_txn(struct session *s)
  	http_init_txn(s);
  
  	s->be = s->fe;

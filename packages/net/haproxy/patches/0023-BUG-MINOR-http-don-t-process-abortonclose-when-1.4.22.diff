@@ -1,0 +1,35 @@
+From d978423607b6666ca8dd3257d860558ead1b94af Mon Sep 17 00:00:00 2001
+From: Willy Tarreau <w@1wt.eu>
+Date: Sun, 30 Dec 2012 00:50:35 +0100
+Subject: BUG/MINOR: http: don't process abortonclose when request was sent
+
+option abortonclose may cause a valid connection to be aborted just
+after the request has been sent. This is because we check for it
+during the session establishment sequence before checking for write
+activity. So if the abort and the connect complete at the same time,
+the abort is still considered. Let's check for an explicity partial
+write before aborting.
+
+This fix should be backported to 1.4 too.
+(cherry picked from commit a7a7ebc38280d7a04192bf95e6852222f4bd8140)
+---
+ src/session.c |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
+
+diff --git a/src/session.c b/src/session.c
+index 239d4f5..6211a45 100644
+--- a/src/session.c
++++ b/src/session.c
+@@ -203,7 +203,8 @@ int sess_update_st_con_tcp(struct session *s, struct stream_interface *si)
+ 	}
+ 
+ 	/* OK, maybe we want to abort */
+-	if (unlikely((rep->flags & BF_SHUTW) ||
++	if (!(req->flags & BF_WRITE_PARTIAL) &&
++	    unlikely((rep->flags & BF_SHUTW) ||
+ 		     ((req->flags & BF_SHUTW_NOW) && /* FIXME: this should not prevent a connection from establishing */
+ 		      (((req->flags & (BF_OUT_EMPTY|BF_WRITE_ACTIVITY)) == BF_OUT_EMPTY) ||
+ 		       s->be->options & PR_O_ABRT_CLOSE)))) {
+-- 
+1.7.1
+

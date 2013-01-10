@@ -1,0 +1,29 @@
+From 113e6626ca26de31e2523a5b197a5bac4ca73dcc Mon Sep 17 00:00:00 2001
+From: Willy Tarreau <w@1wt.eu>
+Date: Wed, 10 Oct 2012 13:41:52 +0200
+Subject: BUG/MINOR: halog: -ad/-ac report the correct number of output lines
+
+There was a lines_out++ left from earlier code, causing each input
+line to be counted as an output line.
+
+This fix also affects 1.4 and should be backported.
+(cherry picked from commit 0a706880160167f872247723c6a041eb31a20c29)
+---
+ contrib/halog/halog.c |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
+
+diff --git a/contrib/halog/halog.c b/contrib/halog/halog.c
+index e4d62e9..8f7f04a 100644
+--- a/contrib/halog/halog.c
++++ b/contrib/halog/halog.c
+@@ -1111,7 +1111,6 @@ void filter_accept_holes(const char *accept_field, const char *time_field, struc
+ 
+ 	t2 = insert_value(&timers[0], tptr, val);
+ 	t2->count++;
+-	lines_out++;
+ 	return;
+ }
+ 
+-- 
+1.7.1
+

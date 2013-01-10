@@ -1,0 +1,58 @@
+From 307227061df9938e9db5c0880254d71f2b9f5e83 Mon Sep 17 00:00:00 2001
+From: Willy Tarreau <w@1wt.eu>
+Date: Sat, 8 Dec 2012 23:03:28 +0100
+Subject: BUG/MEDIUM: tcp: process could theorically crash on lack of source ports
+
+When connect() fails with EAGAIN or EADDRINUSE, an error message is
+sent to logs and uses srv->id to indicate the server name (this is
+very old code). Since version 1.4, it is possible to have srv == NULL,
+so the message could cause a crash when connect() returns EAGAIN or
+EADDRINUSE. However in practice this does not happen because on lack
+of source ports, EADDRNOTAVAIL is returned instead, so this code is
+never called.
+
+This fix consists in not displaying the server name anymore, and in
+adding the test for EADDRNOTAVAIL.
+
+Also, the log level was lowered from LOG_EMERG to LOG_ERR in order
+not to spam all consoles when source ports are missing for a given
+target.
+
+This fix should be backported to 1.4.
+(cherry picked from commit b1719517b754aa0a098ee0f9c59e8babaf8df384)
+---
+ src/proto_tcp.c |   10 ++++------
+ 1 files changed, 4 insertions(+), 6 deletions(-)
+
+diff --git a/src/proto_tcp.c b/src/proto_tcp.c
+index 84fda20..e876d71 100644
+--- a/src/proto_tcp.c
++++ b/src/proto_tcp.c
+@@ -376,20 +376,18 @@ int tcpv4_connect_server(struct stream_interface *si,
+ 	if ((connect(fd, (struct sockaddr *)srv_addr, sizeof(struct sockaddr_in)) == -1) &&
+ 	    (errno != EINPROGRESS) && (errno != EALREADY) && (errno != EISCONN)) {
+ 
+-		if (errno == EAGAIN || errno == EADDRINUSE) {
++		if (errno == EAGAIN || errno == EADDRINUSE || errno == EADDRNOTAVAIL) {
+ 			char *msg;
+-			if (errno == EAGAIN) /* no free ports left, try again later */
++			if (errno == EAGAIN || errno == EADDRNOTAVAIL)
+ 				msg = "no free ports";
+ 			else
+ 				msg = "local address already in use";
+ 
+-			qfprintf(stderr,"Cannot connect: %s.\n",msg);
++			qfprintf(stderr,"Connect() failed for backend %s: %s.\n", be->id, msg);
+ 			port_range_release_port(fdinfo[fd].port_range, fdinfo[fd].local_port);
+ 			fdinfo[fd].port_range = NULL;
+ 			close(fd);
+-			send_log(be, LOG_EMERG,
+-				 "Connect() failed for server %s/%s: %s.\n",
+-				 be->id, srv->id, msg);
++			send_log(be, LOG_ERR, "Connect() failed for backend %s: %s.\n", be->id, msg);
+ 			return SN_ERR_RESOURCE;
+ 		} else if (errno == ETIMEDOUT) {
+ 			//qfprintf(stderr,"Connect(): ETIMEDOUT");
+-- 
+1.7.1
+

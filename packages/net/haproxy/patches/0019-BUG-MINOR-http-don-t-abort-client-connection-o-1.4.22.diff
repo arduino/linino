@@ -1,0 +1,45 @@
+From dc624fd282caae163b11c197b36851e0ecf373eb Mon Sep 17 00:00:00 2001
+From: Willy Tarreau <w@1wt.eu>
+Date: Thu, 20 Dec 2012 12:10:09 +0100
+Subject: BUG/MINOR: http: don't abort client connection on premature responses
+
+When a server responds prematurely to a POST request, haproxy used to
+cause the transfer to be aborted before the end. This is problematic
+because this causes the client to receive a TCP reset when it tries to
+push more data, generally preventing it from receiving the response
+which contain the reason for the premature reponse (eg: "entity too
+large" or an authentication request).
+
+From now on we take care of allowing the upload traffic to flow to the
+server even when the response has been received, since the server is
+supposed to drain it. That way the client receives the server response.
+
+This bug has been present since 1.4 and the fix should probably be
+backported there.
+(cherry picked from commit 40f151aa79bcdf8b517c4e5666edbc7a47ea7fdc)
+
+Note: 1.4 does not have SI_FL_NOHALF but this is not important.
+---
+ src/proto_http.c |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/src/proto_http.c b/src/proto_http.c
+index 7a8872b..e4cec6d 100644
+--- a/src/proto_http.c
++++ b/src/proto_http.c
+@@ -4443,9 +4443,10 @@ int http_resync_states(struct session *s)
+ 		buffer_auto_close(s->rep);
+ 		buffer_auto_read(s->rep);
+ 	}
+-	else if (txn->rsp.msg_state == HTTP_MSG_CLOSED ||
++	else if ((txn->req.msg_state >= HTTP_MSG_DONE &&
++		  (txn->rsp.msg_state == HTTP_MSG_CLOSED || (s->rep->flags & BF_SHUTW))) ||
+ 		 txn->rsp.msg_state == HTTP_MSG_ERROR ||
+-		 (s->rep->flags & BF_SHUTW)) {
++		 txn->req.msg_state == HTTP_MSG_ERROR) {
+ 		s->rep->analysers = 0;
+ 		buffer_auto_close(s->rep);
+ 		buffer_auto_read(s->rep);
+-- 
+1.7.1
+

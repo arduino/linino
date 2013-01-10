@@ -1,0 +1,49 @@
+From 5b4d0775f0afd10c80e63842dca85a69281c9433 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Cyril=20Bont=C3=A9?= <cyril.bonte@free.fr>
+Date: Thu, 1 Nov 2012 18:48:23 +0100
+Subject: BUG: fix garbage data when http-send-name-header replaces an existing header
+
+This patch is an attempt to prevent sending garbage data when
+http-send-name-header replaced existing headers in the request.
+
+http-send-name-header is applied late in the request processing. The buffer is
+already ready to be sent to the backend server. When headers are removed, the
+data length is not modified, resulting in sending more data than required. By
+reducing the data length to send after removing them, this should fix the
+issue.
+
+This patch doesn't need to be ported to haproxy-1.5, which already readjust the
+amount of data to be forwarded.
+
+This issue was reported by Michael Seiferle at BaseX, who also tested and
+confirmed the fix.
+---
+ src/proto_http.c |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
+
+diff --git a/src/proto_http.c b/src/proto_http.c
+index 2ba38f1..1ad838b 100644
+--- a/src/proto_http.c
++++ b/src/proto_http.c
+@@ -3981,6 +3981,7 @@ int http_send_name_header(struct http_txn *txn, struct http_msg *msg, struct buf
+ 
+ 	char *hdr_val;
+ 
++	int delta = txn->req.eoh;
+ 	while (http_find_header2(hdr_name, hdr_name_len, msg->sol, &txn->hdr_idx, &ctx)) {
+ 		/* remove any existing values from the header */
+ 	        http_remove_header2(msg, buf, &txn->hdr_idx, &ctx);
+@@ -3994,6 +3995,10 @@ int http_send_name_header(struct http_txn *txn, struct http_msg *msg, struct buf
+ 	*hdr_val++ = ' ';
+ 	hdr_val += strlcpy2(hdr_val, srv_name, trash + trashlen - hdr_val);
+ 	http_header_add_tail2(buf, msg, &txn->hdr_idx, trash, hdr_val - trash);
++	delta -= txn->req.eoh;
++
++	/* Adjust buffer data length to send */
++	buf->send_max -= delta;
+ 
+ 	return 0;
+ }
+-- 
+1.7.1
+

@@ -1,0 +1,54 @@
+From c998e6347e6e6940263157fb341a8444d789aa5f Mon Sep 17 00:00:00 2001
+From: Willy Tarreau <w@1wt.eu>
+Date: Tue, 3 Jan 2012 09:23:03 +0100
+Subject: OPTIM: halog: keep a fast path for the lines-count only
+
+[ note: this backport is not absolutely required for 1.4 but it eases
+  further backports ]
+
+Using "halog -c" is still something quite common to perform on logs,
+but unfortunately since the recent added controls, it was sensibly
+slowed down due to the parsing of the accept date field.
+
+Now we use a specific loop for the case where nothing is needed from
+the input, and this sped up the line counting by 2.5x. A 2.4 GHz Xeon
+now counts lines at a rate of 2 GB of logs per second.
+
+(cherry picked from commit e1a908c369ab988448c6672066ad1d09b6919d02)
+---
+ contrib/halog/halog.c |   12 +++++++++++-
+ 1 files changed, 11 insertions(+), 1 deletions(-)
+
+diff --git a/contrib/halog/halog.c b/contrib/halog/halog.c
+index 4e3cfc4..3912807 100644
+--- a/contrib/halog/halog.c
++++ b/contrib/halog/halog.c
+@@ -702,6 +702,16 @@ int main(int argc, char **argv)
+ 	posix_fadvise(0, 0, 0, POSIX_FADV_SEQUENTIAL);
+ #endif
+ 
++	if (!line_filter &&
++	    !(filter & (FILT_HTTP_ONLY|FILT_TIME_RESP|FILT_ERRORS_ONLY|FILT_HTTP_STATUS|FILT_QUEUE_ONLY|FILT_QUEUE_SRV_ONLY|FILT_TERM_CODE_NAME))) {
++		/* read the whole file at once first */
++		if (!filter_invert)
++			while (fgets2(stdin) != NULL)
++				lines_out++;
++
++		goto skip_filters;
++	}
++
+ 	while ((line = fgets2(stdin)) != NULL) {
+ 		linenum++;
+ 		time_field = NULL; accept_field = NULL;
+@@ -859,7 +869,7 @@ int main(int argc, char **argv)
+ 			lines_out++; /* we're just counting lines */
+ 	}
+ 
+-
++ skip_filters:
+ 	/*****************************************************
+ 	 * Here we've finished reading all input. Depending on the
+ 	 * filters, we may still have some analysis to run on the
+-- 
+1.7.1
+

@@ -1,0 +1,27 @@
+From 1fd5d70b52a1d3b3f12e577cc158d0988e103f0d Mon Sep 17 00:00:00 2001
+From: Willy Tarreau <w@1wt.eu>
+Date: Wed, 10 Oct 2012 14:57:35 +0200
+Subject: BUG/MINOR: halog: fix help message for -ut/-uto
+
+Erroneous copy-paste suggesting wrong option.
+(cherry picked from commit 4201df77df34492be89e9c720397ff66bc5775d9)
+---
+ contrib/halog/halog.c |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/contrib/halog/halog.c b/contrib/halog/halog.c
+index 8f7f04a..4e3cfc4 100644
+--- a/contrib/halog/halog.c
++++ b/contrib/halog/halog.c
+@@ -181,7 +181,7 @@ void help()
+ 	       " -u*   output statistics per URL (time, requests, errors)\n"
+ 	       "       Additional characters indicate the output sorting key :\n"
+ 	       "       -u : by URL, -uc : request count, -ue : error count\n"
+-	       "       -ua : average response time, -uto : average total time\n"
++	       "       -ua : average response time, -ut : average total time\n"
+ 	       "       -uao, -uto: average times computed on valid ('OK') requests\n"
+ 	       "       -uba, -ubt: average bytes returned, total bytes returned\n"
+ 	       );
+-- 
+1.7.1
+

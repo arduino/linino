@@ -1,0 +1,55 @@
+From 475b5ec3be8e022bd0f96331efc14c7b7b137d60 Mon Sep 17 00:00:00 2001
+From: Willy Tarreau <w@1wt.eu>
+Date: Mon, 26 Nov 2012 02:22:40 +0100
+Subject: BUG/MAJOR: cli: show sess <id> may randomly corrupt the back-ref list
+
+show sess <id> puts a backref into the session it's dumping. If the output
+is interrupted, the backref cannot always be removed because it's only done
+in the I/O handler. This can randomly corrupt the backref list when the
+session closes, because it passes the pointer to the next session which
+itself might be watched.
+
+The case is hard to reproduce (hundreds of attempts) but monitoring systems
+might encounter it frequently.
+
+Thus we have to add a release handler which does the cleanup even when the
+I/O handler is not called.
+
+This issue should also be present in 1.4 so the patch should be backported.
+(cherry picked from commit 5f9a8779b3d4fb324dacc1daacfb478bd12963d1)
+
+NOTE: In 1.4 there is no release function so we have to hard-code the
+release in session.c when the condition is encountered.
+---
+ src/session.c |   15 +++++++++++++++
+ 1 files changed, 15 insertions(+), 0 deletions(-)
+
+diff --git a/src/session.c b/src/session.c
+index 0f6a1cf..239d4f5 100644
+--- a/src/session.c
++++ b/src/session.c
+@@ -989,6 +989,21 @@ resync_stream_interface:
+ 			if (may_dequeue_tasks(s->srv, s->be))
+ 				process_srv_queue(s->srv);
+ 		}
++
++		if (s->req->cons->iohandler == stats_io_handler &&
++		    s->req->cons->st0 == STAT_CLI_O_SESS && s->data_state == DATA_ST_LIST) {
++			/* This is a fix for a design bug in the stats I/O handler :
++			 * "show sess $sess" may corrupt the struct session if not
++			 * properly detached. Unfortunately, in 1.4 there is no way
++			 * to ensure we always cleanly unregister an I/O handler upon
++			 * error. So we're doing the cleanup here if we can detect the
++			 * situation.
++			 */
++			if (!LIST_ISEMPTY(&s->data_ctx.sess.bref.users)) {
++				LIST_DEL(&s->data_ctx.sess.bref.users);
++				LIST_INIT(&s->data_ctx.sess.bref.users);
++			}
++		}
+ 	}
+ 
+ 	/*
+-- 
+1.7.1
+

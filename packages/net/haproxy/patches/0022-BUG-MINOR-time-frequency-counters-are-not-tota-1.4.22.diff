@@ -1,0 +1,124 @@
+From 44db294666f9dfb68667f998532781e898f14c4f Mon Sep 17 00:00:00 2001
+From: Willy Tarreau <w@1wt.eu>
+Date: Sat, 29 Dec 2012 21:50:07 +0100
+Subject: BUG/MINOR: time: frequency counters are not totally accurate
+
+When a frontend is rate-limited to 1000 connections per second, the
+effective rate measured from the client is 999/s, and connections
+experience an average response time of 99.5 ms with a standard
+deviation of 2 ms.
+
+The reason for this inaccuracy is that when computing frequency
+counters, we use one part of the previous value proportional to the
+number of milliseconds remaining in the current second. But even the
+last millisecond still uses a part of the past value, which is wrong :
+since we have a 1ms resolution, the last millisecond must be dedicated
+only to filling the current second.
+
+So we slightly adjust the algorithm to use 999/1000 of the past value
+during the first millisecond, and 0/1000 of the past value during the
+last millisecond.  We also slightly improve the computation by computing
+the remaining time instead of the current time in tv_update_date(), so
+that we don't have to negate the value in each frequency counter.
+
+Now with the fix, the connection rate measured by both the client and
+haproxy is a steady 1000/s, the average response time measured is 99.2ms
+and more importantly, the standard deviation has been divided by 3 to
+0.6 millisecond.
+
+This fix should also be backported to 1.4 which has the same issue.
+(cherry picked from commit eab777c32eff7ee55a6ea12dd2f15fa14d66f233)
+---
+ include/common/time.h |    1 +
+ src/freq_ctr.c        |    7 +++----
+ src/time.c            |   16 +++++++++++++---
+ 3 files changed, 17 insertions(+), 7 deletions(-)
+
+diff --git a/include/common/time.h b/include/common/time.h
+index abc1ccf..c9e3641 100644
+--- a/include/common/time.h
++++ b/include/common/time.h
+@@ -55,6 +55,7 @@
+ #define SETNOW(a)		(*a=now)
+ 
+ extern unsigned int   curr_sec_ms;      /* millisecond of current second (0..999) */
++extern unsigned int   ms_left_scaled;   /* milliseconds left for current second (0..2^32-1) */
+ extern unsigned int   curr_sec_ms_scaled;  /* millisecond of current second (0..2^32-1) */
+ extern unsigned int   now_ms;           /* internal date in milliseconds (may wrap) */
+ extern struct timeval now;              /* internal date is a monotonic function of real clock */
+diff --git a/src/freq_ctr.c b/src/freq_ctr.c
+index 3df930f..8718b60 100644
+--- a/src/freq_ctr.c
++++ b/src/freq_ctr.c
+@@ -47,7 +47,7 @@ unsigned int read_freq_ctr(struct freq_ctr *ctr)
+ 	if (past <= 1 && !curr)
+ 		return past; /* very low rate, avoid flapping */
+ 
+-	return curr + mul32hi(past, ~curr_sec_ms_scaled);
++	return curr + mul32hi(past, ms_left_scaled);
+ }
+ 
+ /* returns the number of remaining events that can occur on this freq counter
+@@ -59,7 +59,6 @@ unsigned int freq_ctr_remain(struct freq_ctr *ctr, unsigned int freq, unsigned i
+ 	unsigned int curr, past;
+ 	unsigned int age;
+ 
+-	past = 0;
+ 	curr = 0;		
+ 	age = now.tv_sec - ctr->curr_sec;
+ 
+@@ -69,7 +68,7 @@ unsigned int freq_ctr_remain(struct freq_ctr *ctr, unsigned int freq, unsigned i
+ 			curr = past;
+ 			past = ctr->prev_ctr;
+ 		}
+-		curr += mul32hi(past, ~curr_sec_ms_scaled);
++		curr += mul32hi(past, ms_left_scaled);
+ 	}
+ 	curr += pend;
+ 
+@@ -99,7 +98,7 @@ unsigned int next_event_delay(struct freq_ctr *ctr, unsigned int freq, unsigned
+ 			curr = past;
+ 			past = ctr->prev_ctr;
+ 		}
+-		curr += mul32hi(past, ~curr_sec_ms_scaled);
++		curr += mul32hi(past, ms_left_scaled);
+ 	}
+ 	curr += pend;
+ 
+diff --git a/src/time.c b/src/time.c
+index 1b0f72c..342be9d 100644
+--- a/src/time.c
++++ b/src/time.c
+@@ -16,8 +16,8 @@
+ #include <common/standard.h>
+ #include <common/time.h>
+ 
+-unsigned int   curr_sec_ms;      /* millisecond of current second (0..999) */
+-unsigned int   curr_sec_ms_scaled;  /* millisecond of current second (0..2^32-1) */
++unsigned int   curr_sec_ms;     /* millisecond of current second (0..999) */
++unsigned int   ms_left_scaled;  /* milliseconds left for current second (0..2^32-1) */
+ unsigned int   now_ms;          /* internal date in milliseconds (may wrap) */
+ struct timeval now;             /* internal date is a monotonic function of real clock */
+ struct timeval date;            /* the real current date */
+@@ -195,7 +195,17 @@ REGPRM2 void tv_update_date(int max_wait, int interrupted)
+  to_ms:
+ 	now = adjusted;
+ 	curr_sec_ms = now.tv_usec / 1000;            /* ms of current second */
+-	curr_sec_ms_scaled = curr_sec_ms * 4294971;  /* ms * 2^32 / 1000 */
++
++	/* For frequency counters, we'll need to know the ratio of the previous
++	 * value to add to current value depending on the current millisecond.
++	 * The principle is that during the first millisecond, we use 999/1000
++	 * of the past value and that during the last millisecond we use 0/1000
++	 * of the past value. In summary, we only use the past value during the
++	 * first 999 ms of a second, and the last ms is used to complete the
++	 * current measure. The value is scaled to (2^32-1) so that a simple
++	 * multiply followed by a shift gives us the final value.
++	 */
++	ms_left_scaled = (999U - curr_sec_ms) * 4294967U;
+ 	now_ms = now.tv_sec * 1000 + curr_sec_ms;
+ 	return;
+ }
+-- 
+1.7.1
+

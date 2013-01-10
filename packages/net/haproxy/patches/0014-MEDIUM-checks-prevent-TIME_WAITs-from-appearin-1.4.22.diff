@@ -1,0 +1,29 @@
+From 4ee19c30abdd962fbc10f65c45a5f1615cda3059 Mon Sep 17 00:00:00 2001
+From: Willy Tarreau <w@1wt.eu>
+Date: Fri, 23 Nov 2012 17:35:59 +0100
+Subject: MEDIUM: checks: prevent TIME_WAITs from appearing also on timeouts
+
+We need to disable lingering before closing on timeout too, otherwise
+we accumulate TIME_WAITs.
+(cherry picked from commit cfd97c6f043fb64980529a0ce26b10fecd0e8fe2)
+---
+ src/checks.c |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
+
+diff --git a/src/checks.c b/src/checks.c
+index 3d01282..201900a 100644
+--- a/src/checks.c
++++ b/src/checks.c
+@@ -1527,6 +1527,9 @@ struct task *process_chk(struct task *t)
+ 			else
+ 				set_server_down(s);
+ 			s->curfd = -1;
++			/* avoid accumulating TIME_WAIT on timeouts */
++			setsockopt(fd, SOL_SOCKET, SO_LINGER,
++				   (struct linger *) &nolinger, sizeof(struct linger));
+ 			fd_delete(fd);
+ 
+ 			rv = 0;
+-- 
+1.7.1
+

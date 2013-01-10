@@ -1,0 +1,31 @@
+From e856a82ac64d2fea6d2117627a9c857aca738bb0 Mon Sep 17 00:00:00 2001
+From: Willy Tarreau <w@1wt.eu>
+Date: Tue, 4 Dec 2012 10:39:01 +0100
+Subject: BUG/MINOR: http: don't log a 503 on client errors while waiting for requests
+
+If a client aborts a request with an error (typically a TCP reset), we must
+log a 400. Till now we did not set the status nor close the stream interface,
+causing the request to attempt to be forwarded and logging a 503.
+
+Should be backported to 1.4 which is affected as well.
+(cherry picked from commit dc979f24929ad5352832730954c83ba47afe24cc)
+---
+ src/proto_http.c |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+
+diff --git a/src/proto_http.c b/src/proto_http.c
+index ae37035..7a8872b 100644
+--- a/src/proto_http.c
++++ b/src/proto_http.c
+@@ -2506,6 +2506,8 @@ int http_wait_for_request(struct session *s, struct buffer *req, int an_bit)
+ 			if (msg->err_pos >= 0)
+ 				http_capture_bad_message(&s->fe->invalid_req, s, req, msg, msg->msg_state, s->fe);
+ 
++			txn->status = 400;
++			stream_int_retnclose(req->prod, NULL);
+ 			msg->msg_state = HTTP_MSG_ERROR;
+ 			req->analysers = 0;
+ 
+-- 
+1.7.1
+
