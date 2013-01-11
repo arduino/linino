@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2011,2012 OpenWrt.org
+# Copyright (C) 2011-2013 OpenWrt.org
 # Copyright (C) 2010 Jo-Philipp Wich <xm@subsignal.org>
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -27,6 +27,7 @@ define Package/$(PKG_NAME)/default
   CATEGORY:=Network
   TITLE:=mosquitto - an MQTT message broker
   URL:=http://www.mosquitto.org/
+  MAINTAINER:=Karl Palsson <karlp@remake.is>
 endef
 
 define Package/$(PKG_NAME)
