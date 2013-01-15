@@ -1,19 +1,22 @@
 # 
-# Copyright (C) 2012 OpenWrt.org
+# Copyright (C) 2011-2013 OpenWrt.org
 #
-# This is free software, licensed under the wxWindows Library Licence, Version 3.1.
+# This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libjpeg-turbo
-PKG_VERSION:=1.1.1
+PKG_VERSION:=1.2.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/libjpeg-turbo
-PKG_MD5SUM:=03b9c1406c7bfdc204313c2917ce6962
+PKG_MD5SUM:=f61e60ff01381ece4d2fe65eeb52669e
+
+PKG_LICENSE:=BSD-3c
+PKG_LICENSE_FILES:=README-turbo.txt
 
 PKG_BUILD_PARALLEL:=1
 
