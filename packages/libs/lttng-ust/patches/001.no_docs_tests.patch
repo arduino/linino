@@ -1,0 +1,35 @@
+diff -urN lttng-ust-2.1.0/Makefile.am lttng-ust-2.1.0.new/Makefile.am
+--- lttng-ust-2.1.0/Makefile.am	2012-12-10 21:29:20.000000000 +0100
++++ lttng-ust-2.1.0.new/Makefile.am	2013-01-14 14:25:41.923661688 +0100
+@@ -5,9 +5,7 @@
+ 		liblttng-ust-ctl \
+ 		liblttng-ust-fork \
+ 		liblttng-ust-libc-wrapper \
+-		tools \
+-		tests \
+-		doc
++		tools
+ 
+ if BUILD_JNI_INTERFACE
+ SUBDIRS += liblttng-ust-java
+diff -urN lttng-ust-2.1.0/Makefile.in lttng-ust-2.1.0.new/Makefile.in
+--- lttng-ust-2.1.0/Makefile.in	2012-12-20 19:24:57.000000000 +0100
++++ lttng-ust-2.1.0.new/Makefile.in	2013-01-14 14:25:31.247661789 +0100
+@@ -135,7 +135,7 @@
+ CTAGS = ctags
+ DIST_SUBDIRS = . include snprintf libringbuffer liblttng-ust-comm \
+ 	liblttng-ust liblttng-ust-ctl liblttng-ust-fork \
+-	liblttng-ust-libc-wrapper tools tests doc liblttng-ust-java
++	liblttng-ust-libc-wrapper tools liblttng-ust-java
+ DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
+ distdir = $(PACKAGE)-$(VERSION)
+ top_distdir = $(distdir)
+@@ -307,7 +307,7 @@
+ ACLOCAL_AMFLAGS = -I config
+ SUBDIRS = . include snprintf libringbuffer liblttng-ust-comm \
+ 	liblttng-ust liblttng-ust-ctl liblttng-ust-fork \
+-	liblttng-ust-libc-wrapper tools tests doc $(am__append_1)
++	liblttng-ust-libc-wrapper tools $(am__append_1)
+ 
+ #temporarily disabled
+ # liblttng-ust-malloc
