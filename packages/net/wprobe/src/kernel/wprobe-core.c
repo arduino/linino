@@ -40,6 +40,12 @@ prefetch(pos->next), pos != (head); \
 pos = rcu_dereference(pos->next))
 #endif
 
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(3,7,0)
+#define SKB_PORTID(x) NETLINK_CB(x).portid
+#else
+#define SKB_PORTID(x) NETLINK_CB(x).pid
+#endif
+
 #define WPROBE_MIN_INTERVAL		100 /* minimum measurement interval in msecs */
 #define WPROBE_MAX_FILTER_SIZE	1024
 #define WPROBE_MAX_FRAME_SIZE	1900
@@ -441,7 +447,7 @@ wprobe_send_item_value(struct sk_buff *msg, struct netlink_callback *cb,
 	struct wprobe_value *val = dev->query_val;
 	u64 time = val[i].last - val[i].first;
 
-	hdr = genlmsg_put(msg, NETLINK_CB(cb->skb).pid, cb->nlh->nlmsg_seq,
+	hdr = genlmsg_put(msg, SKB_PORTID(cb->skb), cb->nlh->nlmsg_seq,
 			&wprobe_fam, NLM_F_MULTI, WPROBE_CMD_GET_INFO);
 
 	if (nla_put_u32(msg, WPROBE_ATTR_ID, i))
@@ -514,7 +520,7 @@ wprobe_send_item_info(struct sk_buff *msg, struct netlink_callback *cb,
 {
 	struct genlmsghdr *hdr;
 
-	hdr = genlmsg_put(msg, NETLINK_CB(cb->skb).pid, cb->nlh->nlmsg_seq,
+	hdr = genlmsg_put(msg, SKB_PORTID(cb->skb), cb->nlh->nlmsg_seq,
 			&wprobe_fam, NLM_F_MULTI, WPROBE_CMD_GET_LIST);
 
 	if ((i == 0) && (dev->addr != NULL)) {
@@ -557,7 +563,7 @@ wprobe_dump_filter_group(struct sk_buff *msg, struct wprobe_filter_group *fg, st
 	struct nlattr *group, *item;
 	int i;
 
-	hdr = genlmsg_put(msg, NETLINK_CB(cb->skb).pid, cb->nlh->nlmsg_seq,
+	hdr = genlmsg_put(msg, SKB_PORTID(cb->skb), cb->nlh->nlmsg_seq,
 			&wprobe_fam, NLM_F_MULTI, WPROBE_CMD_GET_FILTER);
 	if (!hdr)
 		return false;
@@ -639,7 +645,7 @@ wprobe_dump_link(struct sk_buff *msg, struct wprobe_link *l, struct netlink_call
 {
 	struct genlmsghdr *hdr;
 
-	hdr = genlmsg_put(msg, NETLINK_CB(cb->skb).pid, cb->nlh->nlmsg_seq,
+	hdr = genlmsg_put(msg, SKB_PORTID(cb->skb), cb->nlh->nlmsg_seq,
 			&wprobe_fam, NLM_F_MULTI, WPROBE_CMD_GET_LINKS);
 	if (!hdr)
 		return false;
