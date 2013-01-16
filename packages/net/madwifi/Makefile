@@ -229,6 +229,8 @@ define Build/Prepare
 		$(PKG_BUILD_DIR)/hal/public/arm11*.inc
 	$(SED) 's,mtune=arm1136j-s,mtune=mpcore,' \
 		$(PKG_BUILD_DIR)/hal/public/arm11*.inc
+	# preset kernel version
+	echo 'char *uts_release = "$(LINUX_VERSION)";' > $(PKG_BUILD_DIR)/kernelversion.c
 endef
 
 ifeq ($(findstring AHB,$(BUS)),AHB)
