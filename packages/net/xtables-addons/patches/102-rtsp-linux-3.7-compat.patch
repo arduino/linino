@@ -1,5 +1,5 @@
---- xtables-addons-2.0/extensions/rtsp/nf_conntrack_rtsp.c~	2012-12-20 00:08:48.000000000 +0000
-+++ xtables-addons-2.0/extensions/rtsp/nf_conntrack_rtsp.c	2012-12-20 00:19:14.065730169 +0000
+--- a/extensions/rtsp/nf_conntrack_rtsp.c
++++ b/extensions/rtsp/nf_conntrack_rtsp.c
 @@ -73,7 +73,7 @@ static DEFINE_SPINLOCK(rtsp_buffer_lock)
  static struct nf_conntrack_expect_policy rtsp_exp_policy; 
  
@@ -36,8 +36,8 @@
  		break;
  	case IP_CT_DIR_REPLY:
  		pr_debug("IP_CT_DIR_REPLY\n");
---- xtables-addons-2.0/extensions/rtsp/nf_conntrack_rtsp.h~	2012-12-20 00:08:48.000000000 +0000
-+++ xtables-addons-2.0/extensions/rtsp/nf_conntrack_rtsp.h	2012-12-20 00:16:50.868733345 +0000
+--- a/extensions/rtsp/nf_conntrack_rtsp.h
++++ b/extensions/rtsp/nf_conntrack_rtsp.h
 @@ -50,6 +50,7 @@ struct ip_ct_rtsp_expect
  
  extern unsigned int (*nf_nat_rtsp_hook)(struct sk_buff *skb,
@@ -46,9 +46,9 @@
  				 unsigned int matchoff, unsigned int matchlen,
  				 struct ip_ct_rtsp_expect *prtspexp,
  				 struct nf_conntrack_expect *exp);
---- xtables-addons-2.0/extensions/rtsp/nf_nat_rtsp.c~	2012-12-20 00:08:48.000000000 +0000
-+++ xtables-addons-2.0/extensions/rtsp/nf_nat_rtsp.c	2012-12-20 00:29:32.311738640 +0000
-@@ -33,10 +33,10 @@
+--- a/extensions/rtsp/nf_nat_rtsp.c
++++ b/extensions/rtsp/nf_nat_rtsp.c
+@@ -32,10 +32,10 @@
  
  #include <linux/module.h>
  #include <net/tcp.h>
@@ -61,7 +61,7 @@
  
  #include <linux/inet.h>
  #include <linux/ctype.h>
-@@ -105,8 +103,8 @@ get_skb_tcpdata(struct sk_buff* skb, cha
+@@ -102,8 +102,8 @@ get_skb_tcpdata(struct sk_buff* skb, cha
  static int
  rtsp_mangle_tran(enum ip_conntrack_info ctinfo,
                   struct nf_conntrack_expect* exp,
@@ -72,7 +72,7 @@
  {
      char*       ptcp;
      uint        tcplen;
-@@ -259,7 +257,7 @@ rtsp_mangle_tran(enum ip_conntrack_info
+@@ -256,7 +256,7 @@ rtsp_mangle_tran(enum ip_conntrack_info 
                  if (dstact == DSTACT_STRIP || (dstact == DSTACT_AUTO && !is_stun))
                  {
                      diff = nextfieldoff-off;
@@ -81,7 +81,7 @@
                                                           off, diff, NULL, 0))
                      {
                          /* mangle failed, all we can do is bail */
-@@ -329,7 +327,7 @@ rtsp_mangle_tran(enum ip_conntrack_info
+@@ -326,7 +326,7 @@ rtsp_mangle_tran(enum ip_conntrack_info 
                       * parameter 4 below is offset from start of tcp data.
                       */
                      diff = origlen-rbuflen;
@@ -90,7 +90,7 @@
                                                origoff, origlen, rbuf, rbuflen))
                      {
                          /* mangle failed, all we can do is bail */
-@@ -354,7 +352,7 @@ rtsp_mangle_tran(enum ip_conntrack_info
+@@ -351,7 +351,7 @@ rtsp_mangle_tran(enum ip_conntrack_info 
  }
  
  static uint
@@ -99,7 +99,7 @@
  	 unsigned int matchoff, unsigned int matchlen, struct ip_ct_rtsp_expect* prtspexp, 
  	 struct nf_conntrack_expect* exp)
  {
-@@ -392,7 +390,7 @@ help_out(struct sk_buff *skb, enum ip_co
+@@ -389,7 +389,7 @@ help_out(struct sk_buff *skb, enum ip_co
          {
              uint oldtcplen = tcplen;
  	    pr_debug("hdr: Transport\n");
@@ -108,7 +108,7 @@
              {
  		pr_debug("hdr: Transport mangle failed");
                  break;
-@@ -410,7 +408,7 @@ help_out(struct sk_buff *skb, enum ip_co
+@@ -407,7 +407,7 @@ help_out(struct sk_buff *skb, enum ip_co
  }
  
  static unsigned int
@@ -117,7 +117,7 @@
       unsigned int matchoff, unsigned int matchlen, struct ip_ct_rtsp_expect* prtspexp,
       struct nf_conntrack_expect* exp)
  {
-@@ -420,7 +418,7 @@ help(struct sk_buff *skb, enum ip_conntr
+@@ -417,7 +417,7 @@ help(struct sk_buff *skb, enum ip_conntr
      switch (dir)
      {
      case IP_CT_DIR_ORIGINAL:
@@ -126,7 +126,7 @@
          break;
      case IP_CT_DIR_REPLY:
  	pr_debug("unmangle ! %u\n", ctinfo);
-@@ -435,7 +433,7 @@ help(struct sk_buff *skb, enum ip_conntr
+@@ -432,7 +432,7 @@ help(struct sk_buff *skb, enum ip_conntr
  
  static void expected(struct nf_conn* ct, struct nf_conntrack_expect *exp)
  {
@@ -135,7 +135,7 @@
      u_int32_t newdstip, newsrcip, newip;
  
      struct nf_conn *master = ct->master;
-@@ -449,12 +447,13 @@ static void expected(struct nf_conn* ct,
+@@ -446,12 +446,13 @@ static void expected(struct nf_conn* ct,
      pr_debug("newsrcip=%pI4, newdstip=%pI4, newip=%pI4\n",
             &newsrcip, &newdstip, &newip);
  

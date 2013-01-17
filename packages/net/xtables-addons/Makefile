@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009-2012 OpenWrt.org
+# Copyright (C) 2009-2013 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -10,9 +10,9 @@ include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=xtables-addons
 ifeq ($(strip $(call CompareKernelPatchVer,$(KERNEL_PATCHVER),ge,3.7.0)),1)
-PKG_VERSION:=2.0
+PKG_VERSION:=2.1
 PKG_RELEASE:=1
-PKG_MD5SUM:=26b1b1dbb4a8faff24597723ebde04c9
+PKG_MD5SUM:=b624fc57bbda9e15c33a6471e4ec75e1
 else
 PKG_VERSION:=1.45
 PKG_RELEASE:=3
