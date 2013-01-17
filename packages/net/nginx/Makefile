@@ -56,7 +56,7 @@ define Package/nginx
   SUBMENU:=Web Servers/Proxies
   TITLE:=Nginx web server
   URL:=http://nginx.org/
-  DEPENDS:=+!NGINX_DISABLE_PCRE:libpcre +NGINX_SSL:libopenssl +!NGINX_DISABLE_HTTP_GZIP_MODULE:zlib +libpthread +NGINX_MODULE_LUA:liblua
+  DEPENDS:=+!NGINX_DISABLE_PCRE:libpcre +libopenssl +!NGINX_DISABLE_HTTP_GZIP_MODULE:zlib +libpthread +NGINX_MODULE_LUA:liblua
   MENU:=1
 endef
 
