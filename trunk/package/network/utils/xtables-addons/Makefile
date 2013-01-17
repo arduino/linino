@@ -26,6 +26,8 @@ PKG_BUILD_DEPENDS:=iptables
 PKG_INSTALL:=1
 PKG_BUILD_PARALLEL:=1
 
+PKG_MAINTAINER:=Jo-Philipp Wich <jow@openwrt.org>
+
 PKG_FIXUP:=autoreconf
 
 include $(INCLUDE_DIR)/package.mk
