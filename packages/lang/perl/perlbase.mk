@@ -1466,8 +1466,9 @@ TITLE:=Test perl module
 endef
 
 define Package/perlbase-test/install
+$(call perlmod/Install,$(1),Test Test.pm,Test/Harness/TAP.pod Test/Tutorial.pod)
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/prove $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/prove $(1)/usr/bin
 	$(call perlmod/Install,$(1),Test Test.pm,Test/Harness/TAP.pod Test/Tutorial.pod)
 endef
 
