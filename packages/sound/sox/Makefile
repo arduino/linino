@@ -33,7 +33,7 @@ TARGET_LDFLAGS+= \
 define Package/sox
   SECTION:=sound
   CATEGORY:=Sound
-  DEPENDS:=+BUILD_PATENTED:lame-lib +BUILD_PATENTED:libmad +BUILD_PATENTED:libid3tag +libvorbis +libvorbisidec +libgsm +alsa-lib +libsndfile +libflac +ffmpeg +libmagic +libpng
+  DEPENDS:=+BUILD_PATENTED:lame-lib +BUILD_PATENTED:libmad +BUILD_PATENTED:libid3tag +libvorbis +libvorbisidec +libgsm +alsa-lib +libsndfile +libflac +ffmpeg +libmagic +libpng +libao
   TITLE:=Sox is a general purpose sound converter/player/recorder
   URL:=http://sox.sourceforge.net/
   MAINTAINER:=Hamish Guthrie <hcg@openwrt.org>
