@@ -82,13 +82,9 @@ endef
 GST_VERSION:=0.10
 
 CONFIGURE_ARGS += \
-	--disable-debug \
 	--disable-examples \
 	--disable-tests \
 	--disable-valgrind \
-	\
-	--disable-gst-debug \
-	\
 	--without-libiconv-prefix \
 	--without-libintl-prefix \
 	--without-x \

@@ -1,0 +1,43 @@
+--- gstreamer-0.10.36/gst/gstinfo.c 2011-12-30 02:14:34.000000000 +0100
++++ gstreamer-0.10.36.modified/gst/gstinfo.c    2013-01-03 14:01:37.000000000 +0100
+@@ -462,6 +462,39 @@
+   va_end (var_args);
+ }
+ 
++typedef struct {
++  const gchar *file;
++  const gchar *function;
++  const gint   line;
++} GstDebugTraceLocation;
++
++
++/**
++ * gst_debug_log2:
++ *  <at> category: category to log
++ *  <at> level: level of the message is in
++ *  <at> location: the file, function name, and line number of the location that
++ *    emitted the message
++ *  <at> object: the object this message relates to or NULL if none
++ *  <at> format: a printf style format string
++ *  <at> ...: optional arguments for the format
++ *
++ * Logs the given message using the currently registered debugging handlers.
++ */
++void
++gst_debug_log2 (GstDebugCategory * category, GstDebugLevel level,
++    const GstDebugTraceLocation * location,
++    GObject * object, const gchar * format, ...)
++{
++#if 0
++  va_list var_args;
++
++  va_start (var_args, format);
++  gst_debug_log_valist2 (category, level, location, object, format, var_args);
++  va_end (var_args);
++#endif
++}
++
+ #ifdef _MSC_VER
+ /* based on g_basename(), which we can't use because it was deprecated */
+ static inline const gchar *
+
