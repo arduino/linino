@@ -31,7 +31,7 @@ define Package/cups
 $(call Package/cups/Default)
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libcups +libcupsmime +libcupscgi +libcupsppdc +libusb
+  DEPENDS:=+libcups +libcupsmime +libcupscgi +libcupsppdc +libusb-1.0
   TITLE:=Common UNIX Printing System (daemon)
 endef
 
@@ -483,9 +483,7 @@ define Package/cups-client/install
 		$(PKG_INSTALL_DIR)/usr/sbin/{cupsaccept,cupsaddsmb,cupsfilter} \
 		$(PKG_INSTALL_DIR)/usr/sbin/{lpadmin,lpinfo,lpmove} \
 		$(1)/usr/sbin/
-	(cd $(1)/usr/sbin; ln -sf cupsaccept accept;
-		ln -sf cupsaccept cupsenable; ln -sf cupsaccept cupsdisable;
-		ln -sf cupsaccept reject; ln -sf cupsaccept cupsreject;)
+	(cd $(1)/usr/sbin; ln -sf cupsaccept accept; ln -sf cupsaccept cupsenable; ln -sf cupsaccept cupsdisable; ln -sf cupsaccept reject; ln -sf cupsaccept cupsreject;)
 endef
 
 define Package/cups-filters/install
