@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=pygobject
-PKG_VERSION:=2.16.0
+PKG_VERSION:=2.21.5
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=@GNOME/$(PKG_NAME)/2.16
-PKG_MD5SUM:=431e7d4632163b93d1ee43cd071a389c
+PKG_SOURCE_URL:=@GNOME/$(PKG_NAME)/2.21
+PKG_MD5SUM:=77ad7e8dbf13188364c9f56f907e530a
 PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
 
@@ -25,7 +25,7 @@ EXTRA_LDFLAGS+= \
 	-L$(ICONV_PREFIX) -L$(INTL_PREFIX)
 
 TARGET_CFLAGS += $(FPIC)
-CONFIGURE_ARGS += --enable-static
+CONFIGURE_ARGS += --enable-static --disable-instrospection
 
 define Package/python-gobject
   SUBMENU:=Python
@@ -42,7 +42,7 @@ endef
 
 define Build/Configure
 	$(call Build/Configure/Default, \
-		--with-libffi \
+		--with-libffi --disable-introspection \
 	)
 endef
 
