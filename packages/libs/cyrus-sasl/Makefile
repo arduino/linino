@@ -20,7 +20,7 @@ PKG_LICENSE_FILES:=COPYING cmulocal/COPYING saslauthd/COPYING
 
 PKG_BUILD_DEPENDS:=libopenssl
 
-PKG_FIXUP:=autoreconf
+PKG_FIXUP:=autoreconf libtool
 PKG_MACRO_PATHS:=cmulocal config ../cmulocal ../config
 PKG_AUTOMAKE_PATHS:=. saslauthd sasldb
 PKG_REMOVE_FILES:=aclocal.m4 saslauthd/aclocal.m4
