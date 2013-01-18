@@ -9,12 +9,12 @@ include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=i2c-tools
-PKG_VERSION:=3.0.3
+PKG_VERSION:=3.1.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://dl.lm-sensors.org/i2c-tools/releases
-PKG_MD5SUM:=511376eed04455cdb277ef19c5f73bb4
+PKG_MD5SUM:=f15019e559e378c6e9d5d6299a00df21
 
 PKG_BUILD_DEPENDS:=PACKAGE_python-smbus:python
 
