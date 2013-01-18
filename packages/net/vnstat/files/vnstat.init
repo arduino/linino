@@ -65,13 +65,18 @@ start() {
 	config_load vnstat
 	config_foreach init_ifaces vnstat
 
-	/usr/sbin/vnstatd -d
+	SERVICE_PID_FILE="${pid}"
+	service_start /usr/sbin/vnstatd -d
 }
 
 stop() {
 	local pid="$(vnstat_option PidFile)"
-	[ -n "$pid" ] && {
-		service_kill vnstatd "$pid"
-		rm -f "$pid"
+
+	[ -n "$pid" ] || {
+		echo "Error: No PidFile set in vnstat.conf" >&2
+		exit 1
 	}
+
+	SERVICE_PID_FILE="${pid}"
+	service_stop /usr/sbin/vnstatd
 }
