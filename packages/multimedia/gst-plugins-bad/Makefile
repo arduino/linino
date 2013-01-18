@@ -52,7 +52,6 @@ endef
 GST_VERSION:=0.10
 
 CONFIGURE_ARGS += \
-	--disable-debug \
 	--disable-examples \
 	--disable-nls	\
 	\
@@ -233,6 +232,7 @@ $(eval $(call GstBuildPlugin,scaletempoplugin,scaletempo support,,,))
 $(eval $(call GstBuildPlugin,sdpelem,sdp support,interfaces rtp sdp,,))
 $(eval $(call GstBuildPlugin,segmentclip,segmentclip support,audio,,))
 $(eval $(call GstBuildPlugin,siren,siren support,rtp,,))
+#$(eval $(call GstBuildPlugin,soundtouch,soundtouch support,,,))
 $(eval $(call GstBuildPlugin,speed,speed support,,,))
 $(eval $(call GstBuildPlugin,subenc,subenc support,controller,,))
 $(eval $(call GstBuildPlugin,stereo,stereo support,audio controller,,))

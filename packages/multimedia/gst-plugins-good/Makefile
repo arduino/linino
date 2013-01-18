@@ -52,7 +52,6 @@ endef
 GST_VERSION:=0.10
 
 CONFIGURE_ARGS += \
-	--disable-debug \
 	--disable-examples \
 	\
 	--disable-aalib \
