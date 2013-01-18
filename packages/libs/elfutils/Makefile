@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2010-2011 OpenWrt.org
+# Copyright (C) 2010-2013 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,7 +8,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=elfutils
 PKG_VERSION:=0.152
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://fedorahosted.org/releases/e/l/$(PKG_NAME)/$(PKG_VERSION)
@@ -29,7 +29,7 @@ endef
 
 define Package/libdw
   $(call Package/elfutils/Default)
-  DEPENDS:=libelf1 +zlib
+  DEPENDS:=libelf1 +zlib +libbz2
   TITLE+= (libdw)
 endef
 
