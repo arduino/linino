@@ -37,7 +37,8 @@ endef
 # MAKE_FLAGS should be passed again upon cleaning because Perf's makefile
 # always performs checks before processing any rule
 define Build/Clean
-	$(MAKE) -C $(PKG_BUILD_DIR) \
+	-$(MAKE) -C $(PKG_BUILD_DIR) \
+		NO_DWARF=1 \
 		$(MAKE_FLAGS) \
 		clean
 endef
