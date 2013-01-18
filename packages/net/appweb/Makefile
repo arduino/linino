@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009-2010 OpenWrt.org
+# Copyright (C) 2009-2013 OpenWrt.org
 # Copyright (C) 2009 Embedthis Software
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -11,7 +11,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=appweb
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 #
 #	Build stable
