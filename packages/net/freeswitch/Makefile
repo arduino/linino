@@ -11,7 +11,7 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=freeswitch
 PKG_DISTNAME:=$(PKG_NAME)_git
 PKG_VERSION:=1.3.13b
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 
 #
@@ -19,7 +19,7 @@ PKG_RELEASE:=1
 #
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=git://git.$(PKG_NAME).org/$(PKG_NAME).git
-FS_DEFAULT_HEAD:=af6ae011c70c32d6d7637f7befc0e614b4624527
+FS_DEFAULT_HEAD:=8e6460fed3d4182dd90d07c5e9a980c71d22acc9
 FS_LATEST_HEAD:=$(shell git ls-remote $(PKG_SOURCE_URL) HEAD | cut -f1)
 PKG_SOURCE_VERSION:=$(if $(CONFIG_FS_SOFIA_WITH_PULL_CURRENT),$(FS_LATEST_HEAD),$(FS_DEFAULT_HEAD))
 PKG_SOURCE_SUBDIR:=$(PKG_DISTNAME)
@@ -426,13 +426,13 @@ endif
 
 
 ifneq ($(CONFIG_PACKAGE_$(PKG_NAME)-sounds-en),)
- $(eval $(call Download/files,sounds-en,$(PKG_NAME)-sounds-en-us-callie-8000-1.0.22.tar.gz,cff509d878708ce5e6e7fedac7f683ef,,,,))
+ $(eval $(call Download/files,sounds-en,$(PKG_NAME)-sounds-en-us-callie-8000-1.0.22.tar.gz,cff509d878708ce5e6e7fedac7f683ef,vanilla,,,,))
 	MAKE_INSTALL_TARGETS+= sounds-install
 endif
 
 
 ifneq ($(CONFIG_PACKAGE_$(PKG_NAME)-sounds-moh),)
- $(eval $(call Download/files,sounds-moh,$(PKG_NAME)-sounds-music-8000-1.0.8.tar.gz,f63ef3cc3507af079ae5c7b8b8a01e42,,,,))
+ $(eval $(call Download/files,sounds-moh,$(PKG_NAME)-sounds-music-8000-1.0.8.tar.gz,f63ef3cc3507af079ae5c7b8b8a01e42,vanilla,,,,))
 	MAKE_INSTALL_TARGETS+= moh-install
 endif
 
@@ -680,57 +680,45 @@ endef
 #
 # 1. Name
 # 2. Title
-# 3. Files (module files include different names)
-# 4. Files (supporting files include different names)
-# 5. Inter module depends
-# 6. Extra depends
+# 3. Selection on module configuration file
+# 4. Files (module files include different names)
+# 5. Files (supporting files include different names)
+# 6. Inter module depends
+# 7. Extra depends
 #
 define BuildPlugin
   define Package/$(PKG_NAME)-mod-$(1)
     $$(call Package/$(PKG_NAME)/Default)
     TITLE:= FS $(2) module
-    DEPENDS:= $(PKG_NAME) $(foreach m,$(5),+$(PKG_NAME)-mod-$(m)) $(6)
+    DEPENDS:= $(PKG_NAME) $(foreach m,$(6),+$(PKG_NAME)-mod-$(m)) $(7)
   endef
 
   define Package/$(PKG_NAME)-mod-$(1)/install
 	[ -z "mod_$(subst -,_,$(1))" ] || $(INSTALL_DIR) $$(1)/usr/lib/$(PKG_NAME)
 
-	for f in $$$$(realpath $$$$(wildcard $(PKG_INSTALL_DIR)/usr/lib/$(PKG_NAME)/mod_$(subst -,_,$(1)).*)) $$$$(wildcard $(PKG_INSTALL_DIR)/usr/lib/$(PKG_NAME)/$(3)_*); \
+	for f in $$$$(realpath $$$$(wildcard $(PKG_INSTALL_DIR)/usr/lib/$(PKG_NAME)/mod_$(subst -,_,$(1)).*)) $$$$(wildcard $(PKG_INSTALL_DIR)/usr/lib/$(PKG_NAME)/$(4)_*); \
 	do \
 		$(CP) $$$$$$$${f} $$(1)/usr/lib/$(PKG_NAME)/; \
 	done
 
-	for f in $(4); \
+	for f in $(5); \
 	do \
 		[ -d "$(dirname $$(1)/usr/${f})" ] || $(INSTALL_DIR) $(dirname $$(1)/usr/${f}); \
 		$(CP) $(PKG_INSTALL_DIR)/usr/${f} $$(1)/usr/${f}; \
 	done
 
 	#
-	# XML configuration files (vanilla)
+	# mod_$(subst -,_,$(1)) XML configuration files $(3)
 	#
-	if [ -f ${PKG_BUILD_DIR}/conf/vanilla/autoload_configs/$(subst -,_,$(1)).conf.xml ]; then \
-		[ -d  $$(1)/etc/$(PKG_NAME)/autoload_configs ] || $(INSTALL_DIR) $$(1)/etc/$(PKG_NAME)/autoload_configs ; \
-		$(CP) ${PKG_BUILD_DIR}/conf/vanilla/autoload_configs/$(subst -,_,$(1)).conf.xml $$(1)/etc/$(PKG_NAME)/autoload_configs/ ; \
-		if [ -d "./files/etc.packages/$(1)" ]; then \
-			$(CP) ./files/etc.packages/$(1)/* $$(1)/etc/$(PKG_NAME)/ ; \
-		fi \
-	fi
+	$(and "$(3)" == "vanilla" ],$(firstword $(wildcard ${PKG_BUILD_DIR}/conf/$(3)/autoload_configs/$(subst -,_,$(1)).conf.xml)),[ -d $$(1)/etc/$(PKG_NAME)/autoload_configs ] || $(INSTALL_DIR) $$(1)/etc/$(PKG_NAME)/autoload_configs;$(CP) $(firstword $(wildcard ${PKG_BUILD_DIR}/conf/$(3)/autoload_configs/$(subst -,_,$(1)).conf.xml)) $$(1)/etc/$(PKG_NAME)/autoload_configs)
+	$(and !$(3),$(firstword $(wildcard ${PKG_BUILD_DIR}/src/mod/*/mod_$(subst -,_,$(1))/conf/autoload_configs/$(subst -,_,$(1)).conf.xml)),[ -d $$(1)/etc/$(PKG_NAME)/autoload_configs ] || $(INSTALL_DIR) $$(1)/etc/$(PKG_NAME)/autoload_configs;$(CP) $(firstword $(wildcard ${PKG_BUILD_DIR}/src/mod/*/mod_$(subst -,_,$(1))/conf/autoload_configs/$(subst -,_,$(1)).conf.xml)) $$(1)/etc/$(PKG_NAME)/autoload_configs)
 
 	#
-	# For mod_YAML configuration files (vanilla)
+	# Additional configuration files for mod_YAML (vanilla)
 	#
-	if [ "mod_$(subst -,_,$(1))" == "mod_yaml" ] && [ -d ${PKG_BUILD_DIR}/conf/vanilla/yaml ]; then \
+	if [ "$(1)" == "yaml" ] && [ -d ${PKG_BUILD_DIR}/conf/$(3)/yaml ]; then \
 		[ -d  $$(1)/etc/$(PKG_NAME)/yaml ] || $(INSTALL_DIR) $$(1)/etc/$(PKG_NAME)/yaml; \
-		$(CP) $(wildcard ${PKG_BUILD_DIR}/conf/vanilla/yaml/*) $$(1)/etc/$(PKG_NAME)/yaml; \
-	fi
-
-	#
-	# For mod_openzap
-	#
-	if [ "mod_$(subst -,_,$(1))" == "mod_openzap" ]; then \
-		[ -z "$$(1)/etc/$(PKG_NAME)/autoload_configs" ] || $(INSTALL_DIR) $$(1)/etc/$(PKG_NAME)/autoload_configs ; \
-		$(CP) ${PKG_INSTALL_DIR}/etc/$(PKG_NAME)/autoload_configs/$(1).conf.xml $$(1)/etc/$(PKG_NAME)/autoload_configs ; \
+		$(CP) $(wildcard ${PKG_BUILD_DIR}/conf/$(3)/yaml/*) $$(1)/etc/$(PKG_NAME)/yaml; \
 	fi
   endef
 
@@ -766,130 +754,130 @@ $(eval $(call BuildLib,libopenzap,OpenZAP,openzap,,))
 
 
 #
-# $(eval $(call BuildPlugin,Name,Title,Files,Inter Depends,Extra Depends))
+# $(eval $(call BuildPlugin,Name,Title,Selection on module Conf File,Files,Inter Depends,Extra Depends))
 #
-$(eval $(call BuildPlugin,abstraction,An Abstraction To API Call,,,,))
-$(eval $(call BuildPlugin,alsa,Alsa Endpoint,,,,+alsa-lib))
-$(eval $(call BuildPlugin,amr,Adaptive Multi-Rate On Bandwidth Codec,,,,))
-$(eval $(call BuildPlugin,amrwb,Wide Band AMR,,,,))
-$(eval $(call BuildPlugin,avmd,Advanced Voice Mail Detection,,,,))
-$(eval $(call BuildPlugin,blacklist,Blacklist,,,,))
-$(eval $(call BuildPlugin,bv,BroadVoice16 and BroadVoice32 Audio Codec,,,,))
-$(eval $(call BuildPlugin,callcenter,Call Center,,,,))
-$(eval $(call BuildPlugin,cdr-csv,CSV-CDR Handler,,,,))
-$(eval $(call BuildPlugin,cdr-pg-csv,Postgress CDR Handler,,,,+coreutils +libpq +postresql))
-$(eval $(call BuildPlugin,cdr-sqlite,SQLite3 CDR Handler,,,,+libsqlite3))
-$(eval $(call BuildPlugin,celt,CELT Ultra-Low Delay Codec,,,,+libogg))
-$(eval $(call BuildPlugin,cepstral,Cepstral Interface,,,,@BROKEN)) # needs <swift.h>
-$(eval $(call BuildPlugin,cidlookup,Data Query For CID->NAME Services,,,,+libcurl))
-$(eval $(call BuildPlugin,cluechoo,Framework Demo,,,,))
-$(eval $(call BuildPlugin,codec2,CoDec 2,,,,))
-$(eval $(call BuildPlugin,commands,API Commands,,,,))
-$(eval $(call BuildPlugin,conference,Conference Room,,,,))
-$(eval $(call BuildPlugin,console,Console Logger,,,,))
-$(eval $(call BuildPlugin,curl,HTTP Request,,,,+libcurl))
-$(eval $(call BuildPlugin,dahdi-codec,DAHDI Codecs,,,,))
-$(eval $(call BuildPlugin,db,Database Backend,,,,))
-$(eval $(call BuildPlugin,dialplan-asterisk,Asterisk Dialplan Parser,,,,))
-$(eval $(call BuildPlugin,dialplan-directory,Dialplan Directory,,,,))
-$(eval $(call BuildPlugin,dialplan-xml,Dialplan-XML Interface,,,,))
-$(eval $(call BuildPlugin,dingaling,Jabber Interface,,,,+libgcrypt +libopenssl))
-$(eval $(call BuildPlugin,directory,Search By Name Directory IVR,,,,))
-$(eval $(call BuildPlugin,distributor,Simple Robin-Round Load to Gateway,,,,))
-$(eval $(call BuildPlugin,dptools,Dialplan Tools,,,,))
-$(eval $(call BuildPlugin,easyroute,Simple DID Routing,,,,))
-$(eval $(call BuildPlugin,enum,ENUM Routing,,,,))
-$(eval $(call BuildPlugin,erlang-event,Erlang Event Handler,,,,+erlang))
-$(eval $(call BuildPlugin,esf,Extra SIP Functionality,,,,))
-$(eval $(call BuildPlugin,event-multicast,Multicast Event Handler,,,,))
-$(eval $(call BuildPlugin,event-socket,Socket Event Handler,,,,))
-$(eval $(call BuildPlugin,event-zmq,Socket Event Handler By Zero MQ,,,,+libuuid))
-$(eval $(call BuildPlugin,expr,Expression Evaluation,,,,))
-$(eval $(call BuildPlugin,fifo,FIFO,,,,))
-$(eval $(call BuildPlugin,file-string,Streaming Multiple Sound Files Sequentially,,,,@OBSOLETE)) # merged into dptools
-$(eval $(call BuildPlugin,flite,Festival TTS,,,,@(!(armeb||avr32)||BROKEN)))
-$(eval $(call BuildPlugin,fsk,Bell-202 1200-baud FSK decoder,,,,))
-$(eval $(call BuildPlugin,fsv,Video Player / Recorder,,,,))
-$(eval $(call BuildPlugin,g723-1,G.723.1 Codec,,,,))
-$(eval $(call BuildPlugin,g729,G.729 Codec,,,,))
-$(eval $(call BuildPlugin,gsmopen,GSM Modem compatible Endpoint,,,,+alsa-lib @BROKEN)) # needs gsmlib
-$(eval $(call BuildPlugin,h26x,H26X Linear Codec,,,,))
-$(eval $(call BuildPlugin,h323,H323 Endpoint,,,,@BROKEN)) # Req. H323Plus v1.24.x or newer
-$(eval $(call BuildPlugin,hash,API For Manipulating A Hash Table,,,,))
-$(eval $(call BuildPlugin,html5,HTML5 Endpoint Module,,,,))
-$(eval $(call BuildPlugin,httapi,HT Telephony API And HTTP Caching,,,,))
-$(eval $(call BuildPlugin,http-cache,HTTP GET With Caching,,,,+libcurl))
-$(eval $(call BuildPlugin,ilbc,ILBC Codec,,,,))
-$(eval $(call BuildPlugin,isac,iSAC Codec,,,,))
-$(eval $(call BuildPlugin,java,Java Language Interface,,,,@BROKEN)) # needs java
-$(eval $(call BuildPlugin,json-cdr,JSon-CDR Interface,,,,+libcurl))
-$(eval $(call BuildPlugin,lcr,Least Cost Routing,,,,))
-$(eval $(call BuildPlugin,local-stream,Multi-Channel On Same Stream,,,,))
-$(eval $(call BuildPlugin,logfile,File Logger,,,,))
-$(eval $(call BuildPlugin,loopback,Loopback to Dialplan Endpoint,,,,))
-$(eval $(call BuildPlugin,lua,LUA Language Interface,,,,))
-$(eval $(call BuildPlugin,managed,Media Switching Software Library,,,,+glib2 @BROKEN)) # needs Mono
-$(eval $(call BuildPlugin,mp4,MP4 File Format support for video apps,,,,@BROKEN)) # needs libmp4v2
-$(eval $(call BuildPlugin,mp4v,MP4 CoDec Support For Video,,,,))
-$(eval $(call BuildPlugin,native-file,WAV Format Sound Player,,,,))
-$(eval $(call BuildPlugin,nibblebill,Credit / Debit Billing,,,,))
-$(eval $(call BuildPlugin,oreka,Media Recording with Oreka,,,,))
-$(eval $(call BuildPlugin,openzap,Zaptel (Superseded by FreeTDM),ozmod,,,+$(PKG_NAME)-libopenzap +libpcap))
-$(eval $(call BuildPlugin,opus,Opus CoDec,,,,))
-$(eval $(call BuildPlugin,portaudio,Portaudio To Sound Card Interface,,,,+alsa-lib))
-$(eval $(call BuildPlugin,portaudio-stream,Portaudio Streaming Interface,,,,+alsa-lib))
-$(eval $(call BuildPlugin,posix-timer,POSIX Compliant Soft Timer,,,,))
-$(eval $(call BuildPlugin,radius-cdr,Radius-CDR interface,,,,+freeradius2 @BROKEN)) # fails in freeradius-client
-$(eval $(call BuildPlugin,redis,Redis Limited Backend,,,,))
-$(eval $(call BuildPlugin,rss,RRS Feeds via TTS,,,,))
-$(eval $(call BuildPlugin,rtmp,RTMP Protocol Handler,,,,))
-$(eval $(call BuildPlugin,sangoma-codec,codec sangoma-codec,,,,@BROKEN)) # Req. Sangoma CoDec source
-$(eval $(call BuildPlugin,say-de,German Say,,,,))
-$(eval $(call BuildPlugin,say-en,English Say,,,,))
-$(eval $(call BuildPlugin,say-es,Spanish Say,,,,))
-$(eval $(call BuildPlugin,say-fa,Persian Say,,,,))
-$(eval $(call BuildPlugin,say-fr,French Say,,,,))
-$(eval $(call BuildPlugin,say-hu,Hungarian Say,,,,))
-$(eval $(call BuildPlugin,say-it,Italian Say,,,,))
-$(eval $(call BuildPlugin,say-nl,Dutch Say,,,,))
-$(eval $(call BuildPlugin,say-pt,Portugeese Say,,,,))
-$(eval $(call BuildPlugin,say-ru,Russian Say,,,,))
-$(eval $(call BuildPlugin,say-th,Thai Say,,,,))
-$(eval $(call BuildPlugin,say-zh,Chineese Say,,,,))
-$(eval $(call BuildPlugin,shell-stream,Streaming Audio Through CLI,,,,))
-$(eval $(call BuildPlugin,silk,Skype(TM) SILK Codec Module,,,,))
-$(eval $(call BuildPlugin,siren,G.722.1 Codec,,,,))
-$(eval $(call BuildPlugin,skel,Template For New Module,,,,))
-$(eval $(call BuildPlugin,skinny,Skinny Call Control Protocol (SCCP),,,,))
-$(eval $(call BuildPlugin,skypopen,Skype Compatible Endpoint,,,,@FEATURE_drawing-backend_libX11))
-$(eval $(call BuildPlugin,sms,SMS,,,,))
-$(eval $(call BuildPlugin,snapshot,Record Audio Snapshot to File,,,,))
-$(eval $(call BuildPlugin,sndfile,Multi-Format Sound File,,,,))
-$(eval $(call BuildPlugin,snipe-hunt,Snipe Hunt (Simple Example Module),,,,))
-$(eval $(call BuildPlugin,snmp,SNMP AgentX Subagent,,,,+libnetsnmp))
-$(eval $(call BuildPlugin,snom,SNOM specific features,,,,))
-$(eval $(call BuildPlugin,sofia,SOFIA SIP,,,,))
-$(eval $(call BuildPlugin,sonar,Sonar Ping Timer,,,,))
-$(eval $(call BuildPlugin,spandsp,Span DSP,,,,+libjpeg))
-$(eval $(call BuildPlugin,speex,Speex codec,,,,))
-$(eval $(call BuildPlugin,spidermonkey,JavaScript,,,,@BROKEN)) # fails in js
-$(eval $(call BuildPlugin,spidermonkey-core_db,JavaScript DB,,,,@BROKEN))
-$(eval $(call BuildPlugin,spidermonkey-curl,JavaScript Curl,,,,@BROKEN))
-$(eval $(call BuildPlugin,spidermonkey-odbc,JavaScript ODBC,,,,@BROKEN))
-$(eval $(call BuildPlugin,spidermonkey-socket,JavaScript socket,,,,@BROKEN))
-$(eval $(call BuildPlugin,spidermonkey-teletone,JavaScript teletone,,,,@BROKEN))
-$(eval $(call BuildPlugin,spy,User Spy,,,,))
-$(eval $(call BuildPlugin,stress,Voice Stress Detection,,,,))
-$(eval $(call BuildPlugin,syslog,SysLog logger,,,,))
-$(eval $(call BuildPlugin,tone-stream,Tone Generation Stream,,,,))
-$(eval $(call BuildPlugin,tts-commandline,ASR TTS Command Interface,,,,))
-$(eval $(call BuildPlugin,unimrcp,UniMRCP (MRCP client),,,,@BROKEN))
-$(eval $(call BuildPlugin,valet-parking,Valet Parking Application,,,,))
-$(eval $(call BuildPlugin,vmd,VoiceMail Beep Detection,,,,))
-$(eval $(call BuildPlugin,voicemail,VoiceMail,,,,))
-$(eval $(call BuildPlugin,voicemail-ivr,VoiceMail IVR,,,,))
-$(eval $(call BuildPlugin,xml-cdr,XML-CDR Handler,,,,+libcurl))
-$(eval $(call BuildPlugin,xml-curl,XML-Curl Gateway,,,,+libcurl))
-$(eval $(call BuildPlugin,xml-rpc,XML-RPC Interface,,,,))
-$(eval $(call BuildPlugin,xml-scgi,SCGI XML Gateway,,,,))
-$(eval $(call BuildPlugin,yaml,YAML langunage,,,,))
+$(eval $(call BuildPlugin,abstraction,An Abstraction To API Call,vanilla,,,,))
+$(eval $(call BuildPlugin,alsa,Alsa Endpoint,vanilla,,,,+alsa-lib))
+$(eval $(call BuildPlugin,amr,Adaptive Multi-Rate On Bandwidth Codec,vanilla,,,,))
+$(eval $(call BuildPlugin,amrwb,Wide Band AMR,vanilla,,,,))
+$(eval $(call BuildPlugin,avmd,Advanced Voice Mail Detection,vanilla,,,,))
+$(eval $(call BuildPlugin,blacklist,Blacklist,vanilla,,,,))
+$(eval $(call BuildPlugin,bv,BroadVoice16 and BroadVoice32 Audio Codec,vanilla,,,,))
+$(eval $(call BuildPlugin,callcenter,Call Center,vanilla,,,,))
+$(eval $(call BuildPlugin,cdr-csv,CSV-CDR Handler,,,,,))
+$(eval $(call BuildPlugin,cdr-pg-csv,Postgress CDR Handler,vanilla,,,,+coreutils +libpq +postresql))
+$(eval $(call BuildPlugin,cdr-sqlite,SQLite3 CDR Handler,vanilla,,,,+libsqlite3))
+$(eval $(call BuildPlugin,celt,CELT Ultra-Low Delay Codec,vanilla,,,,+libogg))
+$(eval $(call BuildPlugin,cepstral,Cepstral Interface,vanilla,,,,@BROKEN)) # needs <swift.h>
+$(eval $(call BuildPlugin,cidlookup,Data Query For CID->NAME Services,,,,,+libcurl))
+$(eval $(call BuildPlugin,cluechoo,Framework Demo,vanilla,,,,))
+$(eval $(call BuildPlugin,codec2,CoDec 2,,,,,))
+$(eval $(call BuildPlugin,commands,API Commands,vanilla,,,,))
+$(eval $(call BuildPlugin,conference,Conference Room,vanilla,,,,))
+$(eval $(call BuildPlugin,console,Console Logger,vanilla,,,,))
+$(eval $(call BuildPlugin,curl,HTTP Request,vanilla,,,,+libcurl))
+$(eval $(call BuildPlugin,dahdi-codec,DAHDI Codecs,vanilla,,,,))
+$(eval $(call BuildPlugin,db,Database Backend,vanilla,,,,))
+$(eval $(call BuildPlugin,dialplan-asterisk,Asterisk Dialplan Parser,vanilla,,,,))
+$(eval $(call BuildPlugin,dialplan-directory,Dialplan Directory,vanilla,,,,))
+$(eval $(call BuildPlugin,dialplan-xml,Dialplan-XML Interface,vanilla,,,,))
+$(eval $(call BuildPlugin,dingaling,Jabber Interface,vanilla,,,,+libgcrypt +libopenssl))
+$(eval $(call BuildPlugin,directory,Search By Name Directory IVR,vanilla,,,,))
+$(eval $(call BuildPlugin,distributor,Simple Robin-Round Load to Gateway,vanilla,,,,))
+$(eval $(call BuildPlugin,dptools,Dialplan Tools,vanilla,,,,))
+$(eval $(call BuildPlugin,easyroute,Simple DID Routing,vanilla,,,,))
+$(eval $(call BuildPlugin,enum,ENUM Routing,,,,,))
+$(eval $(call BuildPlugin,erlang-event,Erlang Event Handler,vanilla,,,,+erlang))
+$(eval $(call BuildPlugin,esf,Extra SIP Functionality,vanilla,,,,))
+$(eval $(call BuildPlugin,event-multicast,Multicast Event Handler,vanilla,,,,))
+$(eval $(call BuildPlugin,event-socket,Socket Event Handler,vanilla,,,,))
+$(eval $(call BuildPlugin,event-zmq,Socket Event Handler By Zero MQ,vanilla,,,,+libuuid))
+$(eval $(call BuildPlugin,expr,Expression Evaluation,vanilla,,,,))
+$(eval $(call BuildPlugin,fifo,FIFO,vanilla,,,,))
+$(eval $(call BuildPlugin,file-string,Streaming Multiple Sound Files Sequentially,vanilla,,,,@OBSOLETE)) # merged into dptools
+$(eval $(call BuildPlugin,flite,Festival TTS,vanilla,,,,@(!(armeb||avr32)||BROKEN)))
+$(eval $(call BuildPlugin,fsk,Bell-202 1200-baud FSK decoder,vanilla,,,,))
+$(eval $(call BuildPlugin,fsv,Video Player / Recorder,vanilla,,,,))
+$(eval $(call BuildPlugin,g723-1,G.723.1 Codec,vanilla,,,,))
+$(eval $(call BuildPlugin,g729,G.729 Codec,vanilla,,,,))
+$(eval $(call BuildPlugin,gsmopen,GSM Modem compatible Endpoint,,,,,+alsa-lib @BROKEN)) # needs gsmlib
+$(eval $(call BuildPlugin,h26x,H26X Linear Codec,vanilla,,,,))
+$(eval $(call BuildPlugin,h323,H323 Endpoint,,,,,@BROKEN)) # Req. H323Plus v1.24.x or newer
+$(eval $(call BuildPlugin,hash,API For Manipulating A Hash Table,vanilla,,,,))
+$(eval $(call BuildPlugin,html5,HTML5 Endpoint Module,vanilla,,,,))
+$(eval $(call BuildPlugin,httapi,HT Telephony API And HTTP Caching,,,,,))
+$(eval $(call BuildPlugin,http-cache,HTTP GET With Caching,,,,,+libcurl))
+$(eval $(call BuildPlugin,ilbc,ILBC Codec,vanilla,,,,))
+$(eval $(call BuildPlugin,isac,iSAC Codec,vanilla,,,,))
+$(eval $(call BuildPlugin,java,Java Language Interface,vanilla,,,,@BROKEN)) # needs java
+$(eval $(call BuildPlugin,json-cdr,JSon-CDR Interface,,,,,+libcurl))
+$(eval $(call BuildPlugin,lcr,Least Cost Routing,vanilla,,,,))
+$(eval $(call BuildPlugin,local-stream,Multi-Channel On Same Stream,vanilla,,,,))
+$(eval $(call BuildPlugin,logfile,File Logger,vanilla,,,,))
+$(eval $(call BuildPlugin,loopback,Loopback to Dialplan Endpoint,vanilla,,,,))
+$(eval $(call BuildPlugin,lua,LUA Language Interface,vanilla,,,,))
+$(eval $(call BuildPlugin,managed,Media Switching Software Library,vanilla,,,,+glib2 @BROKEN)) # needs Mono
+$(eval $(call BuildPlugin,mp4,MP4 File Format support for video apps,vanilla,,,,@BROKEN)) # needs libmp4v2
+$(eval $(call BuildPlugin,mp4v,MP4 CoDec Support For Video,vanilla,,,,))
+$(eval $(call BuildPlugin,native-file,WAV Format Sound Player,vanilla,,,,))
+$(eval $(call BuildPlugin,nibblebill,Credit / Debit Billing,vanilla,,,,))
+$(eval $(call BuildPlugin,oreka,Media Recording with Oreka,vanilla,,,,))
+$(eval $(call BuildPlugin,openzap,Zaptel (Superseded by FreeTDM),vanilla,ozmod,,,+$(PKG_NAME)-libopenzap +libpcap))
+$(eval $(call BuildPlugin,opus,Opus CoDec,vanilla,,,,))
+$(eval $(call BuildPlugin,portaudio,Portaudio To Sound Card Interface,vanilla,,,,+alsa-lib))
+$(eval $(call BuildPlugin,portaudio-stream,Portaudio Streaming Interface,vanilla,,,,+alsa-lib))
+$(eval $(call BuildPlugin,posix-timer,POSIX Compliant Soft Timer,vanilla,,,,))
+$(eval $(call BuildPlugin,radius-cdr,Radius-CDR interface,vanilla,,,,+freeradius2 @BROKEN)) # fails in freeradius-client
+$(eval $(call BuildPlugin,redis,Redis Limited Backend,vanilla,,,,))
+$(eval $(call BuildPlugin,rss,RRS Feeds via TTS,vanilla,,,,))
+$(eval $(call BuildPlugin,rtmp,RTMP Protocol Handler,vanilla,,,,))
+$(eval $(call BuildPlugin,sangoma-codec,codec sangoma-codec,vanilla,,,,@BROKEN)) # Req. Sangoma CoDec source
+$(eval $(call BuildPlugin,say-de,German Say,vanilla,,,,))
+$(eval $(call BuildPlugin,say-en,English Say,vanilla,,,,))
+$(eval $(call BuildPlugin,say-es,Spanish Say,vanilla,,,,))
+$(eval $(call BuildPlugin,say-fa,Persian Say,vanilla,,,,))
+$(eval $(call BuildPlugin,say-fr,French Say,vanilla,,,,))
+$(eval $(call BuildPlugin,say-hu,Hungarian Say,vanilla,,,,))
+$(eval $(call BuildPlugin,say-it,Italian Say,vanilla,,,,))
+$(eval $(call BuildPlugin,say-nl,Dutch Say,vanilla,,,,))
+$(eval $(call BuildPlugin,say-pt,Portugeese Say,vanilla,,,,))
+$(eval $(call BuildPlugin,say-ru,Russian Say,vanilla,,,,))
+$(eval $(call BuildPlugin,say-th,Thai Say,vanilla,,,,))
+$(eval $(call BuildPlugin,say-zh,Chineese Say,vanilla,,,,))
+$(eval $(call BuildPlugin,shell-stream,Streaming Audio Through CLI,vanilla,,,,))
+$(eval $(call BuildPlugin,silk,Skype(TM) SILK Codec Module,vanilla,,,,))
+$(eval $(call BuildPlugin,siren,G.722.1 Codec,vanilla,,,,))
+$(eval $(call BuildPlugin,skel,Template For New Module,vanilla,,,,))
+$(eval $(call BuildPlugin,skinny,Skinny Call Control Protocol (SCCP),vanilla,,,,))
+$(eval $(call BuildPlugin,skypopen,Skype Compatible Endpoint,,,,,@FEATURE_drawing-backend_libX11))
+$(eval $(call BuildPlugin,sms,SMS,vanilla,,,,))
+$(eval $(call BuildPlugin,snapshot,Record Audio Snapshot to File,vanilla,,,,))
+$(eval $(call BuildPlugin,sndfile,Multi-Format Sound File,vanilla,,,,))
+$(eval $(call BuildPlugin,snipe-hunt,Snipe Hunt (Simple Example Module),vanilla,,,,))
+$(eval $(call BuildPlugin,snmp,SNMP AgentX Subagent,vanilla,,,,+libnetsnmp))
+$(eval $(call BuildPlugin,snom,SNOM specific features,vanilla,,,,))
+$(eval $(call BuildPlugin,sofia,SOFIA SIP,,,,,))
+$(eval $(call BuildPlugin,sonar,Sonar Ping Timer,vanilla,,,,))
+$(eval $(call BuildPlugin,spandsp,Span DSP,,,,,+libjpeg))
+$(eval $(call BuildPlugin,speex,Speex codec,,,,,))
+$(eval $(call BuildPlugin,spidermonkey,JavaScript,vanilla,,,,@BROKEN)) # fails in js
+$(eval $(call BuildPlugin,spidermonkey-core_db,JavaScript DB,vanilla,,,,@BROKEN))
+$(eval $(call BuildPlugin,spidermonkey-curl,JavaScript Curl,vanilla,,,,@BROKEN))
+$(eval $(call BuildPlugin,spidermonkey-odbc,JavaScript ODBC,vanilla,,,,@BROKEN))
+$(eval $(call BuildPlugin,spidermonkey-socket,JavaScript socket,vanilla,,,,@BROKEN))
+$(eval $(call BuildPlugin,spidermonkey-teletone,JavaScript teletone,vanilla,,,,@BROKEN))
+$(eval $(call BuildPlugin,spy,User Spy,vanilla,,,,))
+$(eval $(call BuildPlugin,stress,Voice Stress Detection,vanilla,,,,))
+$(eval $(call BuildPlugin,syslog,SysLog logger,vanilla,,,,))
+$(eval $(call BuildPlugin,tone-stream,Tone Generation Stream,vanilla,,,,))
+$(eval $(call BuildPlugin,tts-commandline,ASR TTS Command Interface,vanilla,,,,))
+$(eval $(call BuildPlugin,unimrcp,UniMRCP (MRCP client),vanilla,,,,@BROKEN))
+$(eval $(call BuildPlugin,valet-parking,Valet Parking Application,vanilla,,,,))
+$(eval $(call BuildPlugin,vmd,VoiceMail Beep Detection,vanilla,,,,))
+$(eval $(call BuildPlugin,voicemail,VoiceMail,vanilla,,,,))
+$(eval $(call BuildPlugin,voicemail-ivr,VoiceMail IVR,vanilla,,,,))
+$(eval $(call BuildPlugin,xml-cdr,XML-CDR Handler,vanilla,,,,+libcurl))
+$(eval $(call BuildPlugin,xml-curl,XML-Curl Gateway,vanilla,,,,+libcurl))
+$(eval $(call BuildPlugin,xml-rpc,XML-RPC Interface,vanilla,,,,))
+$(eval $(call BuildPlugin,xml-scgi,SCGI XML Gateway,vanilla,,,,))
+$(eval $(call BuildPlugin,yaml,YAML langunage,vanilla,,,,))
