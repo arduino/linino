@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2012 OpenWrt.org
+# Copyright (C) 2012-2013 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=bluelog
-PKG_VERSION:=1.0.4
+PKG_VERSION:=1.1.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=ftp://ftp.digifail.com/downloads/software/bluelog
-PKG_MD5SUM:=2791fbb0333b0b414a4d2230c1e9e8e6
+PKG_MD5SUM:=a5327d64731cd45debb57ab1edbe6e43
 
 PKG_INSTALL:=1
 
@@ -57,7 +57,7 @@ endef
 TARGET_CFLAGS += -DOPENWRT
 
 MAKE_FLAGS += \
-	 LIBS="$(TARGET_LDFLAGS) -lbluetooth"
+	 LIBS="$(TARGET_LDFLAGS) -lbluetooth -lm"
 
 define Package/bluelog/install
 	$(INSTALL_DIR) $(1)/usr/bin
@@ -68,20 +68,20 @@ endef
 
 define Package/bluelog-live/install
 	$(INSTALL_DIR) $(1)/www/bluelog
-	$(CP) $(PKG_INSTALL_DIR)/var/lib/bluelog/*.html $(1)/www/bluelog/
+	$(CP) $(PKG_INSTALL_DIR)/usr/share/bluelog/*.html $(1)/www/bluelog/
 	$(CP) \
-		$(PKG_INSTALL_DIR)/var/lib/bluelog/openwrt.css \
+		$(PKG_INSTALL_DIR)/usr/share/bluelog/openwrt.css \
 		$(1)/www/bluelog/style.css
 	$(INSTALL_DIR) $(1)/www/bluelog/images
 	$(CP) \
-		$(PKG_INSTALL_DIR)/var/lib/bluelog/images/digifail_logo.png \
-		$(PKG_INSTALL_DIR)/var/lib/bluelog/images/email.png \
-		$(PKG_INSTALL_DIR)/var/lib/bluelog/images/favicon.png \
-		$(PKG_INSTALL_DIR)/var/lib/bluelog/images/openwrt_logo.png \
-		$(PKG_INSTALL_DIR)/var/lib/bluelog/images/qrcontact.png \
+		$(PKG_INSTALL_DIR)/usr/share/bluelog/images/digifail_logo.png \
+		$(PKG_INSTALL_DIR)/usr/share/bluelog/images/email.png \
+		$(PKG_INSTALL_DIR)/usr/share/bluelog/images/favicon.png \
+		$(PKG_INSTALL_DIR)/usr/share/bluelog/images/openwrt_logo.png \
+		$(PKG_INSTALL_DIR)/usr/share/bluelog/images/qrcontact.png \
 		$(1)/www/bluelog/images/
 	$(INSTALL_DIR) $(1)/www/cgi-bin
-	$(CP) $(PKG_INSTALL_DIR)/var/lib/bluelog/cgi-bin/* $(1)/www/cgi-bin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/share/bluelog/cgi-bin/* $(1)/www/cgi-bin/
 endef
 
 $(eval $(call BuildPackage,bluelog))
