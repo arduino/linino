@@ -19,6 +19,9 @@ define Build/Configure
 	$(Build/Configure/Default)
 endef
 
+CONFIGURE_ARGS+= \
+	--with-php-config=$(STAGING_DIR_HOST)/usr/bin/php-config
+
 define PECLPackage
 
   define Package/php5-pecl-$(1)

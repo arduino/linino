@@ -471,6 +471,7 @@ define Build/InstallDev
 	$(CP) $(PKG_BUILD_DIR)/staging/* $(STAGING_DIR_HOST)
 	sed -i -e "s#prefix='/usr'#prefix='$(STAGING_DIR_HOST)/usr'#" $(STAGING_DIR_HOST)/usr/bin/phpize
 	sed -i -e "s#exec_prefix=\"\`eval echo /usr\`\"#exec_prefix='$(STAGING_DIR_HOST)/usr'#" $(STAGING_DIR_HOST)/usr/bin/phpize
+	sed -i -e "s#prefix=\"/usr\"#prefix=\"$(STAGING_DIR_HOST)/usr\"#" $(STAGING_DIR_HOST)/usr/bin/php-config
 endef
 
 define BuildModule
