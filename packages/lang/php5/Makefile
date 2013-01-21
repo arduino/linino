@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=php
 PKG_VERSION:=5.4.5
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.php.net/distributions/
@@ -19,17 +19,16 @@ PKG_FIXUP:=libtool no-autoreconf
 PKG_BUILD_PARALLEL:=1
 
 PHP5_MODULES = \
-	apc \
 	calendar ctype curl \
 	fileinfo \
-	dio dom \
+	dom \
 	exif \
 	ftp \
 	gettext gd gmp \
-	hash http \
+	hash \
 	iconv \
 	json \
-	ldap libevent \
+	ldap \
 	mbstring mcrypt mysql mysqli \
 	openssl \
 	pcntl pdo pdo-mysql pdo-pgsql pdo-sqlite pgsql \
@@ -152,12 +151,6 @@ else
   CONFIGURE_ARGS+= --disable-cgi
 endif
 
-ifneq ($(SDK)$(CONFIG_PACKAGE_php5-mod-apc),)
-  CONFIGURE_ARGS+= --enable-apc=shared --disable-apc-mmap --disable-apc-pthreadmutex
-else
-  CONFIGURE_ARGS+= --disable-apc
-endif
-
 ifneq ($(SDK)$(CONFIG_PACKAGE_php5-mod-calendar),)
   CONFIGURE_ARGS+= --enable-calendar=shared
 else
@@ -186,12 +179,6 @@ ifneq ($(SDK)$(CONFIG_PACKAGE_php5-mod-gettext),)
   CONFIGURE_ARGS+= --with-gettext=shared,"$(STAGING_DIR)/usr/lib/libintl-full"
 else
   CONFIGURE_ARGS+= --without-gettext
-endif
-
-ifneq ($(SDK)$(CONFIG_PACKAGE_php5-mod-dio),)
-  CONFIGURE_ARGS+= --enable-dio=shared
-else
-  CONFIGURE_ARGS+= --disable-dio
 endif
 
 ifneq ($(SDK)$(CONFIG_PACKAGE_php5-mod-dom),)
@@ -238,15 +225,6 @@ else
   CONFIGURE_ARGS+= --disable-hash
 endif
 
-ifneq ($(SDK)$(CONFIG_PACKAGE_php5-mod-http),)
-  CONFIGURE_ARGS+= \
-	--enable-http=shared \
-	--without-http-shared-deps \
-	--with-http-curl-requests="$(STAGING_DIR)/usr"
-else
-  CONFIGURE_ARGS+= --disable-http
-endif
-
 ifneq ($(SDK)$(CONFIG_PACKAGE_php5-mod-iconv),)
   CONFIGURE_ARGS+= --with-iconv=shared,"$(ICONV_PREFIX)"
 else
@@ -265,12 +243,6 @@ ifneq ($(SDK)$(CONFIG_PACKAGE_php5-mod-ldap),)
 	--with-ldap-sasl="$(STAGING_DIR)/usr"
 else
   CONFIGURE_ARGS+= --without-ldap
-endif
-
-ifneq ($(SDK)$(CONFIG_PACKAGE_php5-mod-libevent),)
-  CONFIGURE_ARGS+= --with-libevent=shared,"$(STAGING_DIR)/usr"
-else
-  CONFIGURE_ARGS+= --without-libevent
 endif
 
 ifneq ($(SDK)$(CONFIG_PACKAGE_php5-mod-mbstring),)
@@ -530,12 +502,10 @@ $(eval $(call BuildPackage,php5-cgi))
 $(eval $(call BuildPackage,php5-fastcgi))
 
 #$(eval $(call BuildModule,NAME,TITLE[,PKG DEPENDS]))
-$(eval $(call BuildModule,apc,APC,+PACKAGE_php5-mod-apc:librt))
 $(eval $(call BuildModule,calendar,Calendar))
 $(eval $(call BuildModule,ctype,Ctype))
 $(eval $(call BuildModule,curl,cURL,+PACKAGE_php5-mod-curl:libcurl))
 $(eval $(call BuildModule,fileinfo,Fileinfo,+PACKAGE_php5-mod-fileinfo:libmagic))
-$(eval $(call BuildModule,dio,Direct IO))
 $(eval $(call BuildModule,dom,DOM,+@PHP5_LIBXML +PACKAGE_php5-mod-dom:libxml2))
 $(eval $(call BuildModule,exif,EXIF))
 $(eval $(call BuildModule,ftp,FTP,+PACKAGE_php5-mod-ftp:libopenssl))
@@ -543,11 +513,9 @@ $(eval $(call BuildModule,gettext,Gettext,+PACKAGE_php5-mod-gettext:libintl-full
 $(eval $(call BuildModule,gd,GD graphics,+PACKAGE_php5-mod-gd:libjpeg +PACKAGE_php5-mod-gd:libpng))
 $(eval $(call BuildModule,gmp,GMP,+PACKAGE_php5-mod-gmp:libgmp))
 $(eval $(call BuildModule,hash,Hash))
-$(eval $(call BuildModule,http,HTTP,+PACKAGE_php5-mod-http:libcurl +PACKAGE_php5-mod-http:libevent2 +PACKAGE_php5-mod-http:librt))
 $(eval $(call BuildModule,iconv,iConv,+PACKAGE_php5-mod-iconv:libiconv))
 $(eval $(call BuildModule,json,JSON))
 $(eval $(call BuildModule,ldap,LDAP,+PACKAGE_php5-mod-ldap:libopenldap +PACKAGE_php5-mod-ldap:libsasl2))
-$(eval $(call BuildModule,libevent,libevent,+PACKAGE_php5-mod-libevent:libevent2))
 $(eval $(call BuildModule,mbstring,MBString))
 $(eval $(call BuildModule,mcrypt,Mcrypt,+PACKAGE_php5-mod-mcrypt:libmcrypt +PACKAGE_php5-mod-mcrypt:libltdl))
 $(eval $(call BuildModule,mysql,MySQL,+PACKAGE_php5-mod-mysql:libmysqlclient))
