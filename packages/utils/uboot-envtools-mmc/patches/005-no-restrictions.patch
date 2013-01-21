@@ -1,0 +1,17 @@
+--- a/fw_env.c
++++ b/fw_env.c
+@@ -375,12 +375,14 @@ int fw_setenv (int argc, char *argv[])
+ 		/*
+ 		 * Ethernet Address and serial# can be set only once
+ 		 */
++#if 0
+ 		if ((strcmp (name, "ethaddr") == 0) ||
+ 			(strcmp (name, "serial#") == 0)) {
+ 			fprintf (stderr, "Can't overwrite \"%s\"\n", name);
+ 			errno = EROFS;
+ 			return -1;
+ 		}
++#endif
+ 
+ 		if (*++nxt == '\0') {
+ 			*env = '\0';

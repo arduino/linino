@@ -1,0 +1,61 @@
+From e0c083da93fcf570f46bc74daaf72e7e7a1526a8 Mon Sep 17 00:00:00 2001
+From: Michael Heimpold <mhei@heimpold.de>
+Date: Wed, 28 Sep 2011 23:29:12 +0200
+Subject: [PATCH] Hack to allow reading and storing env on MMC
+
+---
+ fw_env.c |   12 ++++++++++--
+ 1 files changed, 10 insertions(+), 2 deletions(-)
+
+--- a/fw_env.c
++++ b/fw_env.c
+@@ -681,6 +681,7 @@ static int flash_write_buf (int dev, int
+ 		}
+ 
+ 		erase.start = blockstart;
++#ifndef CONFIG_ENV_IS_IN_MMC
+ 		ioctl (fd, MEMUNLOCK, &erase);
+ 
+ 		if (ioctl (fd, MEMERASE, &erase) != 0) {
+@@ -689,6 +690,7 @@ static int flash_write_buf (int dev, int
+ 				 strerror (errno));
+ 			return -1;
+ 		}
++#endif
+ 
+ 		if (lseek (fd, blockstart, SEEK_SET) == -1) {
+ 			fprintf (stderr,
+@@ -706,8 +708,9 @@ static int flash_write_buf (int dev, int
+ 			return -1;
+ 		}
+ 
++#ifndef CONFIG_ENV_IS_IN_MMC
+ 		ioctl (fd, MEMLOCK, &erase);
+-
++#endif
+ 		processed  += blocklen;
+ 		block_seek = 0;
+ 		blockstart += blocklen;
+@@ -785,9 +788,10 @@ static int flash_write (int fd_current, 
+ 
+ static int flash_read (int fd)
+ {
+-	struct mtd_info_user mtdinfo;
+ 	int rc;
+ 
++#ifndef CONFIG_ENV_IS_IN_MMC
++	struct mtd_info_user mtdinfo;
+ 	rc = ioctl (fd, MEMGETINFO, &mtdinfo);
+ 	if (rc < 0) {
+ 		perror ("Cannot get MTD information");
+@@ -803,6 +807,10 @@ static int flash_read (int fd)
+ 
+ 	rc = flash_read_buf (dev_current, fd, environment.image, CONFIG_ENV_SIZE,
+ 			     DEVOFFSET (dev_current), mtdinfo.type);
++#else
++	rc = flash_read_buf (dev_current, fd, environment.image, CONFIG_ENV_SIZE,
++			     DEVOFFSET (dev_current), 0);
++#endif
+ 
+ 	return (rc != CONFIG_ENV_SIZE) ? -1 : 0;
+ }

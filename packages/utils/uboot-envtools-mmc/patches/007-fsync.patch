@@ -1,0 +1,36 @@
+From 9ef3d800d08dd673ccb5b7a12a69e94394cf2167 Mon Sep 17 00:00:00 2001
+From: Michael Heimpold <mhei@heimpold.de>
+Date: Sat, 11 Aug 2012 21:33:46 +0200
+Subject: [PATCH] Ensure that data is written to disk
+
+---
+ fw_env.c |   12 ++++++++++++
+ 1 files changed, 12 insertions(+), 0 deletions(-)
+
+diff --git a/fw_env.c b/fw_env.c
+index bed8fae..ee15f33 100644
+--- a/fw_env.c
++++ b/fw_env.c
+@@ -849,7 +849,19 @@ static int flash_io (int mode)
+ 
+ 		rc = flash_write (fd_current, fd_target, dev_target);
+ 
++		if (fsync (fd_current)) {
++			fprintf (stderr,
++				 "fsync failed on %s: %s\n",
++				 DEVNAME (dev_current), strerror (errno));
++		}
++
+ 		if (HaveRedundEnv) {
++			if (fsync (fd_target)) {
++				fprintf (stderr,
++					 "fsync failed on %s: %s\n",
++					 DEVNAME (dev_current), strerror (errno));
++			}
++
+ 			if (close (fd_target)) {
+ 				fprintf (stderr,
+ 					"I/O error on %s: %s\n",
+-- 
+1.7.2.5
+
