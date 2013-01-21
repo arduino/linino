@@ -25,5 +25,5 @@ include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/nls.mk
 include ../php5/pecl.mk
 
-$(eval $(call PECLPackage,$(PECL_NAME),$(PECL_LONGNAME)))
+$(eval $(call PECLPackage,$(PECL_NAME),$(PECL_LONGNAME),@BROKEN))
 $(eval $(call BuildPackage,$(PKG_NAME)))
