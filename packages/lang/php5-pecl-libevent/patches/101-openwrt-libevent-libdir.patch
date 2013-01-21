@@ -1,0 +1,13 @@
+--- a/config.m4
++++ b/config.m4
+@@ -33,9 +33,7 @@ if test "$PHP_LIBEVENT" != "no"; then
+   LIBNAME=event
+   LIBSYMBOL=event_base_new
+ 
+-  if test "x$PHP_LIBDIR" = "x"; then
+-    PHP_LIBDIR=lib
+-  fi
++  PHP_LIBDIR=lib/libevent
+ 
+   PHP_CHECK_LIBRARY($LIBNAME,$LIBSYMBOL,
+   [

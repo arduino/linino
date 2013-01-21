@@ -1,0 +1,20 @@
+--- a/config.m4
++++ b/config.m4
+@@ -5,7 +5,7 @@ PHP_ARG_WITH(libevent, for libevent supp
+ 
+ if test "$PHP_LIBEVENT" != "no"; then
+   SEARCH_PATH="/usr /usr/local"
+-  SEARCH_FOR="/include/event.h"
++  SEARCH_FOR="/include/libevent/event.h"
+ 
+   if test "$PHP_LIBEVENT" = "yes"; then
+     AC_MSG_CHECKING([for libevent headers in default path])
+@@ -28,7 +28,7 @@ if test "$PHP_LIBEVENT" != "no"; then
+     AC_MSG_ERROR([Cannot find libevent headers])
+   fi
+ 
+-  PHP_ADD_INCLUDE($LIBEVENT_DIR/include)
++  PHP_ADD_INCLUDE($LIBEVENT_DIR/include/libevent)
+ 
+   LIBNAME=event
+   LIBSYMBOL=event_base_new
