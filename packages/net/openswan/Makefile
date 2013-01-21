@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2012 OpenWrt.org
+# Copyright (C) 2006-2013 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -10,7 +10,7 @@ include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=openswan
 PKG_VERSION:=2.6.38
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.openswan.org/download
@@ -57,7 +57,7 @@ $(call Package/openswan/Default/description)
  This package contains the Openswan kernel module.
 endef
 
-TARGET_CPPFLAGS += -I$(LINUX_DIR)/include -D__EXPORTED_HEADERS__
+TARGET_CPPFLAGS += -I$(LINUX_DIR)/$(LINUX_UAPI_DIR)include -D__EXPORTED_HEADERS__
 
 OPENSWAN_MAKEFLAGS:= \
 	-C $(PKG_BUILD_DIR) \

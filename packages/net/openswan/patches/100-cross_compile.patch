@@ -1,8 +1,6 @@
-Index: openswan-2.6.38/programs/pluto/Makefile
-===================================================================
---- openswan-2.6.38.orig/programs/pluto/Makefile	2012-03-23 22:33:43.000000000 +0100
-+++ openswan-2.6.38/programs/pluto/Makefile	2012-08-14 15:17:29.000000000 +0200
-@@ -58,10 +58,6 @@
+--- a/programs/pluto/Makefile
++++ b/programs/pluto/Makefile
+@@ -58,10 +58,6 @@ CFLAGS+=-DALLOW_MICROSOFT_BAD_PROPOSAL
  
  ALLFLAGS = $(CPPFLAGS) $(CFLAGS) ${CROSSFLAGS}
  
@@ -13,11 +11,9 @@ Index: openswan-2.6.38/programs/pluto/Makefile
  LIBSADNS = $(OPENSWANLIB)
  LIBSADNS += -lresolv # -lefence
  
-Index: openswan-2.6.38/programs/Makefile.program
-===================================================================
---- openswan-2.6.38.orig/programs/Makefile.program	2012-08-14 15:17:32.000000000 +0200
-+++ openswan-2.6.38/programs/Makefile.program	2012-08-14 15:17:38.000000000 +0200
-@@ -55,10 +55,6 @@
+--- a/programs/Makefile.program
++++ b/programs/Makefile.program
+@@ -55,10 +55,6 @@ endif
  
  CFLAGS+= ${WERROR}
  
