@@ -1,35 +1,35 @@
 --- a/Makefile.am
 +++ b/Makefile.am
-@@ -9,7 +9,7 @@ ethtool_SOURCES = ethtool.c ethtool-copy
+@@ -10,7 +10,7 @@ ethtool_SOURCES = ethtool.c ethtool-copy
  		  fec_8xx.c ibm_emac.c ixgb.c ixgbe.c natsemi.c	\
  		  pcnet32.c realtek.c tg3.c marvell.c vioc.c	\
  		  smsc911x.c at76c50x-usb.c sfc.c stmmac.c	\
--		  rxclass.c sfpid.c
-+		  rxclass.c sfpid.c ixp4xx.c
+-		  rxclass.c sfpid.c sfpdiag.c
++		  rxclass.c sfpid.c sfpdiag.c ixp4xx.c
  
  TESTS = test-cmdline test-features
  check_PROGRAMS = test-cmdline test-features
 --- a/Makefile.in
 +++ b/Makefile.in
-@@ -60,7 +60,7 @@ am_ethtool_OBJECTS = ethtool.$(OBJEXT) a
- 	realtek.$(OBJEXT) tg3.$(OBJEXT) marvell.$(OBJEXT) \
- 	vioc.$(OBJEXT) smsc911x.$(OBJEXT) at76c50x-usb.$(OBJEXT) \
- 	sfc.$(OBJEXT) stmmac.$(OBJEXT) rxclass.$(OBJEXT) \
--	sfpid.$(OBJEXT)
-+	sfpid.$(OBJEXT) ixp4xx.$(OBJEXT)
+@@ -78,7 +78,7 @@ am_ethtool_OBJECTS = ethtool.$(OBJEXT) a
+ 	tg3.$(OBJEXT) marvell.$(OBJEXT) vioc.$(OBJEXT) \
+ 	smsc911x.$(OBJEXT) at76c50x-usb.$(OBJEXT) sfc.$(OBJEXT) \
+ 	stmmac.$(OBJEXT) rxclass.$(OBJEXT) sfpid.$(OBJEXT) \
+-	sfpdiag.$(OBJEXT)
++	sfpdiag.$(OBJEXT) ixp4xx.$(OBJEXT)
  ethtool_OBJECTS = $(am_ethtool_OBJECTS)
  ethtool_LDADD = $(LDADD)
- am__objects_1 = test_cmdline-ethtool.$(OBJEXT) \
-@@ -247,7 +247,7 @@ ethtool_SOURCES = ethtool.c ethtool-copy
+ ethtool_DEPENDENCIES =
+@@ -286,7 +286,7 @@ ethtool_SOURCES = ethtool.c ethtool-copy
  		  fec_8xx.c ibm_emac.c ixgb.c ixgbe.c natsemi.c	\
  		  pcnet32.c realtek.c tg3.c marvell.c vioc.c	\
  		  smsc911x.c at76c50x-usb.c sfc.c stmmac.c	\
--		  rxclass.c sfpid.c
-+		  rxclass.c sfpid.c ixp4xx.c
+-		  rxclass.c sfpid.c sfpdiag.c
++		  rxclass.c sfpid.c sfpdiag.c ixp4xx.c
  
  test_cmdline_SOURCES = test-cmdline.c test-common.c $(ethtool_SOURCES) 
  test_cmdline_CFLAGS = -DTEST_ETHTOOL
-@@ -389,6 +389,7 @@ distclean-compile:
+@@ -431,6 +431,7 @@ distclean-compile:
  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sfpid.Po@am__quote@
  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/smsc911x.Po@am__quote@
  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/stmmac.Po@am__quote@
@@ -39,28 +39,19 @@
  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_cmdline-de2104x.Po@am__quote@
 --- a/ethtool.c
 +++ b/ethtool.c
-@@ -826,7 +826,7 @@ static const struct {
- 	{ "e1000e", e1000_dump_regs },
+@@ -873,6 +873,7 @@ static const struct {
  	{ "igb", igb_dump_regs },
  	{ "ixgb", ixgb_dump_regs },
--	{ "ixgbe", ixgbe_dump_regs },
+ 	{ "ixgbe", ixgbe_dump_regs },
 +	{ "ixp4xx", ixp4xx_dump_regs },
  	{ "natsemi", natsemi_dump_regs },
  	{ "e100", e100_dump_regs },
  	{ "amd8111e", amd8111e_dump_regs },
-@@ -842,6 +842,7 @@ static const struct {
-         { "sfc", sfc_dump_regs },
- 	{ "st_mac100", st_mac100_dump_regs },
- 	{ "st_gmac", st_gmac_dump_regs },
-+	{ "ixgbe", ixgbe_dump_regs },
- };
- 
- void dump_hex(FILE *file, const u8 *data, int len, int offset)
 --- a/internal.h
 +++ b/internal.h
-@@ -238,6 +238,9 @@ int st_mac100_dump_regs(struct ethtool_d
- 			struct ethtool_regs *regs);
- int st_gmac_dump_regs(struct ethtool_drvinfo *info, struct ethtool_regs *regs);
+@@ -241,6 +241,9 @@ int st_gmac_dump_regs(struct ethtool_drv
+ /* Et131x ethernet controller */
+ int et131x_dump_regs(struct ethtool_drvinfo *info, struct ethtool_regs *regs);
  
 +/* Intel IXP4xx internal MAC */
 +int ixp4xx_dump_regs(struct ethtool_drvinfo *info, struct ethtool_regs *regs);
