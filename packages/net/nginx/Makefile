@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nginx
-PKG_VERSION:=1.2.5
+PKG_VERSION:=1.2.6
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://nginx.org/download/
-PKG_MD5SUM:=4f5a55187a3d45fa37d99d07ddd90800
+PKG_MD5SUM:=1350d26eb9b66364d9143fb3c4366ab6
 
 PKG_BUILD_PARALLEL:=1
 PKG_INSTALL:=1
@@ -56,7 +56,7 @@ define Package/nginx
   SUBMENU:=Web Servers/Proxies
   TITLE:=Nginx web server
   URL:=http://nginx.org/
-  DEPENDS:=+!NGINX_DISABLE_PCRE:libpcre +libopenssl +!NGINX_DISABLE_HTTP_GZIP_MODULE:zlib +libpthread +NGINX_MODULE_LUA:liblua
+  DEPENDS:=+!NGINX_DISABLE_PCRE:libpcre +NGINX_SSL:libopenssl +!NGINX_DISABLE_HTTP_GZIP_MODULE:zlib +libpthread +NGINX_MODULE_LUA:liblua
   MENU:=1
 endef
 
