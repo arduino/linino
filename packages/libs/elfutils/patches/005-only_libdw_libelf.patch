@@ -1,19 +1,18 @@
 --- a/Makefile.am
 +++ b/Makefile.am
-@@ -30,8 +30,8 @@ ACLOCAL_AMFLAGS = -I m4
+@@ -23,8 +23,7 @@ ACLOCAL_AMFLAGS = -I m4
  pkginclude_HEADERS = version.h
  
  # Add doc back when we have some real content.
 -SUBDIRS = config m4 lib libelf libebl libdwfl libdw libcpu libasm backends \
 -	  src po
 +SUBDIRS = config m4 lib libelf libebl libdwfl libdw
-+
  
- EXTRA_DIST = elfutils.spec GPG-KEY NOTES EXCEPTION
- 
+ EXTRA_DIST = elfutils.spec GPG-KEY NOTES CONTRIBUTING \
+ 	     COPYING COPYING-GPLV2 COPYING-LGPLV3
 --- a/Makefile.in
 +++ b/Makefile.in
-@@ -248,8 +248,7 @@ ACLOCAL_AMFLAGS = -I m4
+@@ -258,8 +258,7 @@ ACLOCAL_AMFLAGS = -I m4
  pkginclude_HEADERS = version.h
  
  # Add doc back when we have some real content.
@@ -21,5 +20,5 @@
 -	  src po
 +SUBDIRS = config m4 lib libelf libebl libdwfl libdw
  
- EXTRA_DIST = elfutils.spec GPG-KEY NOTES EXCEPTION
- 
+ EXTRA_DIST = elfutils.spec GPG-KEY NOTES CONTRIBUTING \
+ 	     COPYING COPYING-GPLV2 COPYING-LGPLV3

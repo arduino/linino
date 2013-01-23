@@ -1,6 +1,6 @@
 --- a/libdw/Makefile.am
 +++ b/libdw/Makefile.am
-@@ -108,7 +108,7 @@ libdw.so: $(srcdir)/libdw.map libdw_pic.
+@@ -111,7 +111,7 @@ libdw.so: $(srcdir)/libdw.map libdw_pic.
  		-Wl,--enable-new-dtags,-rpath,$(pkglibdir) \
  		-Wl,--version-script,$<,--no-undefined \
  		-Wl,--whole-archive $(filter-out $<,$^) -Wl,--no-whole-archive\
@@ -11,7 +11,7 @@
  
 --- a/libdw/Makefile.in
 +++ b/libdw/Makefile.in
-@@ -839,7 +839,7 @@ uninstall-am: uninstall-includeHEADERS u
+@@ -845,7 +845,7 @@ uninstall-am: uninstall-includeHEADERS u
  @MUDFLAP_FALSE@		-Wl,--enable-new-dtags,-rpath,$(pkglibdir) \
  @MUDFLAP_FALSE@		-Wl,--version-script,$<,--no-undefined \
  @MUDFLAP_FALSE@		-Wl,--whole-archive $(filter-out $<,$^) -Wl,--no-whole-archive\

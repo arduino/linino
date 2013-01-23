@@ -1,6 +1,6 @@
 --- a/libelf/libelf.h
 +++ b/libelf/libelf.h
-@@ -55,6 +55,11 @@
+@@ -34,6 +34,11 @@
  /* Get the ELF types.  */
  #include <elf.h>
  
