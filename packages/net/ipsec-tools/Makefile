@@ -19,6 +19,8 @@ PKG_MD5SUM:=b79aae3055a51f8de5c0f1b8ca6cf619
 PKG_BUILD_PARALLEL:=1
 PKG_INSTALL:=1
 
+PKG_FIXUP:=autoreconf
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/ipsec-tools

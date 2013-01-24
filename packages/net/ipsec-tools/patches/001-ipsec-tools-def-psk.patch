@@ -1,7 +1,6 @@
-diff -brau ipsec-tools-0.7.3.o/src/racoon/oakley.c ipsec-tools-0.7.3/src/racoon/oakley.c
---- a/src/racoon/oakley.c	2009-08-13 11:18:45.000000000 +0200
-+++ b/src/racoon/oakley.c	2011-06-06 09:36:11.000000000 +0200
-@@ -2498,8 +2498,21 @@
+--- a/src/racoon/oakley.c
++++ b/src/racoon/oakley.c
+@@ -2419,8 +2419,21 @@ oakley_skeyid(iph1)
  				plog(LLV_ERROR, LOCATION, iph1->remote,
  					"couldn't find the pskey for %s.\n",
  					saddrwop2str(iph1->remote));
