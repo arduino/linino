@@ -28,7 +28,7 @@ $(call Package/cryptsetup/Default)
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=Cryptsetup
-  DEPENDS:=+libblkid +libuuid +libpopt +lvm2 +libgcrypt +libdevmapper
+  DEPENDS:=+libblkid +libuuid +libpopt +lvm2 +libgcrypt +libdevmapper +@KERNEL_DIRECT_IO
 endef
 
 define Package/cryptsetup/description
