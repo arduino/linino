@@ -169,7 +169,7 @@ $(call Package/lcd4linux/Default)
 	+LCD4LINUX_CUSTOM_NEEDS_libmysqlclient:libmysqlclient \
 	+LCD4LINUX_CUSTOM_NEEDS_libncurses:libncurses \
 	+LCD4LINUX_CUSTOM_NEEDS_libsqlite3:libsqlite3 \
-	+LCD4LINUX_CUSTOM_NEEDS_libusb:libusb \
+	+LCD4LINUX_CUSTOM_NEEDS_libusb:libusb-compat \
 	+LCD4LINUX_CUSTOM_NEEDS_libvncserver:libvncserver \
 	+LCD4LINUX_CUSTOM_NEEDS_serdisplib:serdisplib \
 	+LCD4LINUX_CUSTOM_NEEDS_st2205tool:st2205tool \
@@ -203,7 +203,7 @@ $(call Package/lcd4linux/Default)
 	+libmysqlclient \
 	+libncurses \
 	+libsqlite3 \
-	+libusb \
+	+libusb-compat \
 	+libvncserver \
 	+serdisplib \
 	+st2205tool \

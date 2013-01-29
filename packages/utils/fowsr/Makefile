@@ -22,7 +22,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/fowsr
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=+libusb
+  DEPENDS:=+libusb-compat
   TITLE:=Fine Offset Wireless Weather Station Reader
   URL:=http://fowsr.googlecode.com/
 endef

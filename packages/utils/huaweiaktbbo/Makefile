@@ -17,7 +17,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/huaweiaktbbo
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=+libusb
+  DEPENDS:=+libusb-compat
   TITLE:=Huawei E156/E169/E220 activation tool
 endef
 

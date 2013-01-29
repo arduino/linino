@@ -24,7 +24,7 @@ define Package/dfu-util
   CATEGORY:=Utilities
   TITLE:=OpenMoko device flash utility
   URL:=http://wiki.openmoko.org/wiki/Dfu-util
-  DEPENDS:=+libusb
+  DEPENDS:=+libusb-compat
 endef
 
 define Package/dfu-util/description

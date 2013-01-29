@@ -29,7 +29,7 @@ define Package/libnfc
 $(call Package/libnfc/Default)
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=+libusb +pcscd +ccid
+  DEPENDS:=+libusb-compat +pcscd +ccid
 endef
 
 define Package/libnfc/description

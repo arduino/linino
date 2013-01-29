@@ -44,7 +44,7 @@ endef
 define Package/digitemp-usb
 $(call Package/digitemp/Default)
   TITLE += (USB version)
-  DEPENDS += +libusb
+  DEPENDS += +libusb-compat
 endef
 
 define Package/digitemp-usb/description

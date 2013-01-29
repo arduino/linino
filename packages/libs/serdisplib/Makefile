@@ -22,7 +22,7 @@ define Package/serdisplib
   CATEGORY:=Libraries
   TITLE:=A display control library
   URL:=http://serdisplib.sourceforge.net/
-  DEPENDS:=+libusb
+  DEPENDS:=+libusb-compat
 endef
 
 define Package/serdisplib/description

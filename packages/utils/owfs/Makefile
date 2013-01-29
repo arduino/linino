@@ -72,7 +72,7 @@ endef
 
 define Package/libow
   $(call Package/owfs/Library)
-  DEPENDS:=+libusb +libpthread
+  DEPENDS:=+libusb-compat +libpthread
   TITLE:=OWFS - common shared library
 endef
 

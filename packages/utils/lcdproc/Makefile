@@ -20,7 +20,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/lcdproc
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=+libusb +libncurses +libftdi
+  DEPENDS:=+libusb-compat +libncurses +libftdi
   TITLE:=LCD Display daemon and client
   URL:=http://sourceforge.net/projects/lcdproc/
 endef

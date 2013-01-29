@@ -24,7 +24,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/gnokii
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=+libusb
+  DEPENDS:=+libusb-compat
   TITLE:=Gnokii - Datasuite for the mobile phones
   URL:=http://www.gnokii.org/
 endef

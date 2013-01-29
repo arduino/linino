@@ -22,7 +22,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/libftdi
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=+libusb
+  DEPENDS:=+libusb-compat
   TITLE:=library to talk to FTDI chips
   URL:=http://www.intra2net.com/en/developer/libftdi/
 endef

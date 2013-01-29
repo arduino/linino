@@ -24,7 +24,7 @@ define Package/sispmctl
   CATEGORY:=Utilities
   TITLE:=Silver Shield PM Control for Linux
   URL:=http://sispmctl.sourceforge.net/
-  DEPENDS:=+libusb
+  DEPENDS:=+libusb-compat
 endef
 
 define Package/sispmctl/description

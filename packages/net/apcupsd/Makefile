@@ -20,7 +20,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/apcupsd
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=+libpthread +libusb
+  DEPENDS:=+libpthread +libusb-compat
   TITLE:=UPS control software
   URL:=http://www.apcupsd.org/
 endef

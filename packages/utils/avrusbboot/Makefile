@@ -23,7 +23,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/avrusbboot
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=+libusb $(CXX_DEPENDS)
+  DEPENDS:=+libusb-compat $(CXX_DEPENDS)
   TITLE:=USB bootloader for Atmel AVR controllers
   URL:=http://www.fischl.de/avrusbboot/
 endef

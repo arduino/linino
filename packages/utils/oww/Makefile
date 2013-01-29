@@ -25,7 +25,7 @@ define Package/oww
   CATEGORY:=Utilities
   TITLE:=One-wire weather
   URL:=http://oww.sourceforge.net/
-  DEPENDS:=+libcurl +libusb
+  DEPENDS:=+libcurl +libusb-compat
 endef
 
 define Package/oww/description

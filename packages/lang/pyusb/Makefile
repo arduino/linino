@@ -25,7 +25,7 @@ define Package/pyusb
   CATEGORY:=Languages
   TITLE:=pyusb
   URL:=http://pyusb.sourceforge.net
-  DEPENDS:=+python-mini +libusb
+  DEPENDS:=+python-mini +libusb-compat
 endef
 
 define Package/pyusb/description
