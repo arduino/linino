@@ -1,0 +1,30 @@
+diff -burN DirectFB-1.4.2.orig/lib/direct/interface.c DirectFB-1.4.2/lib/direct/interface.c
+--- DirectFB-1.4.2.orig/lib/direct/interface.c	2013-01-29 13:57:25.000000000 +0100
++++ DirectFB-1.4.2/lib/direct/interface.c	2013-01-29 13:59:37.000000000 +0100
+@@ -74,7 +74,7 @@
+ } DirectInterfaceImplementation;
+ 
+ static pthread_mutex_t  implementations_mutex = PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP;
+-static DirectLink      *implementations       = NULL;
++static DirectLink      * volatile implementations       = NULL;
+ 
+ /**************************************************************************************************/
+ 
+@@ -96,7 +96,7 @@
+      D_DEBUG_AT( Direct_Interface, "  -> %s | %s\n", impl->type, impl->implementation );
+ 
+      pthread_mutex_lock( &implementations_mutex );
+-     direct_list_prepend( &implementations, &impl->link );
++     direct_list_prepend( (DirectLink**)&implementations, &impl->link );
+      pthread_mutex_unlock( &implementations_mutex );
+ }
+ 
+@@ -111,7 +111,7 @@
+           D_MAGIC_ASSERT( impl, DirectInterfaceImplementation );
+ 
+           if (impl->funcs == funcs) {
+-               direct_list_remove( &implementations, &impl->link );
++               direct_list_remove( (DirectLink**)&implementations, &impl->link );
+ 
+                break;
+           }
