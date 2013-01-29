@@ -139,7 +139,7 @@ define DriverPackage
     TITLE += ($(1) driver)
     DEPENDS += nut nut-server
     ifeq ($(1),$(filter $(1),$(USB_LIBUSB_DRIVERLIST)))
-      DEPENDS+=libusb
+      DEPENDS+=libusb-compat
     endif
     ifeq ($(1),$(filter $(1),$(SNMP_DRIVERLIST)))
       DEPENDS+=libnetsnmp
