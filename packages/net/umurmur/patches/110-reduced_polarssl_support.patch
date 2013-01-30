@@ -1,0 +1,141 @@
+--- a/src/ssl.c
++++ b/src/ssl.c
+@@ -30,6 +30,7 @@
+ */
+ #include <string.h>
+ #include <stdlib.h>
++#include <fcntl.h>
+ 
+ #include "conf.h"
+ #include "log.h"
+@@ -66,8 +67,7 @@ int ciphers[] =
+ static x509_cert certificate;
+ static rsa_context key;
+ bool_t builtInTestCertificate;
+-
+-havege_state hs; /* exported to crypt.c */
++static int urandom_fd;
+ 
+ /* DH prime */
+ char *my_dhm_P =
+@@ -83,9 +83,13 @@ char *my_dhm_G = "4";
+ static void initTestCert()
+ {
+ 	int rc;
++#ifdef POLARSSL_CERTS_C
+ 	builtInTestCertificate = true;
+ 	rc = x509parse_crt(&certificate, (unsigned char *)test_srv_crt,
+ 					   strlen(test_srv_crt));	
++#else
++	rc = -1;
++#endif
+ 	if (rc != 0)
+ 		Log_fatal("Could not parse built-in test certificate");
+ }
+@@ -93,9 +97,12 @@ static void initTestCert()
+ static void initTestKey()
+ {
+ 	int rc;
+-	
++#ifdef POLARSSL_CERTS_C
+ 	rc = x509parse_key(&key, (unsigned char *)test_srv_key,
+ 					   strlen(test_srv_key), NULL, 0);
++#else
++	rc = -1;
++#endif
+ 	if (rc != 0)
+ 		Log_fatal("Could not parse built-in test RSA key");
+ }
+@@ -135,6 +142,19 @@ static void initKey()
+ 		Log_fatal("Could not read RSA key file %s", keyfile);
+ }
+ 
++int urandom_bytes(void *ctx, unsigned char *dest, size_t len)
++{
++	int cur;
++
++	while (len) {
++		cur = read(urandom_fd, dest, len);
++		if (cur < 0)
++			continue;
++
++		len -= cur;
++	}
++}
++
+ #define DEBUG_LEVEL 0
+ static void pssl_debug(void *ctx, int level, const char *str)
+ {
+@@ -154,8 +174,11 @@ void SSLi_init(void)
+ 	}
+ 	else
+ 		initKey();
+-    havege_init(&hs);
+-    
++
++	urandom_fd = open("/dev/urandom", O_RDONLY);
++	if (urandom_fd < 0)
++		Log_fatal("Cannot open /dev/urandom");
++
+ #ifdef POLARSSL_VERSION_MAJOR
+     version_get_string(verstring);
+     Log_info("PolarSSL library version %s initialized", verstring);
+@@ -173,7 +196,7 @@ void SSLi_deinit(void)
+ /* Create SHA1 of last certificate in the peer's chain. */
+ bool_t SSLi_getSHA1Hash(SSL_handle_t *ssl, uint8_t *hash)
+ {
+-	x509_cert *cert;
++	const x509_cert *cert;
+ #ifdef POLARSSL_API_V1_2
+ 	cert = ssl_get_peer_cert(ssl);
+ #else
+@@ -206,7 +229,7 @@ SSL_handle_t *SSLi_newconnection(int *fd
+ 	ssl_set_endpoint(ssl, SSL_IS_SERVER);	
+ 	ssl_set_authmode(ssl, SSL_VERIFY_OPTIONAL);
+ 
+-	ssl_set_rng(ssl, HAVEGE_RAND, &hs);
++	ssl_set_rng(ssl, urandom_bytes, NULL);
+ 	ssl_set_dbg(ssl, pssl_debug, NULL);
+ 	ssl_set_bio(ssl, net_recv, fd, net_send, fd);
+ 
+--- a/src/ssl.h
++++ b/src/ssl.h
+@@ -45,35 +45,17 @@
+ #else
+ #if (POLARSSL_VERSION_MAJOR == 0)
+ 	#define POLARSSL_API_V0
+-    #define HAVEGE_RAND (havege_rand)
+-    #define RAND_bytes(_dst_, _size_) do { \
+-	    int i; \
+-	    for (i = 0; i < _size_; i++) { \
+-	        _dst_[i] = havege_rand(&hs); \
+-	    } \
+-    } while (0)
+ #else
+ 	#define POLARSSL_API_V1
+-    #if (POLARSSL_VERSION_MINOR >= 1)
+-        #define HAVEGE_RAND (havege_random)
+-        #define RAND_bytes(_dst_, _size_) do { \
+-	        havege_random(&hs, _dst_, _size_); \
+-		} while (0)
+-    #else
+-        #define HAVEGE_RAND (havege_rand)
+-        #define RAND_bytes(_dst_, _size_) do { \
+-	         int i; \
+-	         for (i = 0; i < _size_; i++) { \
+-	             _dst_[i] = havege_rand(&hs); \
+-	         } \
+-        } while (0)
+-    #endif
+     #if (POLARSSL_VERSION_MINOR >= 2)
+ 	    #define POLARSSL_API_V1_2
+     #endif
+ #endif
+ #endif
+ 
++#define RAND_bytes(_dst_, _size_) urandom_bytes(NULL, _dst_, _size_)
++int urandom_bytes(void *ctx, unsigned char *dest, size_t len);
++
+ #else /* OpenSSL */
+ #include <openssl/x509v3.h>
+ #include <openssl/ssl.h>
