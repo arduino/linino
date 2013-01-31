@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2010-2012 OpenWrt.org
+# Copyright (C) 2010-2013 OpenWrt.org
 # Copyright (C) 2010 segal.di.ubi.pt 
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=wifitoggle
 PKG_VERSION:=1
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 include $(INCLUDE_DIR)/package.mk
 
