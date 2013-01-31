@@ -157,11 +157,8 @@ load_wifitoggle() {
 		if [ "$disabled" = "1" ] 
 		then
 			enable $1
-		elif [ "$disabled" = "0" ]
-		then
-			disable
 		else
-			logger -p user.err -t "wifitoggle" "device($device) not recognized"
+			disable
 		fi
         }
 }
