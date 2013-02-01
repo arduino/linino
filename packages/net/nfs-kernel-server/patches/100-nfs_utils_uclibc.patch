@@ -45,5 +45,5 @@
  	}
 +#endif
  	qword_printuint(f, uid);
- 	qword_printuint(f, time(0) + DEFAULT_TTL);
+ 	qword_printtimefrom(f, DEFAULT_TTL);
  	if (rv >= 0) {
