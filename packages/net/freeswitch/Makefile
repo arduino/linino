@@ -18,7 +18,7 @@ PKG_VERSION:=1.3.13b
 #
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=git://git.$(PKG_NAME).org/$(PKG_NAME).git
-FS_DEFAULT_HEAD:=f5f8e90f0117287fdc1ad39482115ca0d8db3c46
+FS_DEFAULT_HEAD:=70a9560306c6800ac8e81e7d7690c2adf446cea7
 FS_LATEST_HEAD:=$(shell git ls-remote $(PKG_SOURCE_URL) HEAD | cut -f1)
 PKG_SOURCE_VERSION:=$(if $(CONFIG_FS_SOFIA_WITH_PULL_CURRENT),$(FS_LATEST_HEAD),$(FS_DEFAULT_HEAD))
 PKG_SOURCE_VERSION_SHORT:=$(shell echo $(PKG_SOURCE_VERSION)|cut -b -7)
@@ -363,16 +363,58 @@ $(call Package/$(PKG_NAME)/Default)
 endef
 
 
-define Package/$(PKG_NAME)-sounds-en
+define Package/$(PKG_NAME)-sounds-en-08KHz
 $(call Package/$(PKG_NAME)/Default)
-  TITLE:=FreeSWITCH english sounds
+  TITLE:=FreeSWITCH 8KHz english sounds
   DEPENDS:= $(PKG_NAME)
 endef
 
 
-define Package/$(PKG_NAME)-sounds-moh
+define Package/$(PKG_NAME)-sounds-en-16KHz
 $(call Package/$(PKG_NAME)/Default)
-  TITLE:=FreeSWITCH music-on-hold sounds
+  TITLE:=FreeSWITCH 16KHz english sounds 
+  DEPENDS:= $(PKG_NAME)
+endef
+
+
+define Package/$(PKG_NAME)-sounds-en-32KHz
+$(call Package/$(PKG_NAME)/Default)
+  TITLE:=FreeSWITCH 32KHz english sounds
+  DEPENDS:= $(PKG_NAME)
+endef
+
+
+define Package/$(PKG_NAME)-sounds-en-48KHz
+$(call Package/$(PKG_NAME)/Default)
+  TITLE:=FreeSWITCH 48KHz english sounds
+  DEPENDS:= $(PKG_NAME)
+endef
+
+
+define Package/$(PKG_NAME)-sounds-moh-08KHz
+$(call Package/$(PKG_NAME)/Default)
+  TITLE:=FreeSWITCH 8KHz music-on-hold sounds
+  DEPENDS:= $(PKG_NAME)
+endef
+
+
+define Package/$(PKG_NAME)-sounds-moh-16KHz
+$(call Package/$(PKG_NAME)/Default)
+  TITLE:=FreeSWITCH 16KHz music-on-hold sounds
+  DEPENDS:= $(PKG_NAME)
+endef
+
+
+define Package/$(PKG_NAME)-sounds-moh-32KHz
+$(call Package/$(PKG_NAME)/Default)
+  TITLE:=FreeSWITCH 32KHz music-on-hold sounds
+  DEPENDS:= $(PKG_NAME)
+endef
+
+
+define Package/$(PKG_NAME)-sounds-moh-48KHz
+$(call Package/$(PKG_NAME)/Default)
+  TITLE:=FreeSWITCH 48KHz music-on-hold sounds
   DEPENDS:= $(PKG_NAME)
 endef
 
@@ -425,14 +467,50 @@ ifneq ($(CONFIG_PACKAGE_$(PKG_NAME)-mod-opus),)
 endif
 
 
-ifneq ($(CONFIG_PACKAGE_$(PKG_NAME)-sounds-en),)
- $(eval $(call Download/files,sounds-en,$(PKG_NAME)-sounds-en-us-callie-8000-1.0.22.tar.gz,cff509d878708ce5e6e7fedac7f683ef,,,))
+ifneq ($(CONFIG_PACKAGE_$(PKG_NAME)-sounds-en-08KHz),)
+ $(eval $(call Download/files,sounds-en-08KHz,$(PKG_NAME)-sounds-en-us-callie-8000-1.0.24.tar.gz,6c0a8ec292e444dff10b652644f4fc54,,,))
 	MAKE_INSTALL_TARGETS+= sounds-install
 endif
 
 
-ifneq ($(CONFIG_PACKAGE_$(PKG_NAME)-sounds-moh),)
- $(eval $(call Download/files,sounds-moh,$(PKG_NAME)-sounds-music-8000-1.0.8.tar.gz,f63ef3cc3507af079ae5c7b8b8a01e42,,,))
+ifneq ($(CONFIG_PACKAGE_$(PKG_NAME)-sounds-en-16KHz),)
+ $(eval $(call Download/files,sounds-en-16KHz,$(PKG_NAME)-sounds-en-us-callie-16000-1.0.24.tar.gz,e9b5c1cdd393660d0cdf7de6b7e03c45,,,))
+	MAKE_INSTALL_TARGETS+= sounds-install
+endif
+
+
+ifneq ($(CONFIG_PACKAGE_$(PKG_NAME)-sounds-en-32KHz),)
+ $(eval $(call Download/files,sounds-en-32KHz,$(PKG_NAME)-sounds-en-us-callie-32000-1.0.24.tar.gz,fa110675de07ca5f6d85646f3093b0ce,,,))
+	MAKE_INSTALL_TARGETS+= sounds-install
+endif
+
+
+ifneq ($(CONFIG_PACKAGE_$(PKG_NAME)-sounds-en-48KHz),)
+ $(eval $(call Download/files,sounds-en-48KHz,$(PKG_NAME)-sounds-en-us-callie-48000-1.0.24.tar.gz,813ea6eeae5545bb6e11664189691f8b,,,))
+	MAKE_INSTALL_TARGETS+= sounds-install
+endif
+
+
+ifneq ($(CONFIG_PACKAGE_$(PKG_NAME)-sounds-moh-08KHz),)
+ $(eval $(call Download/files,sounds-moh-08KHz,$(PKG_NAME)-sounds-music-8000-1.0.8.tar.gz,f63ef3cc3507af079ae5c7b8b8a01e42,,,))
+	MAKE_INSTALL_TARGETS+= moh-install
+endif
+
+
+ifneq ($(CONFIG_PACKAGE_$(PKG_NAME)-sounds-moh-16KHz),)
+ $(eval $(call Download/files,sounds-moh-16KHz,$(PKG_NAME)-sounds-music-16000-1.0.8.tar.gz,7fd0ca9a9e3878783baa39b8187743bf,,,))
+	MAKE_INSTALL_TARGETS+= moh-install
+endif
+
+
+ifneq ($(CONFIG_PACKAGE_$(PKG_NAME)-sounds-moh-32KHz),)
+ $(eval $(call Download/files,sounds-moh-32KHz,$(PKG_NAME)-sounds-music-32000-1.0.8.tar.gz,7e03932ea81b8d0bf6d686f838b060b4,,,))
+	MAKE_INSTALL_TARGETS+= moh-install
+endif
+
+
+ifneq ($(CONFIG_PACKAGE_$(PKG_NAME)-sounds-moh-48KHz),)
+ $(eval $(call Download/files,sounds-moh-48KHz,$(PKG_NAME)-sounds-music-48000-1.0.8.tar.gz,d06cd2a80379f224affab21f5180e4c6,,,))
 	MAKE_INSTALL_TARGETS+= moh-install
 endif
 
@@ -536,8 +614,14 @@ define Build/Prepare
 	$(call Prepare/flite)
 	$(call Prepare/json-cdr)
 	$(call Prepare/opus)
-	$(call Prepare/sounds-en)
-	$(call Prepare/sounds-moh)
+	$(call Prepare/sounds-en-08KHz)
+	$(call Prepare/sounds-en-16KHz)
+	$(call Prepare/sounds-en-32KHz)
+	$(call Prepare/sounds-en-48KHz)
+	$(call Prepare/sounds-moh-08KHz)
+	$(call Prepare/sounds-moh-16KHz)
+	$(call Prepare/sounds-moh-32KHz)
+	$(call Prepare/sounds-moh-48KHz)
 endef
 
 
@@ -612,7 +696,7 @@ endef
 
 define Package/$(PKG_NAME)-config-upstream-defaults/install
 	$(INSTALL_DIR) $(1)/etc/$(PKG_NAME)
-	$(CP) $(PKG_INSTALL_DIR)/etc/$(PKG_NAME)/* $(1)/etc/$(PKG_NAME)/
+	$(CP) $(PKG_INSTALL_DIR)/etc/$(PKG_NAME) $(1)/etc
 endef
 
 
@@ -641,13 +725,49 @@ define Package/$(PKG_NAME)-config-minimal/install
 endef
 
 
-define Package/$(PKG_NAME)-sounds-en/install
+define Package/$(PKG_NAME)-sounds-en-08KHz/install
 	$(INSTALL_DIR) $(1)/usr/share/$(PKG_NAME)/sounds
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/$(PKG_NAME)/sounds/en $(1)/usr/share/$(PKG_NAME)/sounds/
 endef
 
 
-define Package/$(PKG_NAME)-sounds-moh/install
+define Package/$(PKG_NAME)-sounds-en-16KHz/install
+	$(INSTALL_DIR) $(1)/usr/share/$(PKG_NAME)/sounds
+	$(CP) $(PKG_INSTALL_DIR)/usr/share/$(PKG_NAME)/sounds/en $(1)/usr/share/$(PKG_NAME)/sounds/
+endef
+
+
+define Package/$(PKG_NAME)-sounds-en-32KHz/install
+	$(INSTALL_DIR) $(1)/usr/share/$(PKG_NAME)/sounds
+	$(CP) $(PKG_INSTALL_DIR)/usr/share/$(PKG_NAME)/sounds/en $(1)/usr/share/$(PKG_NAME)/sounds/
+endef
+
+
+define Package/$(PKG_NAME)-sounds-en-48KHz/install
+	$(INSTALL_DIR) $(1)/usr/share/$(PKG_NAME)/sounds
+	$(CP) $(PKG_INSTALL_DIR)/usr/share/$(PKG_NAME)/sounds/en $(1)/usr/share/$(PKG_NAME)/sounds/
+endef
+
+
+define Package/$(PKG_NAME)-sounds-moh-08KHz/install
+	$(INSTALL_DIR) $(1)/usr/share/$(PKG_NAME)/sounds
+	$(CP) $(PKG_INSTALL_DIR)/usr/share/$(PKG_NAME)/sounds/music $(1)/usr/share/$(PKG_NAME)/sounds/
+endef
+
+
+define Package/$(PKG_NAME)-sounds-moh-16KHz/install
+	$(INSTALL_DIR) $(1)/usr/share/$(PKG_NAME)/sounds
+	$(CP) $(PKG_INSTALL_DIR)/usr/share/$(PKG_NAME)/sounds/music $(1)/usr/share/$(PKG_NAME)/sounds/
+endef
+
+
+define Package/$(PKG_NAME)-sounds-moh-32KHz/install
+	$(INSTALL_DIR) $(1)/usr/share/$(PKG_NAME)/sounds
+	$(CP) $(PKG_INSTALL_DIR)/usr/share/$(PKG_NAME)/sounds/music $(1)/usr/share/$(PKG_NAME)/sounds/
+endef
+
+
+define Package/$(PKG_NAME)-sounds-moh-48KHz/install
 	$(INSTALL_DIR) $(1)/usr/share/$(PKG_NAME)/sounds
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/$(PKG_NAME)/sounds/music $(1)/usr/share/$(PKG_NAME)/sounds/
 endef
@@ -735,9 +855,9 @@ define BuildPlugin
 	$$$$(if $$$$(firstword $$$$(wildcard ${PKG_BUILD_DIR}/src/$(3)/*/mod_$(subst -,_,$(1))/conf/autoload_configs/$(subst -,_,$(1)).conf.xml)),[ -d $$(1)/etc/$(PKG_NAME)/autoload_configs ] || $(INSTALL_DIR) $$(1)/etc/$(PKG_NAME)/autoload_configs;$(CP) $$$$(firstword $$$$(wildcard ${PKG_BUILD_DIR}/src/$(3)/*/mod_$(subst -,_,$(1))/conf/autoload_configs/$(subst -,_,$(1)).conf.xml)) $$(1)/etc/$(PKG_NAME)/autoload_configs)
 
 	#
-	# 4. mod_$(subst -,_,$(1)) XML configuration files from: $$$$(patsubst ${PKG_BUILD_DIR}/%,%,$$$$(firstword $$$$(wildcard ${PKG_BUILD_DIR}/src/$(3)/*/mod_$(subst -,_,$(1))/configs/$(subst -,_,$(1)).conf.xml)))
+	# 4. mod_$(subst -,_,$(1)) XML configuration files from: $$$$(patsubst ${PKG_BUILD_DIR}/%,%,$$$$(firstword $$$$(wildcard ${PKG_BUILD_DIR}/src/$(3)/*/mod_$(subst -,_,$(1))/conf*/$(subst -,_,$(1)).conf.xml)))
 	#
-	$$$$(if $$$$(firstword $$$$(wildcard ${PKG_BUILD_DIR}/src/$(3)/*/mod_$(subst -,_,$(1))/configs/$(subst -,_,$(1)).conf.xml)),[ -d $$(1)/etc/$(PKG_NAME)/autoload_configs ] || $(INSTALL_DIR) $$(1)/etc/$(PKG_NAME)/autoload_configs;$(CP) $$$$(firstword $$$$(wildcard ${PKG_BUILD_DIR}/src/$(3)/*/mod_$(subst -,_,$(1))/configs/$(subst -,_,$(1)).conf.xml)) $$(1)/etc/$(PKG_NAME)/autoload_configs)
+	$$$$(if $$$$(firstword $$$$(wildcard ${PKG_BUILD_DIR}/src/$(3)/*/mod_$(subst -,_,$(1))/conf*/$(subst -,_,$(1)).conf.xml)),[ -d $$(1)/etc/$(PKG_NAME)/autoload_configs ] || $(INSTALL_DIR) $$(1)/etc/$(PKG_NAME)/autoload_configs;$(CP) $$$$(firstword $$$$(wildcard ${PKG_BUILD_DIR}/src/$(3)/*/mod_$(subst -,_,$(1))/conf*/$(subst -,_,$(1)).conf.xml)) $$(1)/etc/$(PKG_NAME)/autoload_configs)
 
 	#
 	# 5. mod_$(subst -,_,$(1)) XML configuration files from: $$$$(patsubst ${PKG_BUILD_DIR}/%,%,$$$$(firstword $$$$(wildcard ${PKG_BUILD_DIR}/src/$(3)/*/mod_$(subst -,_,$(1))/$(subst -,_,$(1)).conf.xml)))
@@ -767,8 +887,14 @@ endef
 $(eval $(call BuildPackage,$(PKG_NAME)))
 $(eval $(call BuildPackage,$(PKG_NAME)-collection-upstream-defaults))
 $(eval $(call BuildPackage,$(PKG_NAME)-collection-minimal))
-$(eval $(call BuildPackage,$(PKG_NAME)-sounds-en))
-$(eval $(call BuildPackage,$(PKG_NAME)-sounds-moh))
+$(eval $(call BuildPackage,$(PKG_NAME)-sounds-en-08KHz))
+$(eval $(call BuildPackage,$(PKG_NAME)-sounds-en-16KHz))
+$(eval $(call BuildPackage,$(PKG_NAME)-sounds-en-32KHz))
+$(eval $(call BuildPackage,$(PKG_NAME)-sounds-en-48KHz))
+$(eval $(call BuildPackage,$(PKG_NAME)-sounds-moh-08KHz))
+$(eval $(call BuildPackage,$(PKG_NAME)-sounds-moh-16KHz))
+$(eval $(call BuildPackage,$(PKG_NAME)-sounds-moh-32KHz))
+$(eval $(call BuildPackage,$(PKG_NAME)-sounds-moh-48KHz))
 $(eval $(call BuildPackage,$(PKG_NAME)-tools))
 $(eval $(call BuildPackage,$(PKG_NAME)-example-config))
 $(eval $(call BuildPackage,$(PKG_NAME)-config-upstream-defaults))
@@ -793,7 +919,7 @@ $(eval $(call BuildPlugin,blacklist,Blacklist,vanilla,,,,))
 $(eval $(call BuildPlugin,bv,BroadVoice16 and BroadVoice32 Audio Codec,vanilla,,,,))
 $(eval $(call BuildPlugin,callcenter,Call Center,vanilla,,,,))
 $(eval $(call BuildPlugin,cdr-csv,CSV-CDR Handler,mod,,,,)) # ~/conf
-$(eval $(call BuildPlugin,cdr-pg-csv,Postgress CDR Handler,vanilla,,,,+coreutils +libpq +postresql))
+$(eval $(call BuildPlugin,cdr-pg-csv,Postgress CDR Handler,vanilla,,,,+coreutils +libpq))
 $(eval $(call BuildPlugin,cdr-sqlite,SQLite3 CDR Handler,vanilla,,,,+libsqlite3))
 $(eval $(call BuildPlugin,celt,CELT Ultra-Low Delay Codec,vanilla,,,,+libogg))
 $(eval $(call BuildPlugin,cepstral,Cepstral Interface,vanilla,,,,@BROKEN)) # needs <swift.h>
@@ -809,7 +935,7 @@ $(eval $(call BuildPlugin,db,Database Backend,vanilla,,,,))
 $(eval $(call BuildPlugin,dialplan-asterisk,Asterisk Dialplan Parser,vanilla,,,,))
 $(eval $(call BuildPlugin,dialplan-directory,Dialplan Directory,vanilla,,,,))
 $(eval $(call BuildPlugin,dialplan-xml,Dialplan-XML Interface,vanilla,,,,))
-$(eval $(call BuildPlugin,dingaling,Jabber Interface,vanilla,,,,+libgnutls +libgcrypt +libopenssl))
+$(eval $(call BuildPlugin,dingaling,Jabber Interface,vanilla,,,,+libgcrypt +libopenssl))
 $(eval $(call BuildPlugin,directory,Search By Name Directory IVR,vanilla,,,,))
 $(eval $(call BuildPlugin,distributor,Simple Robin-Round Load to Gateway,vanilla,,,,))
 $(eval $(call BuildPlugin,dptools,Dialplan Tools,vanilla,,,,))
