@@ -18,7 +18,7 @@ PKG_VERSION:=1.3.13b
 #
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=git://git.$(PKG_NAME).org/$(PKG_NAME).git
-FS_DEFAULT_HEAD:=70a9560306c6800ac8e81e7d7690c2adf446cea7
+FS_DEFAULT_HEAD:=a55a9b39155856224bc8e81e9abaff1d8235834c
 FS_LATEST_HEAD:=$(shell git ls-remote $(PKG_SOURCE_URL) HEAD | cut -f1)
 PKG_SOURCE_VERSION:=$(if $(CONFIG_FS_SOFIA_WITH_PULL_CURRENT),$(FS_LATEST_HEAD),$(FS_DEFAULT_HEAD))
 PKG_SOURCE_VERSION_SHORT:=$(shell echo $(PKG_SOURCE_VERSION)|cut -b -7)
@@ -372,22 +372,22 @@ endef
 
 define Package/$(PKG_NAME)-sounds-en-16KHz
 $(call Package/$(PKG_NAME)/Default)
-  TITLE:=FreeSWITCH 16KHz english sounds 
-  DEPENDS:= $(PKG_NAME)
+  TITLE:=FreeSWITCH 16KHz english sounds
+  DEPENDS:= $(PKG_NAME) $(PKG_NAME)-sounds-en-08KHz
 endef
 
 
 define Package/$(PKG_NAME)-sounds-en-32KHz
 $(call Package/$(PKG_NAME)/Default)
   TITLE:=FreeSWITCH 32KHz english sounds
-  DEPENDS:= $(PKG_NAME)
+  DEPENDS:= $(PKG_NAME) $(PKG_NAME)-sounds-en-08KHz $(PKG_NAME)-sounds-en-16KHz
 endef
 
 
 define Package/$(PKG_NAME)-sounds-en-48KHz
 $(call Package/$(PKG_NAME)/Default)
   TITLE:=FreeSWITCH 48KHz english sounds
-  DEPENDS:= $(PKG_NAME)
+  DEPENDS:= $(PKG_NAME) $(PKG_NAME)-sounds-en-08KHz $(PKG_NAME)-sounds-en-16KHz $(PKG_NAME)-sounds-en-32KHz
 endef
 
 
@@ -401,21 +401,21 @@ endef
 define Package/$(PKG_NAME)-sounds-moh-16KHz
 $(call Package/$(PKG_NAME)/Default)
   TITLE:=FreeSWITCH 16KHz music-on-hold sounds
-  DEPENDS:= $(PKG_NAME)
+  DEPENDS:= $(PKG_NAME) $(PKG_NAME)-sounds-moh-08KHz
 endef
 
 
 define Package/$(PKG_NAME)-sounds-moh-32KHz
 $(call Package/$(PKG_NAME)/Default)
   TITLE:=FreeSWITCH 32KHz music-on-hold sounds
-  DEPENDS:= $(PKG_NAME)
+  DEPENDS:= $(PKG_NAME) $(PKG_NAME)-sounds-moh-08KHz $(PKG_NAME)-sounds-moh-16KHz
 endef
 
 
 define Package/$(PKG_NAME)-sounds-moh-48KHz
 $(call Package/$(PKG_NAME)/Default)
   TITLE:=FreeSWITCH 48KHz music-on-hold sounds
-  DEPENDS:= $(PKG_NAME)
+  DEPENDS:= $(PKG_NAME) $(PKG_NAME)-sounds-moh-08KHz $(PKG_NAME)-sounds-moh-16KHz $(PKG_NAME)-sounds-moh-32KHz
 endef
 
 
@@ -475,19 +475,19 @@ endif
 
 ifneq ($(CONFIG_PACKAGE_$(PKG_NAME)-sounds-en-16KHz),)
  $(eval $(call Download/files,sounds-en-16KHz,$(PKG_NAME)-sounds-en-us-callie-16000-1.0.24.tar.gz,e9b5c1cdd393660d0cdf7de6b7e03c45,,,))
-	MAKE_INSTALL_TARGETS+= sounds-install
+	MAKE_INSTALL_TARGETS+= hd-sounds-install
 endif
 
 
 ifneq ($(CONFIG_PACKAGE_$(PKG_NAME)-sounds-en-32KHz),)
  $(eval $(call Download/files,sounds-en-32KHz,$(PKG_NAME)-sounds-en-us-callie-32000-1.0.24.tar.gz,fa110675de07ca5f6d85646f3093b0ce,,,))
-	MAKE_INSTALL_TARGETS+= sounds-install
+	MAKE_INSTALL_TARGETS+= uhd-sounds-install
 endif
 
 
 ifneq ($(CONFIG_PACKAGE_$(PKG_NAME)-sounds-en-48KHz),)
  $(eval $(call Download/files,sounds-en-48KHz,$(PKG_NAME)-sounds-en-us-callie-48000-1.0.24.tar.gz,813ea6eeae5545bb6e11664189691f8b,,,))
-	MAKE_INSTALL_TARGETS+= sounds-install
+	MAKE_INSTALL_TARGETS+= cd-sounds-install
 endif
 
 
@@ -499,19 +499,19 @@ endif
 
 ifneq ($(CONFIG_PACKAGE_$(PKG_NAME)-sounds-moh-16KHz),)
  $(eval $(call Download/files,sounds-moh-16KHz,$(PKG_NAME)-sounds-music-16000-1.0.8.tar.gz,7fd0ca9a9e3878783baa39b8187743bf,,,))
-	MAKE_INSTALL_TARGETS+= moh-install
+	MAKE_INSTALL_TARGETS+= hd-moh-install
 endif
 
 
 ifneq ($(CONFIG_PACKAGE_$(PKG_NAME)-sounds-moh-32KHz),)
  $(eval $(call Download/files,sounds-moh-32KHz,$(PKG_NAME)-sounds-music-32000-1.0.8.tar.gz,7e03932ea81b8d0bf6d686f838b060b4,,,))
-	MAKE_INSTALL_TARGETS+= moh-install
+	MAKE_INSTALL_TARGETS+= uhd-moh-install
 endif
 
 
 ifneq ($(CONFIG_PACKAGE_$(PKG_NAME)-sounds-moh-48KHz),)
  $(eval $(call Download/files,sounds-moh-48KHz,$(PKG_NAME)-sounds-music-48000-1.0.8.tar.gz,d06cd2a80379f224affab21f5180e4c6,,,))
-	MAKE_INSTALL_TARGETS+= moh-install
+	MAKE_INSTALL_TARGETS+= cd-moh-install
 endif
 
 
