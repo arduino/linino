@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=miniupnpc
-PKG_VERSION:=1.7
+PKG_VERSION:=1.8
 PKG_RELEASE:=1
 
 PKG_SOURCE_URL:=http://miniupnp.free.fr/files
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_MD5SUM:=297bee441b56af87c6622fc4002179fd
+PKG_MD5SUM:=065bf20a20ebe605c675b7a5aaef340a
 
 PKG_INSTALL:=1
 
