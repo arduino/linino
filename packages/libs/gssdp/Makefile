@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gssdp
-PKG_VERSION:=0.12.1
+PKG_VERSION:=0.13.2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
-PKG_SOURCE_URL:=http://ftp.gnome.org/pub/GNOME/sources/gssdp/0.12/
-PKG_MD5SUM:=e7ac04abe7349a89d13d0ab4ee7d2e1b
+PKG_SOURCE_URL:=http://ftp.gnome.org/pub/GNOME/sources/gssdp/0.13/
+PKG_MD5SUM:=758ed423cdd258a9a22d59c321b535ed
 
 PKG_BUILD_DEPENDS:=libsoup glib2 $(ICONV_DEPENDS)
 

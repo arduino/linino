@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gupnp
-PKG_VERSION:=0.18.3
+PKG_VERSION:=0.19.4
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
-PKG_SOURCE_URL:=http://ftp.gnome.org/pub/GNOME/sources/gupnp/0.18/
-PKG_MD5SUM:=1086654db47def9fbe9fc54c1228d663
+PKG_SOURCE_URL:=http://ftp.gnome.org/pub/GNOME/sources/gupnp/0.19/
+PKG_MD5SUM:=516549cebc5af416f2fd7177d6512a0f
 
 PKG_BUILD_DEPENDS:=libgnutls
 
