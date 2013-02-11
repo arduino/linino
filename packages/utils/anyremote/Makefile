@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2008-2011 OpenWrt.org
+# Copyright (C) 2008-2013 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=anyremote
-PKG_VERSION:=4.7.1
-PKG_RELEASE:=3
+PKG_VERSION:=6.2
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/${PKG_NAME}
-PKG_MD5SUM:=bd177156faa8a59a5d3e02cada243fc3
+PKG_MD5SUM:=130369d8f632127b20de67930386e9ca
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -21,7 +21,7 @@ define Package/anyremote
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=A bluetooth remote control app
-  DEPENDS:=+bluez-libs
+  DEPENDS:=+bluez-libs +libpthread
   URL:=http://anyremote.sourceforge.net/
 endef
 
@@ -31,7 +31,7 @@ endef
 
 define Build/Configure
     $(call Build/Configure/Default, \
-    --disable-xtest \
+    --disable-xtest --disable-glib --disable-iconv \
     )
 endef
 
