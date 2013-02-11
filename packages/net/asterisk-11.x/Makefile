@@ -201,7 +201,7 @@ ifneq ($(SDK)$(CONFIG_PACKAGE_asterisk11-pbx-lua),)
   TARGET_LDFLAGS+=-ldl -lcrypt
 else
   CONFIGURE_ARGS+= \
-	--without-pbx-lua
+	--without-lua
 endif
 
 EXTRA_CFLAGS+= $(TARGET_CPPFLAGS)
