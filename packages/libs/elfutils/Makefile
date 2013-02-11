@@ -16,13 +16,15 @@ PKG_MD5SUM:=163a5712b86f6bdfebdf233cc6e2192d
 
 PKG_INSTALL:=1
 
+PKG_BUILD_DEPENDS:=USE_UCLIBC:argp-standalone
+
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/nls.mk
 
 define Package/elfutils/Default
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=$(INTL_DEPENDS) +USE_UCLIBC:argp-standalone
+  DEPENDS:=$(INTL_DEPENDS)
   TITLE:=ELF manipulation libraries
   URL:=https://fedorahosted.org/elfutils/
 endef
