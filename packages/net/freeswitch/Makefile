@@ -18,7 +18,7 @@ PKG_VERSION:=1.3.13b
 #
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=git://git.$(PKG_NAME).org/$(PKG_NAME).git
-FS_DEFAULT_HEAD:=a55a9b39155856224bc8e81e9abaff1d8235834c
+FS_DEFAULT_HEAD:=475c235df44abe956ccfff050ec04f1f4578e6c1
 FS_LATEST_HEAD:=$(shell git ls-remote $(PKG_SOURCE_URL) HEAD | cut -f1)
 PKG_SOURCE_VERSION:=$(if $(CONFIG_FS_SOFIA_WITH_PULL_CURRENT),$(FS_LATEST_HEAD),$(FS_DEFAULT_HEAD))
 PKG_SOURCE_VERSION_SHORT:=$(shell echo $(PKG_SOURCE_VERSION)|cut -b -7)
@@ -184,14 +184,14 @@ define Package/$(PKG_NAME)/Default
   CATEGORY:=Network
   SUBMENU:=Telephony
   URL:=http://www.$(PKG_NAME).org/
-  MAINTAINER:=Mazilo <OpenWRT@slickdeals.endjunk.com>
+  MAINTAINER:=Mazilo <openwrt.forum.mazilo@recursor.net>
 endef
 
 
 define Package/$(PKG_NAME)
 $(call Package/$(PKG_NAME)/Default)
   TITLE:=FreeSWITCH open source telephony platform ($(PKG_SOURCE_VERSION_SHORT))
-  DEPENDS:=+libcurl +libjpeg +libncurses +libpq +libpthread +librt +libstdcpp
+  DEPENDS:=+libcurl +libiconv-full +libjpeg +libncurses +libpq +libpthread +librt +libstdcpp
   MENU:=1
 endef
 
