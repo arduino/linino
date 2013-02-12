@@ -11,7 +11,7 @@
 @@ -165,7 +169,6 @@ ZRTP_LIBS = -lbn -lzrtp
  libfreeswitch_la_LDFLAGS += $(ZRTP_LDFLAGS)
  libfreeswitch_la_LIBADD += $(ZRTP_LIBS)
- CORE_LIBS += libs/libzrtp/projects/gnu/build/libzrtp.a
+ CORE_LIBS += libs/libzrtp/libzrtp.a
 -LIBS += libs/libzrtp/third_party/bnlib/libbn.a
  endif
  
