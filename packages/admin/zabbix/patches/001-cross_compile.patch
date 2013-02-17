@@ -1,6 +1,6 @@
 --- a/configure.in	2012-06-21 21:32:23.707912790 +0000
 +++ b/configure.in	2012-06-21 21:33:36.213554564 +0000
-@@ -806,25 +806,8 @@
+@@ -802,25 +802,8 @@
  
  dnl Check for %qu format (FreeBSD 4.x)
  dnl FreeBSD 4.x does not support %llu

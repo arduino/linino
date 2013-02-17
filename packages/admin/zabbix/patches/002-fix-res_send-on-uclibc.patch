@@ -1,7 +1,7 @@
---- a/configure.in	2012-05-21 14:07:37.000000000 +0000
-+++ b/configure.in	2012-06-21 19:46:34.843662509 +0000
+--- a/configure.in	2013-02-14 18:29:28.145419003 +0100
++++ b/configure.in	2013-02-14 18:28:42.873418092 +0100
 @@ -149,6 +149,10 @@
- 	AC_MSG_ERROR([Unable to DNS lookup functions "${found_resolv}"])
+ 	AC_MSG_ERROR([Unable to do DNS lookups (libresolv check failed)])
  fi
  LIBS="${LIBS} ${RESOLV_LIBS}"
 +AC_SEARCH_LIBS([res_mkquery], [], [AC_DEFINE([HAVE_RES_MKQUERY], 1, [Define if res_mkquery exists])])
