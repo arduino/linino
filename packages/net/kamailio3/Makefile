@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2012 OpenWrt.org
+# Copyright (C) 2013 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=kamailio3
-PKG_VERSION:=3.3.0
+PKG_VERSION:=3.3.3
 PKG_RELEASE:=1
 
 PKG_SOURCE_URL:=http://www.kamailio.org/pub/kamailio/$(PKG_VERSION)/src/
 PKG_SOURCE:=kamailio-$(PKG_VERSION)$(PKG_VARIANT)_src.tar.gz
-PKG_MD5SUM:=c5261066b5c8b617b6a9408679ad514f
+PKG_MD5SUM:=98c082b70048d2e9a9c4acfaa6cf556d
 
 INCL_MODULES:=
 KAM_MODULES:=
