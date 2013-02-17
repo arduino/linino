@@ -1,6 +1,6 @@
 --- a/configure.ac
 +++ b/configure.ac
-@@ -75,9 +75,10 @@ case "$host_os" in
+@@ -74,9 +74,10 @@ case "$host_os" in
  	    [ KERNEL_INCLUDE="/lib/modules/`uname -r`/build/include" ])
  
      AC_CHECK_HEADER($KERNEL_INCLUDE/linux/pfkeyv2.h, ,
@@ -14,7 +14,7 @@
      AC_SUBST(KERNEL_INCLUDE)
      # We need the configure script to run with correct kernel headers.
      # However we don't want to point to kernel source tree in compile time,
-@@ -644,7 +645,14 @@ AC_EGREP_CPP(yes,
+@@ -643,7 +644,14 @@ AC_EGREP_CPP(yes,
  #ifdef SADB_X_EXT_NAT_T_TYPE
  yes
  #endif
@@ -35,7 +35,7 @@
 @@ -1,14 +1,7 @@
 -
 -.includes: ${top_builddir}/config.status
--	ln -sf $(KERNEL_INCLUDE)/linux
+-	ln -snf $(KERNEL_INCLUDE)/linux
 -	touch .includes
 -
 -all: .includes

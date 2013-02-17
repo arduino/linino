@@ -1,6 +1,6 @@
 --- a/src/racoon/oakley.c
 +++ b/src/racoon/oakley.c
-@@ -2419,8 +2419,21 @@ oakley_skeyid(iph1)
+@@ -2424,8 +2424,21 @@ oakley_skeyid(iph1)
  				plog(LLV_ERROR, LOCATION, iph1->remote,
  					"couldn't find the pskey for %s.\n",
  					saddrwop2str(iph1->remote));
