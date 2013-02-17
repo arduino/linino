@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2012 OpenWrt.org
+# Copyright (C) 2006-2013 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,16 +9,18 @@ include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/uclibc++.mk
 
 PKG_NAME:=mysql
-PKG_VERSION:=5.1.66
-PKG_RELEASE:=7
+PKG_VERSION:=5.1.68
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=\
-	http://mysql.planetmirror.com/Downloads/MySQL-5.1/ \
 	http://mysql.he.net/Downloads/MySQL-5.1/ \
 	http://www.linorg.usp.br/mysql/Downloads/MySQL-5.1/ \
-	http://mysql.holywar.net/Downloads/MySQL-5.1/
-PKG_MD5SUM:=a43ffa58e3611e5a557feb745596aca3
+	http://www.mirrorservice.org/sites/ftp.mysql.com/Downloads/MySQL-5.1/ \
+	http://mirror.switch.ch/ftp/mirror/mysql/Downloads/MySQL-5.1/ \
+	http://downloads.mysql.com/archives/mysql-5.1/
+
+PKG_MD5SUM:=3a4a627d0865ce7660504728a15b0fb9
 
 PKG_BUILD_DEPENDS:=libncurses libreadline
 PKG_BUILD_PARALLEL:=1
