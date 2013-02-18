@@ -19,8 +19,8 @@ config FREECWMP_DEBUG
 	bool "Compile with debug options"
 	default n
 
-config FREECWMP_DEVEL_DEBUG
-	bool "Compile with development debug options"
+config FREECWMP_DEVEL
+	bool "Compile with development options"
 	default n
 
 endif
