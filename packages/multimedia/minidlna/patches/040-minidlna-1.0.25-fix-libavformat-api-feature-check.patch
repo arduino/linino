@@ -1,0 +1,11 @@
+--- a/metadata.c	2012-08-27 23:00:06.997932249 +0100
++++ b/metadata.c	2012-08-27 23:10:07.716582960 +0100
+@@ -110,7 +110,7 @@ lav_open(AVFormatContext **ctx, const ch
+ static inline void
+ lav_close(AVFormatContext *ctx)
+ {
+-#if LIBAVFORMAT_VERSION_INT >= ((53<<16)+(2<<8)+0)
++#if LIBAVFORMAT_VERSION_INT >= ((53<<16)+(17<<8)+0)
+ 	avformat_close_input(&ctx);
+ #else
+ 	av_close_input_file(ctx);
