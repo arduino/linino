@@ -25,8 +25,6 @@ define Package/libqmi/description
   Helper library and utils to talk to QMI enabled modems
 endef
 
-CONFIGURE_VARS+= CFLAGS="$$$$CFLAGS -DMESSAGE_ENABLE_TRACE"
-
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include
 	$(CP) \
