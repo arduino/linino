@@ -4,9 +4,9 @@
 START=90
 
 start() {
-	service_start freecwmpd
+	service_start /usr/sbin/freecwmpd
 }
 
 stop() {
-	service_stop freecwmpd
+	service_stop /usr/sbin/freecwmpd
 }
