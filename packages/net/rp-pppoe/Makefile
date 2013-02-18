@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2011 OpenWrt.org
+# Copyright (C) 2006-2013 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=rp-pppoe
-PKG_VERSION:=3.10
-PKG_RELEASE:=2
+PKG_VERSION:=3.11
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://roaringpenguin.com/files/download
-PKG_MD5SUM:=d58a13cc4185bca6121a606ff456dec0
+PKG_MD5SUM:=13b5900c56bd602df6cc526e5e520722
 
 PKG_BUILD_DEPENDS:=ppp
 
