@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libjpeg-turbo
 PKG_VERSION:=1.2.1
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/libjpeg-turbo
@@ -43,6 +43,14 @@ define Package/jpeg-tools
   TITLE+= manipulation tools
 endef
 
+define Package/libjpeg-turbo-tests
+  $(call Package/libjpeg-turbo/Default)
+  SECTION:=utils
+  CATEGORY:=Utilities
+  DEPENDS:=+libjpeg-turbo
+  TITLE+= testing utilities
+endef
+
 TARGET_CFLAGS += $(FPIC)
 
 CONFIGURE_ARGS += \
@@ -69,17 +77,25 @@ endef
 define Package/libjpeg-turbo/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_BUILD_DIR)/.libs/libjpeg.{a,so*} $(1)/usr/lib/
-#	$(CP) $(PKG_BUILD_DIR)/.libs/libturbojpeg.{a,so*} $(1)/usr/lib/
 endef
 
 define Package/jpeg-tools/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/.libs/{c,d}jpeg $(1)/usr/bin/
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/.libs/jpeg{tran,gut} $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/.libs/jpegtran $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/.libs/{rd,wr}jpgcom $(1)/usr/bin/
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/.libs/jpgtest $(1)/usr/bin/
+endef
+
+define Package/libjpeg-turbo-tests/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/.libs/tjbench $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/.libs/tjunittest $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/.libs/jcstest $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(CP) $(PKG_BUILD_DIR)/.libs/libturbojpeg.{a,so*} $(1)/usr/lib/
 endef
 
 $(eval $(call HostBuild))
 $(eval $(call BuildPackage,libjpeg-turbo))
 $(eval $(call BuildPackage,jpeg-tools))
+$(eval $(call BuildPackage,libjpeg-turbo-tests))
