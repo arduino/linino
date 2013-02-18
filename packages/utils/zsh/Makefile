@@ -15,6 +15,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/zsh
 PKG_MD5SUM:=b8f2ad691acf58b3252225746480dcad
 
+PKG_INSTALL:=1
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/zsh
@@ -38,7 +40,7 @@ define Build/Configure
 	$(call Build/Configure/Default, \
 		--bindir=/bin \
 		--disable-etcdir \
-		--with-term-lib="ncurses ncursesw" \
+		--with-term-lib="ncurses" \
 	)
 	# Do not install these functions:
 	$(SED) 's, Completion/AIX/\*/\*,,g' $(PKG_BUILD_DIR)/config.modules
@@ -53,10 +55,6 @@ define Build/Configure
 	$(SED) 's, Completion/openSUSE/\*/\*,,g' $(PKG_BUILD_DIR)/config.modules
 	# After mucking with 'config.modules', one must call
 	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" prep
-endef
-
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR="$(PKG_INSTALL_DIR)" install
 endef
 
 define Package/zsh/postinst
