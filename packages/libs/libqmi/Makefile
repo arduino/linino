@@ -35,6 +35,11 @@ define Build/InstallDev
 	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/lib/*.{so*,a,la} \
 		$(1)/usr/lib/
+
+	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
+	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/pkgconfig/qmi-glib.pc \
+		$(1)/usr/lib/pkgconfig
 endef
 
 define Package/libqmi/install
