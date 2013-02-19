@@ -38,6 +38,8 @@ endef
 
 TARGET_CFLAGS += $(FPIC)
 
+CONFIGURE_VARS += CC="$(TARGET_CC) $(TARGET_CFLAGS)"
+
 define Build/Configure
 	$(call Build/Configure/Default, \
 		--enable-shared \
