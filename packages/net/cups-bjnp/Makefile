@@ -22,6 +22,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/cups-bjnp
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=Printing
   TITLE:=BJNP protocol backend for CUPS
   URL:=http://sourceforge.net/projects/cups-bjnp/
   DEPENDS:=cups
