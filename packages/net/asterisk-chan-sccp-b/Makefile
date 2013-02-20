@@ -13,7 +13,7 @@ PKG_VERSION:=r$(PKG_REV)
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=https://chan-sccp-b.svn.sourceforge.net/svnroot/chan-sccp-b/trunk
+PKG_SOURCE_URL:=http://svn.code.sf.net/p/chan-sccp-b/code/trunk
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE_VERSION:=$(PKG_REV)
 PKG_SOURCE_PROTO:=svn
