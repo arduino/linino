@@ -394,6 +394,7 @@ define Build/Configure
 		--with-cups-user="nobody" \
 		--with-cups-group="nogroup" \
 		--with-components="embedded" \
+		--with-pdftops="none" \
 		--without-perl \
 		--without-python \
 		--without-php \
@@ -488,7 +489,7 @@ endef
 
 define Package/cups-filters/install
 	$(INSTALL_DIR) $(1)/usr/lib/cups/filter
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/cups/filter/{bannertops,commandtoescpx,commandtopclx,imagetops,imagetoraster,pdftops,rastertoepson,rastertopwg,rastertohp,rastertoescpx,rastertopclx,rastertolabel,texttops} \
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/cups/filter/{bannertops,commandtoescpx,commandtopclx,imagetops,imagetoraster,rastertoepson,rastertopwg,rastertohp,rastertoescpx,rastertopclx,rastertolabel,texttops} \
 		$(1)/usr/lib/cups/filter
 	(cd $(1)/usr/lib/cups/filter; ln -sf rastertolabel rastertodymo;)
 endef
