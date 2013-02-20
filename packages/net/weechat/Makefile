@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=weechat
-PKG_VERSION:=0.3.8
+PKG_VERSION:=0.4.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.weechat.org/files/src
-PKG_MD5SUM:=c07047eca33c176df25e94964bdec7bf
+PKG_MD5SUM:=b2e10ca1e3a72142fcc8d58c7c774b1b
 
 PKG_FIXUP:=autoreconf
 
