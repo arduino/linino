@@ -6,12 +6,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=tig
-PKG_VERSION:=0.18
+PKG_VERSION:=1.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=tig-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://jonas.nitro.dk/tig/releases/
-PKG_MD5SUM:=4fa9e33c5daa76b6fed11e068405356f
+PKG_MD5SUM:=adeb797a8320962eeb345a615257cbac
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/tig-$(PKG_VERSION)
@@ -29,7 +29,8 @@ define Package/tig
 endef
 
 define Package/tig/description
-	Command line launcher for search engines and other Internet services.
+	Tig is a git repository browser that additionally can act as a pager for output
+	from various git commands.
 endef
 
 CONFIGURE_ARGS+= \
