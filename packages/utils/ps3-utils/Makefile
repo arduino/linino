@@ -28,7 +28,7 @@ define Package/ps3-utils
 	CATEGORY:=Utilities
 	TITLE:=PS3 Linux Utilities
 	URL:=http://kernel.org/pub/linux/kernel/people/geoff/cell/ps3-utils/
-	MAINTAINER:=Geoff Levand <geoffrey.levand@am.sony.com>
+	MAINTAINER:=Geoff Levand <geoff@infradead.org>
 	DEPENDS:=@TARGET_ps3||TARGET_ps3chk||TARGET_powerpc
 endef
 
