@@ -27,7 +27,7 @@ define Package/petitboot
 	CATEGORY:=Boot Loaders
 	TITLE:=A kexec based bootloader
 	URL:=http://ozlabs.org/~jk/projects/petitboot/
-	MAINTAINER:=Geoff Levand <geoffrey.levand@am.sony.com>
+	MAINTAINER:=Geoff Levand <geoff@infradead.org>
 	DEPENDS:=@TARGET_ps3 +kexec-tools +libncurses +libtwin +udev +ps3-utils
 endef
 
