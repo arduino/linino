@@ -1,0 +1,36 @@
+#!/bin/sh /etc/rc.common
+START=80
+
+DAEMON="/usr/sbin/shairport"
+
+config_shairport() {
+	local cfg="$1"
+	local args=""
+
+	config_get name "$cfg" name
+	config_get password "$cfg" password
+	config_get port "$cfg" port
+	config_get buffer "$cfg" buffer
+
+	[ -z $name ] && name="AirPort"
+	args="$args -a $name"
+
+	[ ! -z "$password" ] && args="$args -p $password"
+	[ ! -z "$port" ] && args="$args -o $port"
+
+	[ -z $buffer ] && buffer="256"
+	args="$args -b $buffer"
+
+	args="$args -d"
+
+	service_start $DAEMON $args
+}
+
+start() {
+	config_load shairport
+	config_foreach config_shairport shairport
+}
+
+stop() {
+	service_stop $DAEMON
+}
