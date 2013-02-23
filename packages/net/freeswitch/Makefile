@@ -18,7 +18,7 @@ PKG_VERSION:=1.3.13b
 #
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=git://git.$(PKG_NAME).org/$(PKG_NAME).git
-FS_DEFAULT_HEAD:=475c235df44abe956ccfff050ec04f1f4578e6c1
+FS_DEFAULT_HEAD:=3e31837a0bb417a328d9877647bbb1bb2ed51b5f
 FS_LATEST_HEAD:=$(shell git ls-remote $(PKG_SOURCE_URL) HEAD | cut -f1)
 PKG_SOURCE_VERSION:=$(if $(CONFIG_FS_SOFIA_WITH_PULL_CURRENT),$(FS_LATEST_HEAD),$(FS_DEFAULT_HEAD))
 PKG_SOURCE_VERSION_SHORT:=$(shell echo $(PKG_SOURCE_VERSION)|cut -b -7)
@@ -373,21 +373,21 @@ endef
 define Package/$(PKG_NAME)-sounds-en-16KHz
 $(call Package/$(PKG_NAME)/Default)
   TITLE:=FreeSWITCH 16KHz english sounds
-  DEPENDS:= $(PKG_NAME) $(PKG_NAME)-sounds-en-08KHz
+  DEPENDS:= +$(PKG_NAME)-sounds-en-08KHz
 endef
 
 
 define Package/$(PKG_NAME)-sounds-en-32KHz
 $(call Package/$(PKG_NAME)/Default)
   TITLE:=FreeSWITCH 32KHz english sounds
-  DEPENDS:= $(PKG_NAME) $(PKG_NAME)-sounds-en-08KHz $(PKG_NAME)-sounds-en-16KHz
+  DEPENDS:= +$(PKG_NAME)-sounds-en-16KHz
 endef
 
 
 define Package/$(PKG_NAME)-sounds-en-48KHz
 $(call Package/$(PKG_NAME)/Default)
   TITLE:=FreeSWITCH 48KHz english sounds
-  DEPENDS:= $(PKG_NAME) $(PKG_NAME)-sounds-en-08KHz $(PKG_NAME)-sounds-en-16KHz $(PKG_NAME)-sounds-en-32KHz
+  DEPENDS:= +$(PKG_NAME)-sounds-en-32KHz
 endef
 
 
@@ -401,21 +401,21 @@ endef
 define Package/$(PKG_NAME)-sounds-moh-16KHz
 $(call Package/$(PKG_NAME)/Default)
   TITLE:=FreeSWITCH 16KHz music-on-hold sounds
-  DEPENDS:= $(PKG_NAME) $(PKG_NAME)-sounds-moh-08KHz
+  DEPENDS:= +$(PKG_NAME)-sounds-moh-08KHz
 endef
 
 
 define Package/$(PKG_NAME)-sounds-moh-32KHz
 $(call Package/$(PKG_NAME)/Default)
   TITLE:=FreeSWITCH 32KHz music-on-hold sounds
-  DEPENDS:= $(PKG_NAME) $(PKG_NAME)-sounds-moh-08KHz $(PKG_NAME)-sounds-moh-16KHz
+  DEPENDS:= +$(PKG_NAME)-sounds-moh-16KHz
 endef
 
 
 define Package/$(PKG_NAME)-sounds-moh-48KHz
 $(call Package/$(PKG_NAME)/Default)
   TITLE:=FreeSWITCH 48KHz music-on-hold sounds
-  DEPENDS:= $(PKG_NAME) $(PKG_NAME)-sounds-moh-08KHz $(PKG_NAME)-sounds-moh-16KHz $(PKG_NAME)-sounds-moh-32KHz
+  DEPENDS:= +$(PKG_NAME)-sounds-moh-32KHz
 endef
 
 
@@ -531,9 +531,9 @@ ifneq ($(CONFIG_USE_EGLIBC),)
 endif
 
 
-FS_TARGET_CFLAGS:= ${TARGET_CFLAGS} -DLUA_USE_LINUX $(FPIC) -std=gnu99 -Wno-format
-FS_TARGET_CXXFLAGS:= ${TARGET_CXXFLAGS} -DLUA_USE_LINUX $(FPIC) -Wno-format
-FS_TARGET_CPPFLAGS:= -I. -I./lua $(if $(CONFIG_PACKAGE_$(PKG_NAME)-mod-erlang-event),-I$(STAGING_DIR_HOST)/lib/erlang/lib/erl_interface-3.6/include) $(if $(CONFIG_PACKAGE_$(PKG_NAME)-mod-json-cdr),-Wno-error) ${TARGET_CPPFLAGS}
+FS_TARGET_CFLAGS:= $(TARGET_CFLAGS) -DLUA_USE_LINUX $(FPIC) -std=gnu99 -Wno-format
+FS_TARGET_CXXFLAGS:= $(TARGET_CXXFLAGS) -DLUA_USE_LINUX $(FPIC) -Wno-format
+FS_TARGET_CPPFLAGS:= -I. -I./lua $(if $(CONFIG_PACKAGE_$(PKG_NAME)-mod-erlang-event),-I$(STAGING_DIR_HOST)/lib/erlang/lib/erl_interface-3.6/include) $(if $(CONFIG_PACKAGE_$(PKG_NAME)-mod-json-cdr),-Wno-error) $(TARGET_CPPFLAGS)
 
 
 CONFIGURE_ARGS+= \
@@ -561,30 +561,30 @@ CONFIGURE_ARGS+= \
 
 
 CONFIGURE_VARS+= \
-	config_TARGET_CC="$(TOOLCHAIN_DIR)/bin/${TARGET_CC}" \
-	config_TARGET_CFLAGS="${FS_TARGET_CPPFLAGS} ${FS_TARGET_CFLAGS}" \
-	config_TARGET_CXX="$(TOOLCHAIN_DIR)/bin/${TARGET_CXX}" \
-	config_TARGET_CXXFLAGS="${FS_TARGET_CPPFLAGS} ${FS_TARGET_CXXFLAGS}" \
-	config_TARGET_CPPFLAGS="${FS_TARGET_CPPFLAGS}" \
-	config_TARGET_READLINE_INC="${FS_TARGET_CPPFLAGS}" \
-	config_TARGET_READLINE_LIBS="${TARGET_LDFLAGS} -lreadline -lncurses" \
-	config_TARGET_LIBS="${TARGET_LDFLAGS} -lpthread -ldl" \
-	config_BUILD_CC="${HOSTCC}" \
-	config_BUILD_CFLAGS="${HOST_CFLAGS}" \
-	CC_FOR_BUILD="${HOSTCC}" \
-	BUILDTOOL_CC="${HOSTCC}" \
-	BUILDTOOL_CCLD="${HOSTCC}" \
+	config_TARGET_CC="$(TOOLCHAIN_DIR)/bin/$(TARGET_CC)" \
+	config_TARGET_CFLAGS="$(FS_TARGET_CPPFLAGS) $(FS_TARGET_CFLAGS)" \
+	config_TARGET_CXX="$(TOOLCHAIN_DIR)/bin/$(TARGET_CXX)" \
+	config_TARGET_CXXFLAGS="$(FS_TARGET_CPPFLAGS) $(FS_TARGET_CXXFLAGS)" \
+	config_TARGET_CPPFLAGS="$(FS_TARGET_CPPFLAGS)" \
+	config_TARGET_READLINE_INC="$(FS_TARGET_CPPFLAGS)" \
+	config_TARGET_READLINE_LIBS="$(TARGET_LDFLAGS) -lreadline -lncurses" \
+	config_TARGET_LIBS="$(TARGET_LDFLAGS) -lpthread -ldl" \
+	config_BUILD_CC="$(HOSTCC)" \
+	config_BUILD_CFLAGS="$(HOST_CFLAGS)" \
+	CC_FOR_BUILD="$(HOSTCC)" \
+	BUILDTOOL_CC="$(HOSTCC)" \
+	BUILDTOOL_CCLD="$(HOSTCC)" \
 	LDFLAGS="$$$$LDFLAGS" \
-	LDFLAGS_FOR_BUILD="${HOST_LDFLAGS}" \
-	CC="$(TOOLCHAIN_DIR)/bin/${TARGET_CC}" \
-	CXX="$(TOOLCHAIN_DIR)/bin/${TARGET_CXX}" \
+	LDFLAGS_FOR_BUILD="$(HOST_LDFLAGS)" \
+	CC="$(TOOLCHAIN_DIR)/bin/$(TARGET_CC)" \
+	CXX="$(TOOLCHAIN_DIR)/bin/$(TARGET_CXX)" \
 	AR="$(TOOLCHAIN_DIR)/bin/$(TARGET_CROSS)ar" \
 	RANLIB="$(TOOLCHAIN_DIR)/bin/$(TARGET_CROSS)ranlib" \
-	CFLAGS="${FS_TARGET_CPPFLAGS} ${FS_TARGET_CFLAGS}" \
-	CXXFLAGS="${FS_TARGET_CPPFLAGS} ${FS_TARGET_CXXFLAGS}" \
-	CPPFLAGS="${FS_TARGET_CPPFLAGS}" \
-	LDFLAGS="${TARGET_LDFLAGS} -Wl,-rpath-link=\"${STAGING_DIR}/usr/lib\"" \
-	PATH="${PATH}:${STAGING_DIR}" \
+	CFLAGS="$(FS_TARGET_CPPFLAGS) $(FS_TARGET_CFLAGS)" \
+	CXXFLAGS="$(FS_TARGET_CPPFLAGS) $(FS_TARGET_CXXFLAGS)" \
+	CPPFLAGS="$(FS_TARGET_CPPFLAGS)" \
+	LDFLAGS="$(TARGET_LDFLAGS) -Wl,-rpath-link=\"$(STAGING_DIR)/usr/lib\"" \
+	PATH="$(PATH):$(STAGING_DIR)" \
 	HOST_CC="/usr/bin/cc" \
 	HOST_CXX="/usr/bin/g++" \
 	CROSS_COMPILE="1" \
@@ -680,6 +680,7 @@ define Package/$(PKG_NAME)/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/$(PKG_NAME) $(1)/usr/bin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib$(PKG_NAME)* $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/$(PKG_NAME).pc $(1)/usr/lib/pkgconfig/
+	$(if $(1)/usr/lib/$b(PKG_NAME).la,sed -i "s#$(TOOLCHAIN_DIR)/$(REAL_GNU_TARGET_NAME)#/usr#g;s#$(TOOLCHAIN_DIR)/lib##g;s#$(TOOLCHAIN_DIR)##g;s#$(STAGING_DIR)##g;s#$(STAGING_DIR_HOST)##g;s#-L$(PKG_BUILD_DIR)/libs/libzrtp/third_party/bnlib -L$(PKG_BUILD_DIR)/libs/libzrtp ##g;s#-L$(PKG_BUILD_DIR)/libs/apr-util/xml/expat/lib ##g;s#$(PKG_BUILD_DIR)##g" $(1)/usr/lib/lib$(PKG_NAME).la)
 endef
 
 
@@ -714,62 +715,99 @@ define Package/$(PKG_NAME)-config-minimal/install
 	$(INSTALL_DIR) $(1)/etc/$(PKG_NAME)/autoload_configs
 
 	#
-	# Copying dialplan directory jingle_profiles sip_profiles $(PKG_NAME).xml fur_elise.ttml mime.types tetris.ttml tones.conf vars.xml
+	# Copying dialplan directory jingle_profiles sip_profiles $(PKG_NAME).xml
+	# fur_elise.ttml mime.types tetris.ttml tones.conf vars.xml
 	#
-	$(foreach ff,dialplan directory jingle_profiles sip_profiles $(PKG_NAME).xml fur_elise.ttml mime.types tetris.ttml tones.conf vars.xml,$(if ${PKG_BUILD_DIR}/conf/vanilla/$(ff),$(CP) ${PKG_BUILD_DIR}/conf/vanilla/$(ff) $(1)/etc/$(PKG_NAME);))
+	$(foreach f,dialplan directory jingle_profiles sip_profiles $(PKG_NAME).xml fur_elise.ttml mime.types tetris.ttml tones.conf vars.xml,$(if $(PKG_BUILD_DIR)/conf/vanilla/$(f),$(CP) $(PKG_BUILD_DIR)/conf/vanilla/$(f) $(1)/etc/$(PKG_NAME);))
 
 	#
 	# Copying acl ivr modules post_load_modules switch timezones
 	#
-	$(foreach ff,acl ivr modules post_load_modules switch timezones,$(if ${PKG_BUILD_DIR}/conf/vanilla/autoload_configs/$(ff).conf.xml,$(CP) ${PKG_BUILD_DIR}/conf/vanilla/autoload_configs/$(ff).conf.xml $(1)/etc/$(PKG_NAME)/autoload_configs;))
+	$(foreach f,acl ivr modules post_load_modules switch timezones,$(if $(PKG_BUILD_DIR)/conf/vanilla/autoload_configs/$(f).conf.xml,$(CP) $(PKG_BUILD_DIR)/conf/vanilla/autoload_configs/$(f).conf.xml $(1)/etc/$(PKG_NAME)/autoload_configs;))
 endef
 
 
 define Package/$(PKG_NAME)-sounds-en-08KHz/install
-	$(INSTALL_DIR) $(1)/usr/share/$(PKG_NAME)/sounds
-	$(CP) $(PKG_INSTALL_DIR)/usr/share/$(PKG_NAME)/sounds/en $(1)/usr/share/$(PKG_NAME)/sounds/
+	#
+	# sounds-en-8KHz
+	#
+	for dir in `(cd $(PKG_INSTALL_DIR)/usr/share/$(PKG_NAME)/sounds/en/us/callie;ls)`; \
+	do \
+		[ -d $(1)/usr/share/$(PKG_NAME)/sounds/en/us/callie/$$$${dir}/8000 ] || $(INSTALL_DIR) $(1)/usr/share/$(PKG_NAME)/sounds/en/us/callie/$$$${dir}/8000; \
+		$(CP) $(PKG_INSTALL_DIR)/usr/share/$(PKG_NAME)/sounds/en/us/callie/$$$${dir}/8000/* $(1)/usr/share/$(PKG_NAME)/sounds/en/us/callie/$$$${dir}/8000; \
+	done
 endef
 
 
 define Package/$(PKG_NAME)-sounds-en-16KHz/install
-	$(INSTALL_DIR) $(1)/usr/share/$(PKG_NAME)/sounds
-	$(CP) $(PKG_INSTALL_DIR)/usr/share/$(PKG_NAME)/sounds/en $(1)/usr/share/$(PKG_NAME)/sounds/
+	#
+	# sounds-en-16KHz
+	#
+	for dir in `(cd $(PKG_INSTALL_DIR)/usr/share/$(PKG_NAME)/sounds/en/us/callie;ls)`; \
+	do \
+		[ -d $(1)/usr/share/$(PKG_NAME)/sounds/en/us/callie/$$$${dir}/16000 ] || $(INSTALL_DIR) $(1)/usr/share/$(PKG_NAME)/sounds/en/us/callie/$$$${dir}/16000; \
+		$(CP) $(PKG_INSTALL_DIR)/usr/share/$(PKG_NAME)/sounds/en/us/callie/$$$${dir}/16000/* $(1)/usr/share/$(PKG_NAME)/sounds/en/us/callie/$$$${dir}/16000; \
+	done
 endef
 
 
 define Package/$(PKG_NAME)-sounds-en-32KHz/install
-	$(INSTALL_DIR) $(1)/usr/share/$(PKG_NAME)/sounds
-	$(CP) $(PKG_INSTALL_DIR)/usr/share/$(PKG_NAME)/sounds/en $(1)/usr/share/$(PKG_NAME)/sounds/
+	#
+	# sounds-en-32KHz
+	#
+	for dir in `(cd $(PKG_INSTALL_DIR)/usr/share/$(PKG_NAME)/sounds/en/us/callie;ls)`; \
+	do \
+		[ -d $(1)/usr/share/$(PKG_NAME)/sounds/en/us/callie/$$$${dir}/32000 ] || $(INSTALL_DIR) $(1)/usr/share/$(PKG_NAME)/sounds/en/us/callie/$$$${dir}/32000; \
+		$(CP) $(PKG_INSTALL_DIR)/usr/share/$(PKG_NAME)/sounds/en/us/callie/$$$${dir}/32000/* $(1)/usr/share/$(PKG_NAME)/sounds/en/us/callie/$$$${dir}/32000; \
+	done
 endef
 
 
 define Package/$(PKG_NAME)-sounds-en-48KHz/install
-	$(INSTALL_DIR) $(1)/usr/share/$(PKG_NAME)/sounds
-	$(CP) $(PKG_INSTALL_DIR)/usr/share/$(PKG_NAME)/sounds/en $(1)/usr/share/$(PKG_NAME)/sounds/
+	#
+	# sounds-en-48KHz
+	#
+	for dir in `(cd $(PKG_INSTALL_DIR)/usr/share/$(PKG_NAME)/sounds/en/us/callie;ls)`; \
+	do \
+		[ -d $(1)/usr/share/$(PKG_NAME)/sounds/en/us/callie/$$$${dir}/48000 ] || $(INSTALL_DIR) $(1)/usr/share/$(PKG_NAME)/sounds/en/us/callie/$$$${dir}/48000; \
+		$(CP) $(PKG_INSTALL_DIR)/usr/share/$(PKG_NAME)/sounds/en/us/callie/$$$${dir}/48000/* $(1)/usr/share/$(PKG_NAME)/sounds/en/us/callie/$$$${dir}/48000; \
+	done
 endef
 
 
 define Package/$(PKG_NAME)-sounds-moh-08KHz/install
-	$(INSTALL_DIR) $(1)/usr/share/$(PKG_NAME)/sounds
-	$(CP) $(PKG_INSTALL_DIR)/usr/share/$(PKG_NAME)/sounds/music $(1)/usr/share/$(PKG_NAME)/sounds/
+	#
+	# sounds-moh-8KHz
+	#
+	[ -d $(1)/usr/share/$(PKG_NAME)/sounds/music/8000 ] || $(INSTALL_DIR) $(1)/usr/share/$(PKG_NAME)/sounds/music/8000;
+	$(CP) $(PKG_INSTALL_DIR)/usr/share/$(PKG_NAME)/sounds/music/8000 $(1)/usr/share/$(PKG_NAME)/sounds/music;
 endef
 
 
 define Package/$(PKG_NAME)-sounds-moh-16KHz/install
-	$(INSTALL_DIR) $(1)/usr/share/$(PKG_NAME)/sounds
-	$(CP) $(PKG_INSTALL_DIR)/usr/share/$(PKG_NAME)/sounds/music $(1)/usr/share/$(PKG_NAME)/sounds/
+	#
+	# sounds-moh-16KHz
+	#
+	[ -d $(1)/usr/share/$(PKG_NAME)/sounds/music/16000 ] || $(INSTALL_DIR) $(1)/usr/share/$(PKG_NAME)/sounds/music/16000;
+	$(CP) $(PKG_INSTALL_DIR)/usr/share/$(PKG_NAME)/sounds/music/16000 $(1)/usr/share/$(PKG_NAME)/sounds/music;
 endef
 
 
 define Package/$(PKG_NAME)-sounds-moh-32KHz/install
-	$(INSTALL_DIR) $(1)/usr/share/$(PKG_NAME)/sounds
-	$(CP) $(PKG_INSTALL_DIR)/usr/share/$(PKG_NAME)/sounds/music $(1)/usr/share/$(PKG_NAME)/sounds/
+	#
+	# sounds-moh-32KHz
+	#
+	[ -d $(1)/usr/share/$(PKG_NAME)/sounds/music/32000 ] || $(INSTALL_DIR) $(1)/usr/share/$(PKG_NAME)/sounds/music/32000;
+	$(CP) $(PKG_INSTALL_DIR)/usr/share/$(PKG_NAME)/sounds/music/32000 $(1)/usr/share/$(PKG_NAME)/sounds/music;
 endef
 
 
 define Package/$(PKG_NAME)-sounds-moh-48KHz/install
-	$(INSTALL_DIR) $(1)/usr/share/$(PKG_NAME)/sounds
-	$(CP) $(PKG_INSTALL_DIR)/usr/share/$(PKG_NAME)/sounds/music $(1)/usr/share/$(PKG_NAME)/sounds/
+	#
+	# sounds-moh-48KHz
+	#
+	[ -d $(1)/usr/share/$(PKG_NAME)/sounds/music/48000 ] || $(INSTALL_DIR) $(1)/usr/share/$(PKG_NAME)/sounds/music/48000;
+	$(CP) $(PKG_INSTALL_DIR)/usr/share/$(PKG_NAME)/sounds/music/48000 $(1)/usr/share/$(PKG_NAME)/sounds/music;
 endef
 
 
@@ -801,8 +839,9 @@ define BuildLib
   define Package/$(PKG_NAME)-$(1)/install
 	[ -d "$$(1)/usr/lib/pkgconfig" ] || $(INSTALL_DIR) $$(1)/usr/lib/pkgconfig
 
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/$(patsubst lib%,%,${3}).pc $$(1)/usr/lib/pkgconfig
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/${1}* $$(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/$(patsubst lib%,%,$(3)).pc $$(1)/usr/lib/pkgconfig
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/$(1)* $$(1)/usr/lib/
+	$(if $$(1)/usr/lib/$(1).la,sed -i "s#$(TOOLCHAIN_DIR)/$(REAL_GNU_TARGET_NAME)#/usr#g;s#$(TOOLCHAIN_DIR)/lib##g;s#$(TOOLCHAIN_DIR)##g;s#$(STAGING_DIR)##g;s#$(STAGING_DIR_HOST)##g;s#-L$(PKG_BUILD_DIR)/libs/libzrtp/third_party/bnlib -L$(PKG_BUILD_DIR)/libs/libzrtp ##g;s#-L$(PKG_BUILD_DIR)/libs/apr-util/xml/expat/lib ##g;s#$(PKG_BUILD_DIR)##g" $$(1)/usr/lib/$(1).la)
   endef
 
   $$(eval $$(call BuildPackage,$(PKG_NAME)-$(1)))
@@ -833,51 +872,59 @@ define BuildPlugin
 		$(CP) $$$$$$$${f} $$(1)/usr/lib/$(PKG_NAME)/; \
 	done
 
+	#
+	# mod_$(subst -,_,$(1)): Clean installed library control files from referencig to OpenWRT PATH.
+	#
+	for f in $$(1)/usr/lib/$(PKG_NAME)/mod_$(subst -,_,$(1)).la $$$$(wildcard $$(1)/usr/lib/$(PKG_NAME)/$(4)_*.la); \
+	do \
+		$$(if $$$$$$$${f},sed -i "s#$(TOOLCHAIN_DIR)/$(REAL_GNU_TARGET_NAME)#/usr#g;s#$(TOOLCHAIN_DIR)/lib##g;s#$(TOOLCHAIN_DIR)##g;s#$(STAGING_DIR)##g;s#$(STAGING_DIR_HOST)##g;s#-L$(PKG_BUILD_DIR)/libs/libzrtp/third_party/bnlib -L$(PKG_BUILD_DIR)/libs/libzrtp ##g;s#-L$(PKG_BUILD_DIR)/libs/apr-util/xml/expat/lib ##g;s#$(PKG_BUILD_DIR)##g" $$$$$$$${f}); \
+	done
+
 	for f in $(5); \
 	do \
-		[ -d "$(dirname $$(1)/usr/${f})" ] || $(INSTALL_DIR) $(dirname $$(1)/usr/${f}); \
-		$(CP) $(PKG_INSTALL_DIR)/usr/${f} $$(1)/usr/${f}; \
+		[ -d "$(dir $$(1)/usr/$(f))" ] || $(INSTALL_DIR) $(dir $$(1)/usr/$(f)); \
+		$(CP) $(PKG_INSTALL_DIR)/usr/$(f) $$(1)/usr/$(f); \
 	done
 
 	#
-	# 1. mod_$(subst -,_,$(1)) XML configuration files from: $$$$(patsubst ${PKG_BUILD_DIR}/%,%,$$$$(firstword $$$$(wildcard ${PKG_BUILD_DIR}/conf/$(3)/autoload_configs/$(subst -,_,$(1)).conf.xml)))
+	# 1. mod_$(subst -,_,$(1)) XML configuration files from: $$$$(patsubst $(PKG_BUILD_DIR)/%,%,$$$$(firstword $$$$(wildcard $(PKG_BUILD_DIR)/conf/$(3)/autoload_configs/$(subst -,_,$(1)).conf.xml)))
 	#
-	$$$$(if $$$$(firstword $$$$(wildcard ${PKG_BUILD_DIR}/conf/$(3)/autoload_configs/$(subst -,_,$(1)).conf.xml)),[ -d $$(1)/etc/$(PKG_NAME)/autoload_configs ] || $(INSTALL_DIR) $$(1)/etc/$(PKG_NAME)/autoload_configs;$(CP) $$$$(firstword $$$$(wildcard ${PKG_BUILD_DIR}/conf/$(3)/autoload_configs/$(subst -,_,$(1)).conf.xml)) $$(1)/etc/$(PKG_NAME)/autoload_configs)
+	$$$$(if $$$$(firstword $$$$(wildcard $(PKG_BUILD_DIR)/conf/$(3)/autoload_configs/$(subst -,_,$(1)).conf.xml)),[ -d $$(1)/etc/$(PKG_NAME)/autoload_configs ] || $(INSTALL_DIR) $$(1)/etc/$(PKG_NAME)/autoload_configs;$(CP) $$$$(firstword $$$$(wildcard $(PKG_BUILD_DIR)/conf/$(3)/autoload_configs/$(subst -,_,$(1)).conf.xml)) $$(1)/etc/$(PKG_NAME)/autoload_configs)
 
 	#
-	# 2. mod_$(subst -,_,$(1)) XML configuration files from: $$$$(patsubst ${PKG_BUILD_DIR}/%,%,$$$$(firstword $$$$(wildcard ${PKG_BUILD_DIR}/$(3)/$(1)/*/$(subst -,_,$(1)).conf.xml)))
+	# 2. mod_$(subst -,_,$(1)) XML configuration files from: $$$$(patsubst $(PKG_BUILD_DIR)/%,%,$$$$(firstword $$$$(wildcard $(PKG_BUILD_DIR)/$(3)/$(1)/*/$(subst -,_,$(1)).conf.xml)))
 	#
-	$$$$(if $$$$(firstword $$$$(wildcard ${PKG_BUILD_DIR}/$(3)/$(1)/*/$(subst -,_,$(1)).conf.xml)),[ -d $$(1)/etc/$(PKG_NAME)/autoload_configs ] || $(INSTALL_DIR) $$(1)/etc/$(PKG_NAME)/autoload_configs;$(CP) $$$$(firstword $$$$(wildcard ${PKG_BUILD_DIR}/$(3)/$(1)/*/$(subst -,_,$(1)).conf.xml)) $$(1)/etc/$(PKG_NAME)/autoload_configs)
+	$$$$(if $$$$(firstword $$$$(wildcard $(PKG_BUILD_DIR)/$(3)/$(1)/*/$(subst -,_,$(1)).conf.xml)),[ -d $$(1)/etc/$(PKG_NAME)/autoload_configs ] || $(INSTALL_DIR) $$(1)/etc/$(PKG_NAME)/autoload_configs;$(CP) $$$$(firstword $$$$(wildcard $(PKG_BUILD_DIR)/$(3)/$(1)/*/$(subst -,_,$(1)).conf.xml)) $$(1)/etc/$(PKG_NAME)/autoload_configs)
 
 	#
-	# 3. mod_$(subst -,_,$(1)) XML configuration files from: $$$$(patsubst ${PKG_BUILD_DIR}/%,%,$$$$(firstword $$$$(wildcard ${PKG_BUILD_DIR}/src/$(3)/*/mod_$(subst -,_,$(1))/conf/autoload_configs/$(subst -,_,$(1)).conf.xml)))
+	# 3. mod_$(subst -,_,$(1)) XML configuration files from: $$$$(patsubst $(PKG_BUILD_DIR)/%,%,$$$$(firstword $$$$(wildcard $(PKG_BUILD_DIR)/src/$(3)/*/mod_$(subst -,_,$(1))/conf/autoload_configs/$(subst -,_,$(1)).conf.xml)))
 	#
-	$$$$(if $$$$(firstword $$$$(wildcard ${PKG_BUILD_DIR}/src/$(3)/*/mod_$(subst -,_,$(1))/conf/autoload_configs/$(subst -,_,$(1)).conf.xml)),[ -d $$(1)/etc/$(PKG_NAME)/autoload_configs ] || $(INSTALL_DIR) $$(1)/etc/$(PKG_NAME)/autoload_configs;$(CP) $$$$(firstword $$$$(wildcard ${PKG_BUILD_DIR}/src/$(3)/*/mod_$(subst -,_,$(1))/conf/autoload_configs/$(subst -,_,$(1)).conf.xml)) $$(1)/etc/$(PKG_NAME)/autoload_configs)
+	$$$$(if $$$$(firstword $$$$(wildcard $(PKG_BUILD_DIR)/src/$(3)/*/mod_$(subst -,_,$(1))/conf/autoload_configs/$(subst -,_,$(1)).conf.xml)),[ -d $$(1)/etc/$(PKG_NAME)/autoload_configs ] || $(INSTALL_DIR) $$(1)/etc/$(PKG_NAME)/autoload_configs;$(CP) $$$$(firstword $$$$(wildcard $(PKG_BUILD_DIR)/src/$(3)/*/mod_$(subst -,_,$(1))/conf/autoload_configs/$(subst -,_,$(1)).conf.xml)) $$(1)/etc/$(PKG_NAME)/autoload_configs)
 
 	#
-	# 4. mod_$(subst -,_,$(1)) XML configuration files from: $$$$(patsubst ${PKG_BUILD_DIR}/%,%,$$$$(firstword $$$$(wildcard ${PKG_BUILD_DIR}/src/$(3)/*/mod_$(subst -,_,$(1))/conf*/$(subst -,_,$(1)).conf.xml)))
+	# 4. mod_$(subst -,_,$(1)) XML configuration files from: $$$$(patsubst $(PKG_BUILD_DIR)/%,%,$$$$(firstword $$$$(wildcard $(PKG_BUILD_DIR)/src/$(3)/*/mod_$(subst -,_,$(1))/conf*/$(subst -,_,$(1)).conf.xml)))
 	#
-	$$$$(if $$$$(firstword $$$$(wildcard ${PKG_BUILD_DIR}/src/$(3)/*/mod_$(subst -,_,$(1))/conf*/$(subst -,_,$(1)).conf.xml)),[ -d $$(1)/etc/$(PKG_NAME)/autoload_configs ] || $(INSTALL_DIR) $$(1)/etc/$(PKG_NAME)/autoload_configs;$(CP) $$$$(firstword $$$$(wildcard ${PKG_BUILD_DIR}/src/$(3)/*/mod_$(subst -,_,$(1))/conf*/$(subst -,_,$(1)).conf.xml)) $$(1)/etc/$(PKG_NAME)/autoload_configs)
+	$$$$(if $$$$(firstword $$$$(wildcard $(PKG_BUILD_DIR)/src/$(3)/*/mod_$(subst -,_,$(1))/conf*/$(subst -,_,$(1)).conf.xml)),[ -d $$(1)/etc/$(PKG_NAME)/autoload_configs ] || $(INSTALL_DIR) $$(1)/etc/$(PKG_NAME)/autoload_configs;$(CP) $$$$(firstword $$$$(wildcard $(PKG_BUILD_DIR)/src/$(3)/*/mod_$(subst -,_,$(1))/conf*/$(subst -,_,$(1)).conf.xml)) $$(1)/etc/$(PKG_NAME)/autoload_configs)
 
 	#
-	# 5. mod_$(subst -,_,$(1)) XML configuration files from: $$$$(patsubst ${PKG_BUILD_DIR}/%,%,$$$$(firstword $$$$(wildcard ${PKG_BUILD_DIR}/src/$(3)/*/mod_$(subst -,_,$(1))/$(subst -,_,$(1)).conf.xml)))
+	# 5. mod_$(subst -,_,$(1)) XML configuration files from: $$$$(patsubst $(PKG_BUILD_DIR)/%,%,$$$$(firstword $$$$(wildcard $(PKG_BUILD_DIR)/src/$(3)/*/mod_$(subst -,_,$(1))/$(subst -,_,$(1)).conf.xml)))
 	#
-	$$$$(if $$$$(firstword $$$$(wildcard ${PKG_BUILD_DIR}/src/$(3)/*/mod_$(subst -,_,$(1))/$(subst -,_,$(1)).conf.xml)),[ -d $$(1)/etc/$(PKG_NAME)/autoload_configs ] || $(INSTALL_DIR) $$(1)/etc/$(PKG_NAME)/autoload_configs;$(CP) $$$$(firstword $$$$(wildcard ${PKG_BUILD_DIR}/src/$(3)/*/mod_$(subst -,_,$(1))/$(subst -,_,$(1)).conf.xml)) $$(1)/etc/$(PKG_NAME)/autoload_configs)
+	$$$$(if $$$$(firstword $$$$(wildcard $(PKG_BUILD_DIR)/src/$(3)/*/mod_$(subst -,_,$(1))/$(subst -,_,$(1)).conf.xml)),[ -d $$(1)/etc/$(PKG_NAME)/autoload_configs ] || $(INSTALL_DIR) $$(1)/etc/$(PKG_NAME)/autoload_configs;$(CP) $$$$(firstword $$$$(wildcard $(PKG_BUILD_DIR)/src/$(3)/*/mod_$(subst -,_,$(1))/$(subst -,_,$(1)).conf.xml)) $$(1)/etc/$(PKG_NAME)/autoload_configs)
 
 	#
-	# 6. Additional configuration files for mod_$(subst -,_,$(1)) from: $$$$(patsubst ${PKG_BUILD_DIR}/%,%,$$$$(firstword $$$$(wildcard ${PKG_BUILD_DIR}/conf/$(3)/$(1)/*.$(1))))
+	# 6. Additional configuration files for mod_$(subst -,_,$(1)) from: $$$$(patsubst $(PKG_BUILD_DIR)/%,%,$$$$(firstword $$$$(wildcard $(PKG_BUILD_DIR)/conf/$(3)/$(1)/*.$(1))))
 	#
-	$$$$(if $$$$(firstword $$$$(wildcard ${PKG_BUILD_DIR}/conf/$(3)/$(1)/*.$(1))),[ -d $$(1)/etc/$(PKG_NAME)/$(1) ] || $(INSTALL_DIR) $$(1)/etc/$(PKG_NAME)/$(1);$(CP) ${PKG_BUILD_DIR}/conf/$(3)/$(1) $$(1)/etc/$(PKG_NAME))
+	$$$$(if $$$$(firstword $$$$(wildcard $(PKG_BUILD_DIR)/conf/$(3)/$(1)/*.$(1))),[ -d $$(1)/etc/$(PKG_NAME)/$(1) ] || $(INSTALL_DIR) $$(1)/etc/$(PKG_NAME)/$(1);$(CP) $(PKG_BUILD_DIR)/conf/$(3)/$(1) $$(1)/etc/$(PKG_NAME))
   endef
 
   define Package/$(PKG_NAME)-mod-$(1)/postinst
 #!/bin/sh
-sed -i -e 's|^\([ \t]*\)<!-- *\(.*\)"mod_$(subst -,_,$(1))"\(.*\) *-->\(.*\)$$$$|\1\2"mod_$(subst -,_,$(1))"\3\4|' $$$${IPKG_INSTROOT}/etc/$(PKG_NAME)/autoload_configs/modules.conf.xml
+sed -i -e 's|^\([ \t]*\)<!-- *\(.*\)"mod_$(subst -,_,$(1))"\(.*\) *-->\(.*\)$$$$|\1\2"mod_$(subst -,_,$(1))"\3\4|' $$$$(IPKG_INSTROOT)/etc/$(PKG_NAME)/autoload_configs/modules.conf.xml
   endef
 
   define Package/$(PKG_NAME)-mod-$(1)/postrm
 #!/bin/sh
-sed -i -e 's|^\([ \t]*\)\(.*\)"mod_$(subst -,_,$(1))"\(.*\)$$$$|\1<!-- \2"mod_$(subst -,_,$(1))"\3 -->|' $$$${IPKG_INSTROOT}/etc/$(PKG_NAME)/autoload_configs/modules.conf.xml
+sed -i -e 's|^\([ \t]*\)\(.*\)"mod_$(subst -,_,$(1))"\(.*\)$$$$|\1<!-- \2"mod_$(subst -,_,$(1))"\3 -->|' $$$$(IPKG_INSTROOT)/etc/$(PKG_NAME)/autoload_configs/modules.conf.xml
   endef
 
   $$(eval $$(call BuildPackage,$(PKG_NAME)-mod-$(1)))
@@ -916,7 +963,7 @@ $(eval $(call BuildPlugin,amr,Adaptive Multi-Rate On Bandwidth Codec,vanilla,,,,
 $(eval $(call BuildPlugin,amrwb,Wide Band AMR,vanilla,,,,))
 $(eval $(call BuildPlugin,avmd,Advanced Voice Mail Detection,vanilla,,,,))
 $(eval $(call BuildPlugin,blacklist,Blacklist,vanilla,,,,))
-$(eval $(call BuildPlugin,bv,BroadVoice16 and BroadVoice32 Audio Codec,vanilla,,,,))
+$(eval $(call BuildPlugin,bv,BroadVoice 16/32-bit Audio Codec,vanilla,,,,))
 $(eval $(call BuildPlugin,callcenter,Call Center,vanilla,,,,))
 $(eval $(call BuildPlugin,cdr-csv,CSV-CDR Handler,mod,,,,)) # ~/conf
 $(eval $(call BuildPlugin,cdr-pg-csv,Postgress CDR Handler,vanilla,,,,+coreutils +libpq))
