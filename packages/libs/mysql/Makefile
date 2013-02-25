@@ -14,8 +14,6 @@ PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=\
-	http://downloads.mysql.com/archives/mysql-5.1/ \
-	http://mysql.planetmirror.com/Downloads/MySQL-5.1/ \
 	http://mysql.he.net/Downloads/MySQL-5.1/ \
 	http://www.linorg.usp.br/mysql/Downloads/MySQL-5.1/ \
 	http://www.mirrorservice.org/sites/ftp.mysql.com/Downloads/MySQL-5.1/ \
