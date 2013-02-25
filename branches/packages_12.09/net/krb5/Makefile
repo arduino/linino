@@ -1,12 +1,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=krb5
-PKG_VERSION:=1.8
-PKG_RELEASE:=2
+PKG_VERSION:=1.11
+PKG_RELEASE:=1
 
 PKG_SOURCE:=krb5-$(PKG_VERSION)-signed.tar
 PKG_SOURCE_URL:=http://web.mit.edu/kerberos/dist/krb5/$(PKG_VERSION)/
-PKG_MD5SUM:=74257d68373a8df8b9391fc093d594be
+PKG_MD5SUM:=1a13c53899806c4da99a798a04d25545
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
@@ -47,7 +47,7 @@ define Package/krb5-client
 	TITLE:=Kerberos 5 Client
 endef
 
-define Package/krb5/decription
+define Package/krb5/description
 	Kerberos
 endef
 
@@ -56,8 +56,7 @@ define Build/Prepare
 	# containing source code.
 	tar xf "$(DL_DIR)/$(PKG_SOURCE)" -C "$(BUILD_DIR)"
 	tar xzf "$(BUILD_DIR)/krb5-$(PKG_VERSION).tar.gz" -C "$(BUILD_DIR)"
-	patch -p1 -d "$(PKG_BUILD_DIR)" < "$(PATCH_DIR)/001-krb5kdc-dir-to-etc.patch"
-	patch -p1 -d "$(PKG_BUILD_DIR)" < "$(PATCH_DIR)/002-MITKRB5-SA-2011-002.patch"
+	patch -p1 -d "$(PKG_BUILD_DIR)" < "$(PATCH_DIR)/001-fix-build-warning.patch"
 endef
 
 CONFIGURE_PATH = ./src
@@ -71,10 +70,9 @@ CONFIGURE_VARS += \
 	ac_cv_file__etc_TIMEZONE=no
 
 CONFIGURE_ARGS += \
-	--enable-thread-support \
-	--without-krb4 \
 	--without-tcl \
-	--disable-ipv6
+	--without-libedit \
+	--localstatedir=/etc
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include
@@ -113,11 +111,11 @@ endef
 define Package/krb5-server/install
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/krb5kdc $(1)/etc/init.d/krb5kdc
-	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/sclient $(1)/usr/bin
+#	$(INSTALL_DIR) $(1)/usr/bin
+#	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/sclient $(1)/usr/bin
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/kadmin.local $(1)/usr/sbin
-#	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/kadmind $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/kadmind $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/kdb5_util $(1)/usr/sbin
 #	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/kprop $(1)/usr/sbin
 #	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/kpropd $(1)/usr/sbin
