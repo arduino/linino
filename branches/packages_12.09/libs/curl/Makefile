@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=curl
-PKG_VERSION:=7.23.1
+PKG_VERSION:=7.29.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
@@ -19,7 +19,7 @@ PKG_SOURCE_URL:=http://curl.haxx.se/download/ \
 	ftp://ftp.planetmirror.com/pub/curl/ \
 	http://www.mirrormonster.com/curl/download/ \
 	http://curl.mirrors.cyberservers.net/download/
-PKG_MD5SUM:=0296d3196b4bf82c896a869b38dbc5f2
+PKG_MD5SUM:=fa5f37f38a8042020e292ce7ec5341ce
 
 PKG_FIXUP:=autoreconf
 PKG_BUILD_PARALLEL:=1
@@ -81,7 +81,7 @@ CONFIGURE_ARGS += \
 	$(call autoconf_bool,CONFIG_IPV6,ipv6) \
 
 CONFIGURE_VARS += \
-	LDFLAGS="$$$$LDFLAGS -lcrypto -lssl -lz" \
+	LIBS="-lcrypto -lssl -lz" \
 	CC="$(filter-out ccache,$(TARGET_CC))"
 
 define Build/Compile
