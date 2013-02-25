@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2013 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=sipp
-PKG_VERSION:=3.1
-PKG_RELEASE:=2
+PKG_VERSION:=3.3
+PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME).$(PKG_VERSION).src.tar.gz
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/sipp
-PKG_MD5SUM:=452a6f88f2d314dbb2f44e318a60982b
+PKG_MD5SUM:=8c1d513423f9dabee799e738b737e311
 
 include $(INCLUDE_DIR)/uclibc++.mk
 include $(INCLUDE_DIR)/package.mk
