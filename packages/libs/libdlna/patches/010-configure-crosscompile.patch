@@ -1,0 +1,59 @@
+--- a/configure
++++ b/configure
+@@ -184,6 +184,19 @@ check_ld(){
+     check_cmd $cc $LDFLAGS "$@" -o $TMPE $TMPO $extralibs
+ }
+ 
++check_host_cc(){
++    log check_host_cc "$@"
++    cat >$TMPC
++    log_file $TMPC
++    check_cmd $host_cc $host_cflags "$@" -c -o $TMPO $TMPC
++}
++
++check_host_ld(){
++    log check_host_ld "$@"
++    check_host_cc || return
++    check_cmd $host_cc $host_cflags $host_ldflags "$@" -o $TMPE $TMPO
++}
++
+ check_exec(){
+     check_ld "$@" && { enabled cross_compile || $TMPE >>$logfile 2>&1; }
+ }
+@@ -318,6 +331,7 @@ includedir='$(PREFIX)/include'
+ static="yes"
+ shared="yes"
+ cc="gcc"
++host_cc="gcc"
+ ar="ar"
+ ranlib="ranlib"
+ make="make"
+@@ -465,6 +479,10 @@ else
+   [ -n "$STRIP" ] && strip="$STRIP"
+ fi
+ [ -n "$MAKE" ] && make="$MAKE"
++[ -n "$HOST_CC" ] && host_cc="$HOST_CC"
++[ -n "$HOST_CFLAGS" ] && host_cflags="$HOST_CFLAGS"
++[ -n "$HOST_LDFLAGS" ] && host_ldflags="$HOST_LDFLAGS"
++host_cflags="-Isrc $host_cflags"
+ 
+ #################################################
+ #   create logging file
+@@ -649,8 +667,7 @@ check_lib libavcodec/avcodec.h avcodec_r
+ #################################################
+ #   version
+ #################################################
+-temp_cflags "-Isrc"
+-check_ld <<EOF
++check_host_ld <<EOF
+ #include <stdio.h>
+ #include <dlna.h>
+ int main(){
+@@ -660,7 +677,6 @@ int main(){
+ }
+ EOF
+ VERSION=`$TMPE`
+-restore_flags
+ 
+ 
+ #################################################

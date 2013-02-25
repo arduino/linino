@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2009 OpenWrt.org
+# Copyright (C) 2006-2013 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,15 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libdlna
-PKG_VERSION:=0.2.3
+PKG_VERSION:=0.2.4
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://libdlna.geexbox.org/releases/
-PKG_MD5SUM:=2c974f95b711e5fd07f78fc4ebfcca66
+PKG_MD5SUM:=64d7de57aff5a729f2434fc5e69b4ffc
+
+PKG_LICENSE:=LGPLv2.1+
+PKG_LICENSE_FILES:=COPYING
 
 PKG_BUILD_PARALLEL:=1
 PKG_INSTALL:=1
