@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=freeswitch
 PKG_DISTNAME:=$(PKG_NAME)_git
-PKG_VERSION:=1.3.13b
+PKG_VERSION:=1.3.14b
 
 
 #
