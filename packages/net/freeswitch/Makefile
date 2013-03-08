@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=freeswitch
 PKG_DISTNAME:=$(PKG_NAME)_git
-PKG_VERSION:=1.3.14b
+PKG_VERSION:=1.3.17
 
 
 #
@@ -18,7 +18,7 @@ PKG_VERSION:=1.3.14b
 #
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=git://git.$(PKG_NAME).org/$(PKG_NAME).git
-FS_DEFAULT_HEAD:=c35a41e4ca209f822d561f4601f1f387bfc9a82e
+FS_DEFAULT_HEAD:=eee1755c4207637a2d02c9a7138f26d5d2cf7617
 FS_LATEST_HEAD:=$(shell git ls-remote $(PKG_SOURCE_URL) HEAD | cut -f1)
 PKG_SOURCE_VERSION:=$(if $(CONFIG_FS_SOFIA_WITH_PULL_CURRENT),$(FS_LATEST_HEAD),$(FS_DEFAULT_HEAD))
 PKG_SOURCE_VERSION_SHORT:=$(shell echo $(PKG_SOURCE_VERSION)|cut -b -7)
@@ -921,7 +921,7 @@ define BuildPlugin
 sed -i -e 's|^\([ \t]*\)<!-- *\(.*\)"mod_$(subst -,_,$(1))"\(.*\) *-->\(.*\)$$$$|\1\2"mod_$(subst -,_,$(1))"\3\4|' $$$${IPKG_INSTROOT}/etc/$(PKG_NAME)/autoload_configs/modules.conf.xml
   endef
 
-  define Package/$(PKG_NAME)-mod-$(1)/postrm
+  define Package/$(PKG_NAME)-mod-$(1)/prerm
 #!/bin/sh
 sed -i -e 's|^\([ \t]*\)\(.*\)"mod_$(subst -,_,$(1))"\(.*\)$$$$|\1<!-- \2"mod_$(subst -,_,$(1))"\3 -->|' $$$${IPKG_INSTROOT}/etc/$(PKG_NAME)/autoload_configs/modules.conf.xml
   endef
