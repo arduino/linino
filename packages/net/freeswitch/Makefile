@@ -18,7 +18,7 @@ PKG_VERSION:=1.3.17
 #
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=git://git.$(PKG_NAME).org/$(PKG_NAME).git
-FS_DEFAULT_HEAD:=eee1755c4207637a2d02c9a7138f26d5d2cf7617
+FS_DEFAULT_HEAD:=d9a4b8a9b0304ceb9267b9e7c8551066a1826b0b
 FS_LATEST_HEAD:=$(shell git ls-remote $(PKG_SOURCE_URL) HEAD | cut -f1)
 PKG_SOURCE_VERSION:=$(if $(CONFIG_FS_SOFIA_WITH_PULL_CURRENT),$(FS_LATEST_HEAD),$(FS_DEFAULT_HEAD))
 PKG_SOURCE_VERSION_SHORT:=$(shell echo $(PKG_SOURCE_VERSION)|cut -b -7)
@@ -154,6 +154,7 @@ FS_MOD_AVAILABLE:= \
 	vmd \
 	voicemail \
 	voicemail-ivr \
+	vp8 \
 	xml-cdr \
 	xml-curl \
 	xml-rpc \
@@ -1077,6 +1078,7 @@ $(eval $(call BuildPlugin,valet-parking,Valet Parking Application,vanilla,,,,))
 $(eval $(call BuildPlugin,vmd,VoiceMail Beep Detection,vanilla,,,,))
 $(eval $(call BuildPlugin,voicemail,VoiceMail,vanilla,,,,))
 $(eval $(call BuildPlugin,voicemail-ivr,VoiceMail IVR,vanilla,,,,))
+$(eval $(call BuildPlugin,vp8,VP8 Video Codec,vanilla,,,,))
 $(eval $(call BuildPlugin,xml-cdr,XML-CDR Handler,vanilla,,,,+libcurl))
 $(eval $(call BuildPlugin,xml-curl,XML-Curl Gateway,vanilla,,,,+libcurl))
 $(eval $(call BuildPlugin,xml-rpc,XML-RPC Interface,vanilla,,,,))
