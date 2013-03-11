@@ -366,6 +366,7 @@ $(eval $(call BuildAsteriskModule,func-channel,Channel info,Channel info dialpla
 $(eval $(call BuildAsteriskModule,func-shell,Shell,support for shell execution,,,,func_shell,))
 $(eval $(call BuildAsteriskModule,func-uri,URI encoding and decoding,Encodes and decodes URI-safe strings,,,,func_uri,))
 $(eval $(call BuildAsteriskModule,func-vmcount,vmcount dialplan,a vmcount dialplan function,,,,func_vmcount,))
+$(eval $(call BuildAsteriskModule,func-base64,base64 support,support of base64 function,,,,func_base64,))
 $(eval $(call BuildAsteriskModule,chan-agent,Agents proxy channel, an implementation of agents proxy channel,,,,chan_agent,))
 $(eval $(call BuildAsteriskModule,chan-iax2,IAX2 channel,IAX support,,/etc/asterisk/iax.conf /etc/asterisk/iaxprov.conf,iax.conf iaxprov.conf,chan_iax2,))
 $(eval $(call BuildAsteriskModule,chan-motif,Jingle channel,Motif Jingle Channel Driver,+asterisk11-res-xmpp,/etc/asterisk/motif.conf /etc/asterisk/jingle.conf,motif.conf jingle.conf,chan_motif,))
