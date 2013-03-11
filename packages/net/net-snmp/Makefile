@@ -155,7 +155,7 @@ CONFIGURE_ARGS += \
 	--enable-mfd-rewrites \
 	--enable-shared \
 	--enable-static \
-	--with-endianness=little \
+	--with-endianness=$(if $(CONFIG_BIG_ENDIAN),big,little) \
 	--with-logfile=/var/log/snmpd.log \
 	--with-persistent-directory=/usr/lib/snmp/ \
 	--with-default-snmp-version=1 \
