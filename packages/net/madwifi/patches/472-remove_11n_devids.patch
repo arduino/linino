@@ -7,9 +7,9 @@
 -	{ 0x168c, 0x0023, PCI_ANY_ID, PCI_ANY_ID },
 -	{ 0x168c, 0x0024, PCI_ANY_ID, PCI_ANY_ID },
  	{ 0x168c, 0x9013, PCI_ANY_ID, PCI_ANY_ID }, /* sonicwall */
- 	{ 0x168c, 0xff16, PCI_ANY_ID, PCI_ANY_ID },
  	{ 0x168c, 0xff1a, PCI_ANY_ID, PCI_ANY_ID },
-@@ -148,8 +146,6 @@ static const struct ath_hw_detect cards[
+ 	{ 0 }
+@@ -146,8 +144,6 @@ static const struct ath_hw_detect cards[
  	{ ubnt, "SR4C",    0x168c, 0x0013, 0x7777, 0x1004, 6 },
  	{ ubnt, "SR5",     0x168c, 0x0013, 0x168c, 0x2042, 7 },
  	{ ubnt, "SR9",     0x168c, 0x0013, 0x7777, 0x2009, 12 },

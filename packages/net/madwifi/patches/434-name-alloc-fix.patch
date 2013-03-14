@@ -14,7 +14,7 @@
  		if (((devid & AR5315_REV_MAJ_M) == AR5315_REV_MAJ) ||
 --- a/ath/if_ath_pci.c
 +++ b/ath/if_ath_pci.c
-@@ -238,6 +238,11 @@ ath_pci_probe(struct pci_dev *pdev, cons
+@@ -236,6 +236,11 @@ ath_pci_probe(struct pci_dev *pdev, cons
  	 */
  	sc->aps_sc.sc_invalid = 1;
  
