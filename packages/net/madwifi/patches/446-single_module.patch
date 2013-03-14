@@ -89,7 +89,7 @@
  {
 --- a/net80211/ieee80211_crypto_ccmp.c
 +++ b/net80211/ieee80211_crypto_ccmp.c
-@@ -686,6 +686,8 @@ ccmp_decrypt(struct ieee80211_key *key,
+@@ -686,6 +686,8 @@ ccmp_decrypt(struct ieee80211_key *key, 
  }
  #undef CCMP_DECRYPT
  
@@ -451,7 +451,7 @@
  module_exit(exit_ath_ahb);
 --- a/ath/if_ath_pci.c
 +++ b/ath/if_ath_pci.c
-@@ -415,11 +415,19 @@ MODULE_SUPPORTED_DEVICE("Atheros WLAN ca
+@@ -417,11 +417,19 @@ MODULE_SUPPORTED_DEVICE("Atheros WLAN ca
  MODULE_LICENSE("Dual BSD/GPL");
  #endif
  
@@ -471,7 +471,7 @@
  	if (pci_register_driver(&ath_pci_driver) < 0) {
  		printk(KERN_ERR "%s: No devices found, driver not installed.\n", dev_info);
  		return (-ENODEV);
-@@ -434,6 +442,10 @@ exit_ath_pci(void)
+@@ -436,6 +444,10 @@ exit_ath_pci(void)
  {
  	ath_sysctl_unregister();
  	pci_unregister_driver(&ath_pci_driver);
