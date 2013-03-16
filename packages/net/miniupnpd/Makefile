@@ -35,7 +35,7 @@ define Package/miniupnpd/postinst
 #!/bin/sh
 
 if [ -z "$$IPKG_INSTROOT" ]; then
-  . /etc/uci-defaults/99-miniupnpd
+  ( . /etc/uci-defaults/99-miniupnpd )
   rm -f /etc/uci-defaults/99-miniupnpd
 fi
 
