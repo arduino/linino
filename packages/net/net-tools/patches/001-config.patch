@@ -16,7 +16,7 @@
 +# HAVE_AFASH=0
 +HAVE_HWETHER=1
 +# HAVE_HWARC=0
-+# HAVE_HWSLIP=0
++HAVE_HWSLIP=1
 +HAVE_HWPPP=1
 +HAVE_HWTUNNEL=1
 +# HAVE_HWSTRIP=0
@@ -90,7 +90,7 @@
 +* 
 +bool 'UNIX protocol family' HAVE_AFUNIX y
 +bool 'INET (TCP/IP) protocol family' HAVE_AFINET y
-+bool 'INET6 (IPv6) protocol family' HAVE_AFINET6 n
++bool 'INET6 (IPv6) protocol family' HAVE_AFINET6 y
 +bool 'Novell IPX/SPX protocol family' HAVE_AFIPX n
 +bool 'Appletalk DDP protocol family' HAVE_AFATALK n
 +bool 'AX25 (packet radio) protocol family' HAVE_AFAX25 n
@@ -106,7 +106,7 @@
 +*
 +bool 'Ethernet (generic) support' HAVE_HWETHER y
 +bool 'ARCnet support' HAVE_HWARC n
-+bool 'SLIP (serial line) support' HAVE_HWSLIP n
++bool 'SLIP (serial line) support' HAVE_HWSLIP y
 +bool 'PPP (serial line) support' HAVE_HWPPP y
 +bool 'IPIP Tunnel support' HAVE_HWTUNNEL y
 +bool 'STRIP (Metricom radio) support' HAVE_HWSTRIP n
@@ -181,7 +181,7 @@
 + */
 +#define HAVE_HWETHER 1
 +#define HAVE_HWARC 0
-+#define HAVE_HWSLIP 0
++#define HAVE_HWSLIP 1
 +#define HAVE_HWPPP 1
 +#define HAVE_HWTUNNEL 1
 +#define HAVE_HWSTRIP 0
