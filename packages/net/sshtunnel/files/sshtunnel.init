@@ -96,6 +96,7 @@ load_server() {
 
 	config_get user 	$1 user
 	config_get hostname 	$1 hostname
+	config_get port		$1 port		"22"
 	config_get retrydelay 	$1 retrydelay	"60"
 	config_get PKCS11Provider	$1 PKCS11Provider
 	config_get CheckHostIP		$1 CheckHostIP
@@ -154,7 +155,7 @@ load_server() {
 	[ "$count" -eq 0 ] 	&& { logger -p user.err -t "sshtunnel" "tunnels to $server not started - no tunnels defined"; return; }
 
 	append_params CheckHostIP Compression CompressionLevel IdentityFile LogLevel PKCS11Provider ServerAliveCountMax ServerAliveInterval StrictHostKeyChecking TCPKeepAlive VerifyHostKeyDNS
-	ARGS="$ARGS_options -o ExitOnForwardFailure=yes -o BatchMode=yes -nN $ARGS_tunnels $user@$hostname"
+	ARGS="$ARGS_options -o ExitOnForwardFailure=yes -o BatchMode=yes -nN $ARGS_tunnels -p $port $user@$hostname"
 
 	/usr/bin/sshtunnel.sh "$ARGS" "$retrydelay" "$server" &
 	echo $! >> "${PIDFILE}.pids"
