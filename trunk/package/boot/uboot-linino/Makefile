@@ -51,15 +51,19 @@ define Package/uboot-ar71xx-Linino/config
 endef
 
 ifdef CONFIG_COMPRESSED_UBOOT
-      COMPRESSED_UBOOT=1  
+      COMPRESSED_UBOOT=1
 endif
 
 ifdef CONFIG_HORNET_1_1_WAR
-      CONFIG_HORNET_1_1_WAR=1  
+      CONFIG_HORNET_1_1_WAR=1
 endif
 
 ifdef CONFIG_NEW_DDR_TAP_CAL
-      NEW_DDR_TAP_CAL=1  
+      NEW_DDR_TAP_CAL=1
+endif
+
+ifdef CONFIG_LININO_DDR2
+      CONFIG_LININO_DDR2=1
 endif
 
 define BuildUbootPackage

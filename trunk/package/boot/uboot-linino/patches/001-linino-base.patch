@@ -13,7 +13,7 @@ diff -Naur u-boot-linino/board/ar7240/ap121/ap121.c u-boot-linino.20130321/board
 +    ar7240_ddr_initial_config(CFG_DDR_REFRESH_VAL);  //DDR2
 +#endif
 +*/
-+#if 1
++#ifdef CONFIG_LININO_DDR2
 +    ar7240_ddr_initial_config(CFG_DDR_REFRESH_VAL);  //DDR2
  #endif
  
