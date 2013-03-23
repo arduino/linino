@@ -4,7 +4,6 @@
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-OUT_DIR:=$(TOPDIR)/bin/ar71xx
 include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/kernel.mk
 
@@ -28,11 +27,11 @@ define uboot/Default
   IMAGE:=
 endef
 
-define uboot/Linino
+define uboot/linino
   TITLE:=U-boot for Linino project
 endef
 
-UBOOTS:=Linino
+UBOOTS:=linino
 
 define Package/uboot/template
 define Package/uboot-ar71xx-$(1)
@@ -41,12 +40,12 @@ define Package/uboot-ar71xx-$(1)
   TITLE:=$(2)
   DEPENDS:=@TARGET_ar71xx
   URL:=http://www.linino.org
-  DEFAULT:=y if (TARGET_ar71xx_generic_NBG_460N_550N_550NH || TARGET_ar71xx_generic_Default || CONFIG_TARGET_ar71xx_generic_Minimal)
+  DEFAULT:=y if (TARGET_ar71xx_generic_Linino)
   VARIANT:=$(1)
 endef
 endef
 
-define Package/uboot-ar71xx-Linino/config
+define Package/uboot-ar71xx-linino/config
 	source $(SOURCE)/Config.in
 endef
 
@@ -81,7 +80,6 @@ UBOOT_IMAGE:=$(if $(IMAGE),$(IMAGE),openwrt-$(BOARD)-$(BUILD_VARIANT)-u-boot.bin
 endif
 
 define Build/Prepare
-       $(CP) ./$(PKG_SOURCE) $(DL_DIR)/; $(CP) ./$(CAL_DATA) $(BIN_DIR)/
 	$(call Build/Prepare/Default)
 	$(CP) ./files/* $(PKG_BUILD_DIR)	
 	find $(PKG_BUILD_DIR) -name .svn | $(XARGS) rm -rf
@@ -101,8 +99,10 @@ endef
 
 define Package/uboot/install/template
 define Package/uboot-ar71xx-$(1)/install
-	$(INSTALL_DIR) $$(1)
+	#$(INSTALL_DIR) $$(1)
+	rm -rf $$(1)
 	$(CP) $(PKG_BUILD_DIR)/tuboot.bin $(BIN_DIR)/$(2)
+	$(CP) ./$(PKG_SOURCE) $(DL_DIR)/; $(CP) ./$(CAL_DATA) $(BIN_DIR)/openwrt-ar71xx-generic-linino-caldata.bin && touch $(BIN_DIR)/openwrt-ar71xx-generic-linino-caldata.bin
 endef
 endef
 
