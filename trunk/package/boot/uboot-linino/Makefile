@@ -80,6 +80,7 @@ UBOOT_IMAGE:=$(if $(IMAGE),$(IMAGE),openwrt-$(BOARD)-$(BUILD_VARIANT)-u-boot.bin
 endif
 
 define Build/Prepare
+	$(CP) ./$(PKG_SOURCE) $(DL_DIR)/
 	$(call Build/Prepare/Default)
 	$(CP) ./files/* $(PKG_BUILD_DIR)	
 	find $(PKG_BUILD_DIR) -name .svn | $(XARGS) rm -rf
