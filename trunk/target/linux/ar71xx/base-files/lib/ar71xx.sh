@@ -489,6 +489,9 @@ ar71xx_board_detect() {
 	*EmbWir-Dorin-Router)
 		name="ew-dorin-router"
 		;;
+	*"Linino reference board")
+		name="linino"
+		;;
 	esac
 
 	case "$machine" in
