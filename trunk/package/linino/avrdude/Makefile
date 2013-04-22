@@ -21,7 +21,7 @@ PKG_SOURCE_PROTO:=svn
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/avrdude_linino
+define Package/avrdude
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=AVR Downloader/UploaDEr
@@ -29,7 +29,7 @@ define Package/avrdude_linino
   DEPENDS:=+libncurses +libreadline +libusb-compat +libc +libelf +lm $(CXX_DEPENDS)
 endef
 
-define Package/avrdude_linino/description
+define Package/avrdude/description
  AVRDUDE is a full featured program for programming Atmel's AVR CPU's.
 endef
 
@@ -55,15 +55,15 @@ define Build/Compile
 		all 
 endef
 
-define Package/avrdude_linino/conffiles
+define Package/avrdude/conffiles
 /etc/avrdude.conf
 endef
 
-define Package/avrdude_linino/install
+define Package/avrdude/install
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/avrdude.conf $(1)/etc/
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/avrdude $(1)/usr/bin/
 endef
 
-$(eval $(call BuildPackage,avrdude_linino))
+$(eval $(call BuildPackage,avrdude))
