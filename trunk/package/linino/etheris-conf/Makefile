@@ -40,8 +40,7 @@ rm "$${IPKG_INSTROOT}/etc/avahi/services/http.service"
 rm "$${IPKG_INSTROOT}/etc/avahi/services/ssh.service"
 
 sed -i "s/option hostname	OpenWrt/option hostname	Etheris/" "$${IPKG_INSTROOT}/etc/config/system"
-sed -i "s/192.168.1.1/192.168.240.1/" "$${IPKG_INSTROOT}/etc/preinit"
-sed -i "s/192.168.1.255/192.168.240.255/" "$${IPKG_INSTROOT}/etc/preinit"
+sed -i "s/192.168.1.1/192.168.240.1/" "$${IPKG_INSTROOT}/lib/functions/uci-defaults.sh"
 endef
 
 $(eval $(call BuildPackage,etheris-conf))
