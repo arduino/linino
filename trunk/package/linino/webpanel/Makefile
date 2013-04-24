@@ -13,9 +13,9 @@ PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://downloads.arduino.cc/
-PKG_MD5SUM:=fe93ddf54d0490ea572b8c78cde2b591
+PKG_MD5SUM:=d164fa9ee1fb1b97794220905a5fbd36
 
-DEPENDS:=python
+DEPENDS:=+python
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -33,13 +33,7 @@ define Build/Compile
 	# NOOP
 endef
 
-define Package/webpanel/conffiles
-/etc/arduino.conf
-endef
-
 define Package/webpanel/install
-	$(INSTALL_DIR) $(1)/etc
-	$(INSTALL_CONF) $(PKG_BUILD_DIR)/config/arduino.conf $(1)/etc/
 	$(INSTALL_DIR) $(1)/www
 	$(INSTALL_DIR) $(1)/www/webpanel
 	$(INSTALL_DIR) $(1)/www/webpanel/views

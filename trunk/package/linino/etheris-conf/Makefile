@@ -22,7 +22,9 @@ define Package/etheris-conf
 endef
 
 define Package/etheris-conf/conffiles
+/etc/arduino.conf
 /etc/avahi/services/arduino.service
+/etc/arduino/Caterina-Leonardo.hex
 endef
 
 define Build/Compile
@@ -31,7 +33,10 @@ endef
 
 define Package/etheris-conf/install
 	$(INSTALL_DIR) $(1)/etc/avahi/services
-	$(INSTALL_DATA) ./files/arduino.service $(1)/etc/avahi/services/arduino.service
+	$(INSTALL_DIR) $(1)/etc/arduino
+	$(INSTALL_DATA) ./files/etc/avahi/services/arduino.service $(1)/etc/avahi/services/arduino.service
+	$(INSTALL_DATA) ./files/etc/arduino.conf $(1)/etc/arduino.conf
+	$(INSTALL_DATA) ./files/etc/arduino/Caterina-Leonardo.hex $(1)/etc/arduino/Caterina-Leonardo.hex
 endef
 
 define Package/etheris-conf/postinst
