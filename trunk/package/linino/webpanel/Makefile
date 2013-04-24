@@ -15,6 +15,8 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://downloads.arduino.cc/
 PKG_MD5SUM:=fe93ddf54d0490ea572b8c78cde2b591
 
+DEPENDS:=python
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/webpanel
