@@ -13,7 +13,7 @@ PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://downloads.arduino.cc/
-PKG_MD5SUM:=d164fa9ee1fb1b97794220905a5fbd36
+PKG_MD5SUM:=c5991e22143c305ef21e8e24757b34f6
 
 DEPENDS:=+python
 
@@ -37,8 +37,8 @@ define Package/webpanel/install
 	$(INSTALL_DIR) $(1)/www
 	$(INSTALL_DIR) $(1)/www/webpanel
 	$(INSTALL_DIR) $(1)/www/webpanel/views
-	$(CP) $(PKG_BUILD_DIR)/*.py* $(1)/www/webpanel
-	$(CP) $(PKG_BUILD_DIR)/views $(1)/www/webpanel/views
+	$(CP) $(PKG_BUILD_DIR)/*.py* $(1)/www/webpanel/
+	$(CP) $(PKG_BUILD_DIR)/views/* $(1)/www/webpanel/views/
 endef
 
 $(eval $(call BuildPackage,webpanel))
