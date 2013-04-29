@@ -16,12 +16,17 @@
 #include "dev-usb.h"
 #include "dev-wmac.h"
 #include "machtypes.h"
+#include <asm/mach-ath79/ar71xx_regs.h>
+#include <asm/mach-ath79/ath79.h>
+#include "common.h"
+#include "gpio.h"
+#include "linux/gpio.h"
 
 #define AP121_GPIO_LED_WLAN		0
 #define AP121_GPIO_LED_USB		1
 
-#define AP121_GPIO_BTN_JUMPSTART	11
-#define AP121_GPIO_BTN_RESET		12
+#define LININO_GPIO_OE			21
+#define LININO_GPIO_OE2			23
 
 #define AP121_KEYS_POLL_INTERVAL	20	/* msecs */
 #define AP121_KEYS_DEBOUNCE_INTERVAL	(3 * AP121_KEYS_POLL_INTERVAL)
@@ -32,8 +37,6 @@
 #define AP121_WMAC_MAC_OFFSET		0x1002
 
 #define AP121_MINI_GPIO_LED_WLAN	0
-#define AP121_MINI_GPIO_BTN_JUMPSTART	12
-#define AP121_MINI_GPIO_BTN_RESET	11
 
 static struct gpio_led ap121_leds_gpio[] __initdata = {
 	{
@@ -49,7 +52,7 @@ static struct gpio_led ap121_leds_gpio[] __initdata = {
 };
 
 static struct gpio_keys_button ap121_gpio_keys[] __initdata = {
-	{
+/*	{
 		.desc		= "jumpstart button",
 		.type		= EV_KEY,
 		.code		= KEY_WPS_BUTTON,
@@ -65,6 +68,7 @@ static struct gpio_keys_button ap121_gpio_keys[] __initdata = {
 		.gpio		= AP121_GPIO_BTN_RESET,
 		.active_low	= 1,
 	}
+*/
 };
 
 static struct gpio_led ap121_mini_leds_gpio[] __initdata = {
@@ -76,7 +80,7 @@ static struct gpio_led ap121_mini_leds_gpio[] __initdata = {
 };
 
 static struct gpio_keys_button ap121_mini_gpio_keys[] __initdata = {
-	{
+/*	{
 		.desc		= "jumpstart button",
 		.type		= EV_KEY,
 		.code		= KEY_WPS_BUTTON,
@@ -92,6 +96,7 @@ static struct gpio_keys_button ap121_mini_gpio_keys[] __initdata = {
 		.gpio		= AP121_MINI_GPIO_BTN_RESET,
 		.active_low	= 1,
 	}
+*/
 };
 
 static void __init ap121_common_setup(void)
@@ -116,6 +121,8 @@ static void __init ap121_common_setup(void)
 
 static void __init ap121_setup(void)
 {
+	u32 t;
+
 	ap121_common_setup();
 
 	ath79_register_leds_gpio(-1, ARRAY_SIZE(ap121_leds_gpio),
@@ -124,6 +131,28 @@ static void __init ap121_setup(void)
 					ARRAY_SIZE(ap121_gpio_keys),
 					ap121_gpio_keys);
 	ath79_register_usb();
+
+	//Disable the Function for some pins to have GPIO functionality active
+	ath79_gpio_function_setup(AR933X_GPIO_FUNC_JTAG_DISABLE | AR933X_GPIO_FUNC_I2S_MCK_EN, 0);
+
+	ath79_gpio_function2_setup(AR933X_GPIO_FUNC2_JUMPSTART_DISABLE, 0);
+
+	printk("Setting Linino GPIO\n");
+	t = ath79_reset_rr(AR933X_RESET_REG_BOOTSTRAP);
+	t |= AR933X_BOOTSTRAP_MDIO_GPIO_EN;
+	ath79_reset_wr(AR933X_RESET_REG_BOOTSTRAP, t);
+
+	// enable OE of level shifter
+	if (gpio_request_one(LININO_GPIO_OE,
+		 GPIOF_OUT_INIT_HIGH | GPIOF_EXPORT_DIR_FIXED,
+		 "OE-1") != 0)
+		printk("Error setting GPIO OE\n");
+
+
+	if (gpio_request_one(LININO_GPIO_OE2,
+		 GPIOF_OUT_INIT_HIGH | GPIOF_EXPORT_DIR_FIXED,
+		 "OE-2") != 0)
+		printk("Error setting GPIO OE2\n");
 }
 
 MIPS_MACHINE(ATH79_MACH_Linino, "Linino", "Linino reference board",
