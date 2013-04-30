@@ -6,21 +6,48 @@ MAX_SLEEP=60
 
 slept=0
 
-ifconfig=`ifconfig $IFACE | grep 'inet addr'`
+iface_exists=""
+iface_is_managed=""
+iface_has_ssid=""
+iface_is_access_point=""
 
-while [ "$ifconfig" == "" ]
-do
+update_vars() {
+	iface_exists=`/usr/sbin/iwconfig $IFACE`
+	iface_has_no_ssid=`/usr/sbin/iwconfig $IFACE | grep ESSID\:off\/any`
+	iface_is_access_point=`/usr/sbin/iwconfig $IFACE | grep Mode\:Master`
+}
+
+wait_for_iface() {
         if [ $slept -gt $MAX_SLEEP ]
         then
-                dmesg > /var/log/last_dmesg_with_wifi_errors
-                wifi-reset
+                /bin/dmesg > /tmp/last_dmesg_with_wifi_errors
+		/bin/sync
+                /usr/bin/wifi-reset-and-reboot
                 exit 1
         fi
 
         sleep $SLEEP_TIME
         slept=$(($slept + $SLEEP_TIME))
 
-        ifconfig=`ifconfig $IFACE | grep 'inet addr`
+	update_vars
+}
+
+update_vars
+
+while [ true ]
+do
+	if [ "$iface_exists" = "" ]
+	then
+		wait_for_iface
+	elif [ "$iface_is_access_point" != "" ]
+	then
+		exit 0
+	elif [ "$iface_has_no_ssid" != "" ]
+	then
+		wait_for_iface
+	else
+		break
+	fi
 done
 
 rm -f /var/log/last_dmesg_with_wifi_errors

@@ -47,6 +47,10 @@ rm "$${IPKG_INSTROOT}/etc/avahi/services/ssh.service"
 sed -i "s/option hostname	OpenWrt/option hostname	Arduino/" "$${IPKG_INSTROOT}/etc/config/system"
 sed -i "s/option ssid     Linino/option ssid     Arduino/" "$${IPKG_INSTROOT}/etc/config/wireless"
 sed -i "s/192.168.1.1/192.168.240.1/" "$${IPKG_INSTROOT}/lib/functions/uci-defaults.sh"
+
+sed -i "s/exit 0//" "$${IPKG_INSTROOT}/etc/rc.local"
+echo "wifi-live-or-reset &" >> "$${IPKG_INSTROOT}/etc/rc.local"
+echo "exit 0" >> "$${IPKG_INSTROOT}/etc/rc.local"
 endef
 
 $(eval $(call BuildPackage,etheris-conf))

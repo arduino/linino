@@ -1,17 +1,19 @@
 #!/bin/ash
 
-uci set "wireless.radio0.channel=11"
-uci set "wireless.@wifi-iface[0].mode=ap"
-uci set "wireless.@wifi-iface[0].ssid=Arduino"
-uci set "wireless.@wifi-iface[0].encryption=none"
-uci delete "wireless.@wifi-iface[0].key"
-uci delete "wireless.radio0.country"
+/sbin/uci set "wireless.radio0.channel=11"
+/sbin/uci set "wireless.@wifi-iface[0].mode=ap"
+/sbin/uci set "wireless.@wifi-iface[0].ssid=Arduino"
+/sbin/uci set "wireless.@wifi-iface[0].encryption=none"
+/sbin/uci delete "wireless.@wifi-iface[0].key"
+/sbin/uci delete "wireless.radio0.country"
 
-uci set "network.lan.ifname=eth0"
-uci set "network.lan.type=bridge"
-uci set "network.lan.ipaddr=192.168.240.1"
-uci set "network.lan.netmask=255.255.255.0"
-uci set "network.lan.proto=static"
+/sbin/uci set "network.lan.ifname=eth0"
+/sbin/uci set "network.lan.type=bridge"
+/sbin/uci set "network.lan.ipaddr=192.168.240.1"
+/sbin/uci set "network.lan.netmask=255.255.255.0"
+/sbin/uci set "network.lan.proto=static"
 
-reboot
+/sbin/uci commit
+
+/sbin/reboot
 
