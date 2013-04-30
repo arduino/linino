@@ -24,7 +24,6 @@ endef
 define Package/etheris-conf/conffiles
 /etc/config/arduino
 /etc/avahi/services/arduino.service
-/etc/arduino/Caterina-Leonardo.hex
 endef
 
 define Build/Compile
@@ -35,8 +34,8 @@ define Package/etheris-conf/install
 	$(INSTALL_DIR) $(1)/etc/avahi/services
 	$(INSTALL_DIR) $(1)/etc/arduino
 	$(INSTALL_DIR) $(1)/etc/config
-	$(INSTALL_DATA) ./files/etc/avahi/services/arduino.service $(1)/etc/avahi/services/
-	$(INSTALL_DATA) ./files/etc/config/arduino $(1)/etc/config/
+	$(INSTALL_CONF) ./files/etc/avahi/services/arduino.service $(1)/etc/avahi/services/
+	$(INSTALL_CONF) ./files/etc/config/arduino $(1)/etc/config/
 	$(INSTALL_DATA) ./files/etc/arduino/Caterina-Leonardo.hex $(1)/etc/arduino/
 endef
 
@@ -45,7 +44,8 @@ define Package/etheris-conf/postinst
 rm "$${IPKG_INSTROOT}/etc/avahi/services/http.service"
 rm "$${IPKG_INSTROOT}/etc/avahi/services/ssh.service"
 
-sed -i "s/option hostname	OpenWrt/option hostname	Etheris/" "$${IPKG_INSTROOT}/etc/config/system"
+sed -i "s/option hostname	OpenWrt/option hostname	Arduino/" "$${IPKG_INSTROOT}/etc/config/system"
+sed -i "s/option ssid     Linino/option ssid     Arduino/" "$${IPKG_INSTROOT}/etc/config/wireless"
 sed -i "s/192.168.1.1/192.168.240.1/" "$${IPKG_INSTROOT}/lib/functions/uci-defaults.sh"
 endef
 
