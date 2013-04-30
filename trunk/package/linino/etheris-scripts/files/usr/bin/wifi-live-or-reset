@@ -1,0 +1,26 @@
+#!/bin/ash
+
+IFACE="wlan0"
+SLEEP_TIME=2
+MAX_SLEEP=60
+
+slept=0
+
+ifconfig=`ifconfig $IFACE | grep 'inet addr'`
+
+while [ "$ifconfig" == "" ]
+do
+        if [ $slept -gt $MAX_SLEEP ]
+        then
+                dmesg > /var/log/last_dmesg_with_wifi_errors
+                wifi-reset
+                exit 1
+        fi
+
+        sleep $SLEEP_TIME
+        slept=$(($slept + $SLEEP_TIME))
+
+        ifconfig=`ifconfig $IFACE | grep 'inet addr`
+done
+
+rm -f /var/log/last_dmesg_with_wifi_errors
