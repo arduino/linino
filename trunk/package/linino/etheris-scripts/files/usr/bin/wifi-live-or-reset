@@ -1,4 +1,6 @@
-#!/bin/ash
+#!/bin/sh
+
+echo "none" > /sys/class/leds/ap121\:green\:wlan/trigger
 
 IFACE="wlan0"
 SLEEP_TIME=2
@@ -20,8 +22,11 @@ update_vars() {
 wait_for_iface() {
         if [ $slept -gt $MAX_SLEEP ]
         then
-                /bin/dmesg > /tmp/last_dmesg_with_wifi_errors
+                /bin/dmesg > /tmp/last_dmesg_with_wifi_errors.log
 		/bin/sync
+		echo "timer" > /sys/class/leds/ap121\:green\:wlan/trigger
+		echo 200 > /sys/class/leds/ap121\:green\:wlan/delay_on
+		echo 200 > /sys/class/leds/ap121\:green\:wlan/delay_off
                 /usr/bin/wifi-reset-and-reboot
                 exit 1
         fi
@@ -50,4 +55,4 @@ do
 	fi
 done
 
-rm -f /var/log/last_dmesg_with_wifi_errors
+rm -f /tmp/last_dmesg_with_wifi_errors.log

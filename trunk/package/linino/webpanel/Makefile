@@ -13,9 +13,9 @@ PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://downloads.arduino.cc/
-PKG_MD5SUM:=4de6a19577ed4e9f25b33df7093796ad
+#PKG_MD5SUM:=58133f3bb176ca54cfab7432fe22517c
 
-DEPENDS:=+python
+DEPENDS:=+python-mini
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -38,6 +38,8 @@ define Package/webpanel/install
 	$(INSTALL_DIR) $(1)/www/webpanel
 	$(INSTALL_DIR) $(1)/www/webpanel/views
 	$(CP) $(PKG_BUILD_DIR)/*.py* $(1)/www/webpanel/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/datetime.so $(1)/www/webpanel/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/cPickle.so $(1)/www/webpanel/
 	$(CP) $(PKG_BUILD_DIR)/views/* $(1)/www/webpanel/views/
 endef
 
