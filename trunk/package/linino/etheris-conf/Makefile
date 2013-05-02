@@ -92,7 +92,7 @@ python -m compileall "$${IPKG_INSTROOT}/usr/lib/python2.7/warnings.py"
 python -m compileall "$${IPKG_INSTROOT}/usr/lib/python2.7/encodings/aliases.py"
 python -m compileall "$${IPKG_INSTROOT}/usr/lib/python2.7/encodings/ascii.py"
 python -m compileall "$${IPKG_INSTROOT}/usr/lib/python2.7/encodings/utf_8.py"
-python -m compileall "$${IPKG_INSTROOT}/usr/lib/python2.7/encodings/__init__.py
+python -m compileall "$${IPKG_INSTROOT}/usr/lib/python2.7/encodings/__init__.py"
 
 endef
 
