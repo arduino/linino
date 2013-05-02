@@ -37,6 +37,7 @@ define Package/etheris-conf/install
 	$(INSTALL_CONF) ./files/etc/avahi/services/arduino.service $(1)/etc/avahi/services/
 	$(INSTALL_CONF) ./files/etc/config/arduino $(1)/etc/config/
 	$(INSTALL_DATA) ./files/etc/arduino/Caterina-Leonardo.hex $(1)/etc/arduino/
+	$(INSTALL_DATA) ./files/etc/arduino/optiboot_atmega328.hex $(1)/etc/arduino/
 endef
 
 define Package/etheris-conf/postinst
