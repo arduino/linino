@@ -24,7 +24,7 @@ update_vars() {
 wait_for_iface() {
         if [ $slept -gt $MAX_SLEEP ]
         then
-                /bin/dmesg > /tmp/last_dmesg_with_wifi_errors.log
+                /bin/dmesg > /last_dmesg_with_wifi_errors.log
 		/bin/sync
                 /usr/bin/wifi-reset-and-reboot
                 exit 1
@@ -52,7 +52,7 @@ do
 		wait_for_iface
 	else
 		echo "none" > /sys/class/leds/ap121\:green\:wlan/trigger
-		rm -f /tmp/last_dmesg_with_wifi_errors.log
+		rm -f /last_dmesg_with_wifi_errors.log
 		exit 0
 	fi
 done
