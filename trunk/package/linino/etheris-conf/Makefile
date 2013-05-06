@@ -43,7 +43,7 @@ define Package/etheris-conf/install
 endef
 
 define Package/etheris-conf/postinst
-#!/bin/sh -x
+#!/bin/sh
 if [ -n "$${IPKG_INSTROOT}" ]; then
 	rm "$${IPKG_INSTROOT}/etc/avahi/services/http.service"
 	rm "$${IPKG_INSTROOT}/etc/avahi/services/ssh.service"
