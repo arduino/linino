@@ -60,7 +60,7 @@ if [ -n "$${IPKG_INSTROOT}" ]; then
 
 	sed -i "s/exit 0//" "$${IPKG_INSTROOT}/etc/rc.local"
 	echo "wifi-live-or-reset &" >> "$${IPKG_INSTROOT}/etc/rc.local"
-	echo "cd /www/webpanel/ && python main.py &" >> "$${IPKG_INSTROOT}/etc/rc.local"
+	echo "cd /www/webpanel/ && exec python main.py &" >> "$${IPKG_INSTROOT}/etc/rc.local"
 	echo "exit 0" >> "$${IPKG_INSTROOT}/etc/rc.local"
 
 	python -m compileall "$${IPKG_INSTROOT}/usr/lib/python2.7/StringIO.py"
