@@ -24,10 +24,11 @@ endef
 define Package/etheris-conf/conffiles
 /etc/config/arduino
 /etc/avahi/services/arduino.service
+/etc/arduino/ssl_certificate.pem
 endef
 
 define Build/Compile
-	# NOOP
+	./create_certificate.sh $(PKG_BUILD_DIR)/ssl_certificate.pem
 endef
 
 define Package/etheris-conf/install
@@ -40,13 +41,15 @@ define Package/etheris-conf/install
 	$(INSTALL_CONF) ./files/etc/shadow $(1)/etc/shadow.1
 	$(INSTALL_DATA) ./files/etc/arduino/Caterina-Etheris.hex $(1)/etc/arduino/
 	$(INSTALL_DATA) ./files/etc/arduino/optiboot_atmega328.hex $(1)/etc/arduino/
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/ssl_certificate.pem $(1)/etc/arduino/
 endef
 
 define Package/etheris-conf/postinst
 #!/bin/sh
 if [ -n "$${IPKG_INSTROOT}" ]; then
+	#removing unconfigured services
 	rm "$${IPKG_INSTROOT}/etc/avahi/services/http.service"
-	rm "$${IPKG_INSTROOT}/etc/avahi/services/ssh.service"
+
 
 	rm "$${IPKG_INSTROOT}/etc/config/firewall"
 	mv "$${IPKG_INSTROOT}/etc/config/firewall.1" "$${IPKG_INSTROOT}/etc/config/firewall"
@@ -59,8 +62,8 @@ if [ -n "$${IPKG_INSTROOT}" ]; then
 	mv "$${IPKG_INSTROOT}/etc/shadow.1" "$${IPKG_INSTROOT}/etc/shadow"
 
 	sed -i "s/exit 0//" "$${IPKG_INSTROOT}/etc/rc.local"
+	echo "reset-to-factory && reboot" >> "$${IPKG_INSTROOT}/etc/rc.local"
 	echo "wifi-live-or-reset" >> "$${IPKG_INSTROOT}/etc/rc.local"
-	echo "restore-from-sd" >> "$${IPKG_INSTROOT}/etc/rc.local"
 	echo "cd /www/webpanel/ && exec python main.py &" >> "$${IPKG_INSTROOT}/etc/rc.local"
 	echo "exit 0" >> "$${IPKG_INSTROOT}/etc/rc.local"
 

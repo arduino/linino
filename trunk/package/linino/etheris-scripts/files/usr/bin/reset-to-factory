@@ -4,30 +4,25 @@ PATH=$PATH:/bin:/sbin:/usr/bin
 
 if [ ! -e /dev/sda1 ]
 then
-        exit 0
+        exit 1
 fi
 
 mkdir -p /tmp_restore || exit 1
 mount /dev/sda1 /tmp_restore || exit 1
 
-bins=`ls /tmp_restore/*squashfs-sysupgrade.bin | wc -l`
-
-if [ $bins -ne 1 -o -f /tmp_restore/restored ]
+if [ ! -f /tmp_restore/reset-to-factory ]
 then
         umount /tmp_restore
         rmdir /tmp_restore
-        exit 0
+        exit 1
 fi
 
 echo "timer" > /sys/class/leds/ap121\:green\:wlan/trigger
 echo 100 > /sys/class/leds/ap121\:green\:wlan/delay_on
 echo 100 > /sys/class/leds/ap121\:green\:wlan/delay_off
 
-rm -f /tmp/*squashfs-sysupgrade.bin || exit 1
+. /sbin/firstboot
 
-cp `ls /tmp_restore/*squashfs-sysupgrade.bin` /tmp || exit 1
-
-touch /tmp_restore/restored || exit 1
-
-sysupgrade -n `ls /tmp/*squashfs-sysupgrade.bin`
+reset_has_fo=true
+boot_run_hook jffs2reset
 
