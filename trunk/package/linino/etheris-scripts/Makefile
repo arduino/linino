@@ -27,6 +27,7 @@ define Package/etheris-scripts/install
 	$(INSTALL_DIR) $(1)/usr/bin/
 	$(INSTALL_BIN) ./files/usr/bin/wifi-live-or-reset $(1)/usr/bin/
 	$(INSTALL_BIN) ./files/usr/bin/wifi-reset-and-reboot $(1)/usr/bin/
+	$(INSTALL_BIN) ./files/usr/bin/restore-from-sd $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,etheris-scripts))

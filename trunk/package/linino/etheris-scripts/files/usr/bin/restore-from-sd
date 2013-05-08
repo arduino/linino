@@ -1,0 +1,33 @@
+#!/bin/sh
+
+PATH=$PATH:/bin:/sbin:/usr/bin
+
+if [ ! -e /dev/sda1 ]
+then
+        exit 0
+fi
+
+mkdir /tmp_restore
+mount /dev/sda1 /tmp_restore
+
+bins=`ls /tmp_restore/*squashfs-sysupgrade.bin | wc -l`
+
+if [ $bins -ne 1 -o -f /tmp_restore/restored ]
+then
+        umount /tmp_restore
+        rmdir /tmp_restore
+        exit 0
+fi
+
+echo "timer" > /sys/class/leds/ap121\:green\:wlan/trigger
+echo 100 > /sys/class/leds/ap121\:green\:wlan/delay_on
+echo 100 > /sys/class/leds/ap121\:green\:wlan/delay_off
+
+rm -f /tmp/*squashfs-sysupgrade.bin
+
+cp `ls /tmp_restore/*squashfs-sysupgrade.bin` /tmp
+
+touch /tmp_restore/restored
+
+sysupgrade -d 10 `ls /tmp/*squashfs-sysupgrade.bin`
+
