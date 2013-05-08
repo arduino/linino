@@ -59,8 +59,8 @@ if [ -n "$${IPKG_INSTROOT}" ]; then
 	mv "$${IPKG_INSTROOT}/etc/shadow.1" "$${IPKG_INSTROOT}/etc/shadow"
 
 	sed -i "s/exit 0//" "$${IPKG_INSTROOT}/etc/rc.local"
+	echo "wifi-live-or-reset" >> "$${IPKG_INSTROOT}/etc/rc.local"
 	echo "restore-from-sd" >> "$${IPKG_INSTROOT}/etc/rc.local"
-	echo "wifi-live-or-reset &" >> "$${IPKG_INSTROOT}/etc/rc.local"
 	echo "cd /www/webpanel/ && exec python main.py &" >> "$${IPKG_INSTROOT}/etc/rc.local"
 	echo "exit 0" >> "$${IPKG_INSTROOT}/etc/rc.local"
 

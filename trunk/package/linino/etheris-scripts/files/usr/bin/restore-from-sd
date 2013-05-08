@@ -7,8 +7,8 @@ then
         exit 0
 fi
 
-mkdir /tmp_restore
-mount /dev/sda1 /tmp_restore
+mkdir -p /tmp_restore || exit 1
+mount /dev/sda1 /tmp_restore || exit 1
 
 bins=`ls /tmp_restore/*squashfs-sysupgrade.bin | wc -l`
 
@@ -23,11 +23,11 @@ echo "timer" > /sys/class/leds/ap121\:green\:wlan/trigger
 echo 100 > /sys/class/leds/ap121\:green\:wlan/delay_on
 echo 100 > /sys/class/leds/ap121\:green\:wlan/delay_off
 
-rm -f /tmp/*squashfs-sysupgrade.bin
+rm -f /tmp/*squashfs-sysupgrade.bin || exit 1
 
-cp `ls /tmp_restore/*squashfs-sysupgrade.bin` /tmp
+cp `ls /tmp_restore/*squashfs-sysupgrade.bin` /tmp || exit 1
 
-touch /tmp_restore/restored
+touch /tmp_restore/restored || exit 1
 
-sysupgrade -d 10 `ls /tmp/*squashfs-sysupgrade.bin`
+sysupgrade -n `ls /tmp/*squashfs-sysupgrade.bin`
 
