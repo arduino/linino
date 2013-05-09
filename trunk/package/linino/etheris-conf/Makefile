@@ -11,7 +11,7 @@ PKG_NAME:=etheris-conf
 PKG_VERSION:=1.0.0
 PKG_RELEASE:=1
 
-DEPENDS:=+avahi-daemon +base-files
+DEPENDS:=+avahi-daemon +base-files +webpanel
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -50,23 +50,27 @@ if [ -n "$${IPKG_INSTROOT}" ]; then
 	#removing unconfigured services
 	rm "$${IPKG_INSTROOT}/etc/avahi/services/http.service"
 
-
+	#configuring firewall
 	rm "$${IPKG_INSTROOT}/etc/config/firewall"
 	mv "$${IPKG_INSTROOT}/etc/config/firewall.1" "$${IPKG_INSTROOT}/etc/config/firewall"
 
+	#setting hostname, ip address, and wifi ssid
 	sed -i "s/option hostname	OpenWrt/option hostname	Arduino/" "$${IPKG_INSTROOT}/etc/config/system"
 	sed -i "s/option ssid     Linino/option ssid     Arduino/" "$${IPKG_INSTROOT}/etc/config/wireless"
 	sed -i "s/192.168.1.1/192.168.240.1/" "$${IPKG_INSTROOT}/lib/functions/uci-defaults.sh"
 
+	#setting default root password
 	cp "$${IPKG_INSTROOT}/etc/shadow" "$${IPKG_INSTROOT}/etc/shadow-"
 	mv "$${IPKG_INSTROOT}/etc/shadow.1" "$${IPKG_INSTROOT}/etc/shadow"
 
+	#adding boot time scripts
 	sed -i "s/exit 0//" "$${IPKG_INSTROOT}/etc/rc.local"
 	echo "reset-to-factory && reboot" >> "$${IPKG_INSTROOT}/etc/rc.local"
 	echo "wifi-live-or-reset" >> "$${IPKG_INSTROOT}/etc/rc.local"
 	echo "cd /www/webpanel/ && exec python main.py &" >> "$${IPKG_INSTROOT}/etc/rc.local"
 	echo "exit 0" >> "$${IPKG_INSTROOT}/etc/rc.local"
 
+	#precompiling system python
 	python -m compileall "$${IPKG_INSTROOT}/usr/lib/python2.7/StringIO.py"
 	python -m compileall "$${IPKG_INSTROOT}/usr/lib/python2.7/UserDict.py"
 	python -m compileall "$${IPKG_INSTROOT}/usr/lib/python2.7/__future__.py"
@@ -107,6 +111,7 @@ if [ -n "$${IPKG_INSTROOT}" ]; then
 	python -m compileall "$${IPKG_INSTROOT}/usr/lib/python2.7/encodings/ascii.py"
 	python -m compileall "$${IPKG_INSTROOT}/usr/lib/python2.7/encodings/utf_8.py"
 	python -m compileall "$${IPKG_INSTROOT}/usr/lib/python2.7/encodings/__init__.py"
+	python -m compileall "$${IPKG_INSTROOT}/usr/lib/python2.7/site-packages/json.py"
 fi
 endef
 
