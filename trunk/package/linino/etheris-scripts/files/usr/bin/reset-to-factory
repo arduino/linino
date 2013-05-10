@@ -17,9 +17,7 @@ then
         exit 1
 fi
 
-echo "timer" > /sys/class/leds/ap121\:green\:wlan/trigger
-echo 100 > /sys/class/leds/ap121\:green\:wlan/delay_on
-echo 100 > /sys/class/leds/ap121\:green\:wlan/delay_off
+blink-start 100
 
 . /sbin/firstboot
 

@@ -35,13 +35,11 @@ endef
 
 define Package/webpanel/install
 	$(INSTALL_DIR) $(1)/www/webpanel/views
-	$(INSTALL_DIR) $(1)/www/webpanel/assets
 	$(INSTALL_DIR) $(1)/usr/lib/python2.7/lib-dynload
 	$(INSTALL_DIR) $(1)/usr/lib/python2.7/wsgiref
 
 	$(CP) $(PKG_BUILD_DIR)/{bottle,conf,main}.py* $(1)/www/webpanel/
 	$(CP) $(PKG_BUILD_DIR)/views/* $(1)/www/webpanel/views/
-	$(CP) $(PKG_BUILD_DIR)/assets/* $(1)/www/webpanel/assets/
 
 	$(CP) $(PKG_BUILD_DIR)/*.py* $(1)/usr/lib/python2.7/
 	$(RM) $(1)/usr/lib/python2.7/{bottle,conf,main}.py*

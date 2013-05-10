@@ -1,0 +1,12 @@
+#!/bin/sh
+
+mkdir -p /tmp_restore || exit 1
+mount /dev/sda1 /tmp_restore || exit 1
+
+cp "/tmp_restore/$1" /tmp || exit 1
+
+umount /tmp_restore
+rmdir /tmp_restore
+
+exec sysupgrade "/tmp/$1"
+

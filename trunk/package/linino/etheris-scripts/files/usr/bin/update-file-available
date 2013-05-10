@@ -1,0 +1,30 @@
+#!/bin/sh
+
+if [ ! -e /dev/sda1 ]
+then
+        exit 1
+fi
+
+if [ -f /tmp_restore ]
+then
+        exit 1
+fi
+
+mkdir -p /tmp_restore || exit 1
+mount /dev/sda1 /tmp_restore || exit 1
+
+how_many_bins=`ls /tmp_restore/*squashfs-sysupgrade.bin | wc -l`
+
+if [ $how_many_bins -ne 1 ]
+then
+	umount /tmp_restore
+	rmdir /tmp_restore
+	exit 1
+fi
+
+bins=`ls /tmp_restore/*squashfs-sysupgrade.bin`
+
+umount /tmp_restore
+rmdir /tmp_restore
+
+echo $bins

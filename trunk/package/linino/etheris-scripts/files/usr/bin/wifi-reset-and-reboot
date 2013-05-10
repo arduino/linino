@@ -1,4 +1,4 @@
-#!/bin/ash
+#!/bin/sh
 
 /sbin/uci set "wireless.radio0.channel=11"
 /sbin/uci set "wireless.@wifi-iface[0].mode=ap"

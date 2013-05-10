@@ -1,8 +1,6 @@
 #!/bin/sh
 
-echo "timer" > /sys/class/leds/ap121\:green\:wlan/trigger
-echo 200 > /sys/class/leds/ap121\:green\:wlan/delay_on
-echo 200 > /sys/class/leds/ap121\:green\:wlan/delay_off
+blink-start 200
 
 IFACE="wlan0"
 SLEEP_TIME=2
@@ -45,13 +43,13 @@ do
 		wait_for_iface
 	elif [ "$iface_is_access_point" != "" ]
 	then
-		echo "none" > /sys/class/leds/ap121\:green\:wlan/trigger
+		blink-stop
 		exit 0
 	elif [ "$iface_has_no_ssid" != "" ]
 	then
 		wait_for_iface
 	else
-		echo "none" > /sys/class/leds/ap121\:green\:wlan/trigger
+		blink-stop
 		rm -f /last_dmesg_with_wifi_errors.log
 		exit 0
 	fi

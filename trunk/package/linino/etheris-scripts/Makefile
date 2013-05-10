@@ -25,6 +25,10 @@ endef
 
 define Package/etheris-scripts/install
 	$(INSTALL_DIR) $(1)/usr/bin/
+	$(INSTALL_BIN) ./files/usr/bin/blink-start $(1)/usr/bin/
+	$(INSTALL_BIN) ./files/usr/bin/blink-stop $(1)/usr/bin/
+	$(INSTALL_BIN) ./files/usr/bin/update-file-available $(1)/usr/bin/
+	$(INSTALL_BIN) ./files/usr/bin/run-sysupgrade $(1)/usr/bin/
 	$(INSTALL_BIN) ./files/usr/bin/wifi-live-or-reset $(1)/usr/bin/
 	$(INSTALL_BIN) ./files/usr/bin/wifi-reset-and-reboot $(1)/usr/bin/
 	$(INSTALL_BIN) ./files/usr/bin/reset-to-factory $(1)/usr/bin/
