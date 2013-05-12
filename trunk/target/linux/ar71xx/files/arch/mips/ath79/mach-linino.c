@@ -22,93 +22,80 @@
 #include "gpio.h"
 #include "linux/gpio.h"
 
-#define AP121_GPIO_LED_WLAN		0
-#define AP121_GPIO_LED_USB		1
+// Uncomment to use for DS1 board
+//#define DS1
 
-#define LININO_GPIO_OE			21
-#define LININO_GPIO_OE2			23
+#define DS_GPIO_LED_WLAN		0
+#define DS_GPIO_LED_USB			1
 
-#define AP121_KEYS_POLL_INTERVAL	20	/* msecs */
-#define AP121_KEYS_DEBOUNCE_INTERVAL	(3 * AP121_KEYS_POLL_INTERVAL)
+#define DS_GPIO_OE			21
+#define DS_GPIO_AVR_RESET		7
 
-#define AP121_MAC0_OFFSET		0x0000
-#define AP121_MAC1_OFFSET		0x0006
-#define AP121_CALDATA_OFFSET		0x1000
-#define AP121_WMAC_MAC_OFFSET		0x1002
+#ifdef DS1
+#define DS_GPIO_OE2			23
+#else
+#define DS_GPIO_UART_ENA		23
+#define DS_GPIO_CONF_BTN		20
+#define DS_GPIO_LED_SPD			22
+#define DS_GPIO_LED_FDX			18
+#endif
 
-#define AP121_MINI_GPIO_LED_WLAN	0
+#define DS_KEYS_POLL_INTERVAL		20	/* msecs */
+#define DS_KEYS_DEBOUNCE_INTERVAL	(3 * DS_KEYS_POLL_INTERVAL)
 
-static struct gpio_led ap121_leds_gpio[] __initdata = {
+#define DS_MAC0_OFFSET			0x0000
+#define DS_MAC1_OFFSET			0x0006
+#define DS_CALDATA_OFFSET		0x1000
+#define DS_WMAC_MAC_OFFSET		0x1002
+
+
+static struct gpio_led ds_leds_gpio[] __initdata = {
 	{
-		.name		= "ap121:green:usb",
-		.gpio		= AP121_GPIO_LED_USB,
+		.name		= "ds:green:usb",
+		.gpio		= DS_GPIO_LED_USB,
 		.active_low	= 0,
 	},
 	{
-		.name		= "ap121:green:wlan",
-		.gpio		= AP121_GPIO_LED_WLAN,
+		.name		= "ds:green:wlan",
+		.gpio		= DS_GPIO_LED_WLAN,
 		.active_low	= 0,
 	},
+#ifndef DS1
+        {
+                .name           = "ds:green:spd",
+                .gpio           = DS_GPIO_LED_SPD,
+                .active_low     = 0,
+        },
+        {
+                .name           = "ds:green:fdx",
+                .gpio           = DS_GPIO_LED_FDX,
+                .active_low     = 0,
+        },
+#endif
 };
 
-static struct gpio_keys_button ap121_gpio_keys[] __initdata = {
-/*	{
-		.desc		= "jumpstart button",
+static struct gpio_keys_button ds_gpio_keys[] __initdata = {
+#ifndef DS1
+	{
+		.desc		= "configuration button",
 		.type		= EV_KEY,
 		.code		= KEY_WPS_BUTTON,
-		.debounce_interval = AP121_KEYS_DEBOUNCE_INTERVAL,
-		.gpio		= AP121_GPIO_BTN_JUMPSTART,
+		.debounce_interval = DS_KEYS_DEBOUNCE_INTERVAL,
+		.gpio		= DS_GPIO_CONF_BTN,
 		.active_low	= 1,
 	},
-	{
-		.desc		= "reset button",
-		.type		= EV_KEY,
-		.code		= KEY_RESTART,
-		.debounce_interval = AP121_KEYS_DEBOUNCE_INTERVAL,
-		.gpio		= AP121_GPIO_BTN_RESET,
-		.active_low	= 1,
-	}
-*/
+#endif
 };
 
-static struct gpio_led ap121_mini_leds_gpio[] __initdata = {
-	{
-		.name		= "ap121:green:wlan",
-		.gpio		= AP121_MINI_GPIO_LED_WLAN,
-		.active_low	= 0,
-	},
-};
-
-static struct gpio_keys_button ap121_mini_gpio_keys[] __initdata = {
-/*	{
-		.desc		= "jumpstart button",
-		.type		= EV_KEY,
-		.code		= KEY_WPS_BUTTON,
-		.debounce_interval = AP121_KEYS_DEBOUNCE_INTERVAL,
-		.gpio		= AP121_MINI_GPIO_BTN_JUMPSTART,
-		.active_low	= 1,
-	},
-	{
-		.desc		= "reset button",
-		.type		= EV_KEY,
-		.code		= KEY_RESTART,
-		.debounce_interval = AP121_KEYS_DEBOUNCE_INTERVAL,
-		.gpio		= AP121_MINI_GPIO_BTN_RESET,
-		.active_low	= 1,
-	}
-*/
-};
-
-static void __init ap121_common_setup(void)
+static void __init ds_common_setup(void)
 {
 	u8 *art = (u8 *) KSEG1ADDR(0x1fff0000);
-
 	ath79_register_m25p80(NULL);
-	ath79_register_wmac(art + AP121_CALDATA_OFFSET,
-			    art + AP121_WMAC_MAC_OFFSET);
+	ath79_register_wmac(art + DS_CALDATA_OFFSET,
+			    art + DS_WMAC_MAC_OFFSET);
 
-	ath79_init_mac(ath79_eth0_data.mac_addr, art + AP121_MAC0_OFFSET, 0);
-	ath79_init_mac(ath79_eth1_data.mac_addr, art + AP121_MAC1_OFFSET, 0);
+	ath79_init_mac(ath79_eth0_data.mac_addr, art + DS_MAC0_OFFSET, 0);
+	ath79_init_mac(ath79_eth1_data.mac_addr, art + DS_MAC1_OFFSET, 0);
 
 	ath79_register_mdio(0, 0x0);
 
@@ -119,55 +106,56 @@ static void __init ap121_common_setup(void)
 	ath79_register_eth(0);
 }
 
-static void __init ap121_setup(void)
+static void __init ds_setup(void)
 {
 	u32 t;
 
-	ap121_common_setup();
+	ds_common_setup();
 
-	ath79_register_leds_gpio(-1, ARRAY_SIZE(ap121_leds_gpio),
-				 ap121_leds_gpio);
-	ath79_register_gpio_keys_polled(-1, AP121_KEYS_POLL_INTERVAL,
-					ARRAY_SIZE(ap121_gpio_keys),
-					ap121_gpio_keys);
+	ath79_register_leds_gpio(-1, ARRAY_SIZE(ds_leds_gpio),
+				 ds_leds_gpio);
+	ath79_register_gpio_keys_polled(-1, DS_KEYS_POLL_INTERVAL,
+					ARRAY_SIZE(ds_gpio_keys),
+					ds_gpio_keys);
 	ath79_register_usb();
 
 	//Disable the Function for some pins to have GPIO functionality active
+	// GPIO6-7-8 and GPIO11
 	ath79_gpio_function_setup(AR933X_GPIO_FUNC_JTAG_DISABLE | AR933X_GPIO_FUNC_I2S_MCK_EN, 0);
 
 	ath79_gpio_function2_setup(AR933X_GPIO_FUNC2_JUMPSTART_DISABLE, 0);
 
-	printk("Setting Linino GPIO\n");
+	printk("Setting DogStick2 GPIO\n");
 	t = ath79_reset_rr(AR933X_RESET_REG_BOOTSTRAP);
 	t |= AR933X_BOOTSTRAP_MDIO_GPIO_EN;
 	ath79_reset_wr(AR933X_RESET_REG_BOOTSTRAP, t);
 
+        // Put the avr reset to high 
+	if (gpio_request_one(DS_GPIO_AVR_RESET,
+                 GPIOF_OUT_INIT_LOW | GPIOF_EXPORT_DIR_FIXED,
+                 "OE-1") != 0)
+                printk("Error setting GPIO OE\n");
+	gpio_unexport(DS_GPIO_AVR_RESET);
+	gpio_free(DS_GPIO_AVR_RESET);
+
 	// enable OE of level shifter
-	if (gpio_request_one(LININO_GPIO_OE,
-		 GPIOF_OUT_INIT_HIGH | GPIOF_EXPORT_DIR_FIXED,
+	if (gpio_request_one(DS_GPIO_OE,
+		 GPIOF_OUT_INIT_LOW | GPIOF_EXPORT_DIR_FIXED,
 		 "OE-1") != 0)
 		printk("Error setting GPIO OE\n");
 
-
-	if (gpio_request_one(LININO_GPIO_OE2,
+#ifdef DS1
+	if (gpio_request_one(DS_GPIO_OE2,
 		 GPIOF_OUT_INIT_HIGH | GPIOF_EXPORT_DIR_FIXED,
 		 "OE-2") != 0)
 		printk("Error setting GPIO OE2\n");
+#else
+        if (gpio_request_one(DS_GPIO_UART_ENA,
+                 GPIOF_OUT_INIT_LOW | GPIOF_EXPORT_DIR_FIXED,
+                 "UART-ENA") != 0)
+                printk("Error setting GPIO OE2\n");
+#endif
 }
 
 MIPS_MACHINE(ATH79_MACH_Linino, "Linino", "Linino reference board",
-	     ap121_setup);
-
-static void __init ap121_mini_setup(void)
-{
-	ap121_common_setup();
-
-	ath79_register_leds_gpio(-1, ARRAY_SIZE(ap121_mini_leds_gpio),
-				 ap121_mini_leds_gpio);
-	ath79_register_gpio_keys_polled(-1, AP121_KEYS_POLL_INTERVAL,
-					ARRAY_SIZE(ap121_mini_gpio_keys),
-					ap121_mini_gpio_keys);
-}
-
-MIPS_MACHINE(ATH79_MACH_AP121_MINI, "AP121-MINI", "Atheros AP121-MINI",
-	     ap121_mini_setup);
+	     ds_setup);
