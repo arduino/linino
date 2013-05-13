@@ -67,7 +67,7 @@ if [ -n "$${IPKG_INSTROOT}" ]; then
 	sed -i "s/exit 0//" "$${IPKG_INSTROOT}/etc/rc.local"
 	echo "reset-to-factory && reboot" >> "$${IPKG_INSTROOT}/etc/rc.local"
 	echo "wifi-live-or-reset" >> "$${IPKG_INSTROOT}/etc/rc.local"
-	echo "cd /www/webpanel/ && python -B main.py &" >> "$${IPKG_INSTROOT}/etc/rc.local"
+	echo "cd /www/webpanel/ && exec python -B main.py &" >> "$${IPKG_INSTROOT}/etc/rc.local"
 	echo "exit 0" >> "$${IPKG_INSTROOT}/etc/rc.local"
 fi
 endef
