@@ -45,7 +45,7 @@ define Package/etheris-conf/install
 endef
 
 define Package/etheris-conf/postinst
-#!/bin/sh
+#!/bin/sh -e
 if [ -n "$${IPKG_INSTROOT}" ]; then
 	#removing unconfigured services
 	rm "$${IPKG_INSTROOT}/etc/avahi/services/http.service"
@@ -58,6 +58,7 @@ if [ -n "$${IPKG_INSTROOT}" ]; then
 	sed -i "s/option hostname	OpenWrt/option hostname	Arduino/" "$${IPKG_INSTROOT}/etc/config/system"
 	sed -i "s/option ssid     Linino/option ssid     Arduino/" "$${IPKG_INSTROOT}/etc/config/wireless"
 	sed -i "s/192.168.1.1/192.168.240.1/" "$${IPKG_INSTROOT}/lib/functions/uci-defaults.sh"
+	sed -i "s/\*wpa_supplicant\*/\*wpa_supplicant\*\|\*udhcpc\*/" "$${IPKG_INSTROOT}/lib/upgrade/common.sh"
 
 	#setting default root password
 	cp "$${IPKG_INSTROOT}/etc/shadow" "$${IPKG_INSTROOT}/etc/shadow-"
