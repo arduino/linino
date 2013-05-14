@@ -1,4 +1,4 @@
 #!/bin/sh
 
-echo "none" > /sys/class/leds/ap121\:green\:wlan/trigger
+echo "none" > /sys/class/leds/ds:green:wlan/trigger
 
