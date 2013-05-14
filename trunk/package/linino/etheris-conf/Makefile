@@ -42,6 +42,7 @@ define Package/etheris-conf/install
 	$(INSTALL_DATA) ./files/etc/arduino/Caterina-Etheris.hex $(1)/etc/arduino/
 	$(INSTALL_DATA) ./files/etc/arduino/optiboot_atmega328.hex $(1)/etc/arduino/
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/ssl_certificate.pem $(1)/etc/arduino/
+	$(INSTALL_DATA) ./files/etc/banner $(1)/etc/
 endef
 
 define Package/etheris-conf/postinst

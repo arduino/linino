@@ -32,6 +32,7 @@ define Package/etheris-scripts/install
 	$(INSTALL_BIN) ./files/usr/bin/wifi-live-or-reset $(1)/usr/bin/
 	$(INSTALL_BIN) ./files/usr/bin/wifi-reset-and-reboot $(1)/usr/bin/
 	$(INSTALL_BIN) ./files/usr/bin/reset-to-factory $(1)/usr/bin/
+	$(INSTALL_BIN) ./files/usr/bin/run-avrdude $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,etheris-scripts))
