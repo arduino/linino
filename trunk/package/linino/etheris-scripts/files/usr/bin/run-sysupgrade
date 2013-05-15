@@ -1,5 +1,11 @@
 #!/bin/sh
 
+sleep 2
+
+kill -9 `pgrep -f 'python -B main.py'`
+
+sleep 2
+
 mkdir -p /tmp_restore || exit 1
 mount /dev/sda1 /tmp_restore || exit 1
 

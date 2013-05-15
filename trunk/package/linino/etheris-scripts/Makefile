@@ -36,6 +36,7 @@ define Package/etheris-scripts/install
 	$(INSTALL_BIN) ./files/usr/bin/run-avrdude $(1)/usr/bin/
 	$(INSTALL_BIN) ./files/usr/bin/wifi-reset-button-pressed $(1)/usr/bin/
 	$(INSTALL_BIN) ./files/usr/bin/wifi-reset-button-released $(1)/usr/bin/
+	$(INSTALL_BIN) ./files/usr/bin/kill-bridge $(1)/usr/bin/
 endef
 
 $(eval $(call BuildPackage,etheris-scripts))
