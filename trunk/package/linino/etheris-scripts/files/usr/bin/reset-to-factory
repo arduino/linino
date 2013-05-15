@@ -17,10 +17,5 @@ then
         exit 1
 fi
 
-blink-start 100
-
-. /sbin/firstboot
-
-reset_has_fo=true
-boot_run_hook jffs2reset
+reset-to-factory-anyway
 

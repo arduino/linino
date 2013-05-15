@@ -11,7 +11,7 @@ PKG_NAME:=etheris-conf
 PKG_VERSION:=1.0.0
 PKG_RELEASE:=1
 
-DEPENDS:=+avahi-daemon +base-files +webpanel
+DEPENDS:=+avahi-daemon +base-files +webpanel +triggerhappy
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -35,9 +35,11 @@ define Package/etheris-conf/install
 	$(INSTALL_DIR) $(1)/etc/avahi/services
 	$(INSTALL_DIR) $(1)/etc/arduino
 	$(INSTALL_DIR) $(1)/etc/config
+	$(INSTALL_DIR) $(1)/etc/triggerhappy/triggers.d
 	$(INSTALL_CONF) ./files/etc/avahi/services/arduino.service $(1)/etc/avahi/services/
 	$(INSTALL_CONF) ./files/etc/config/arduino $(1)/etc/config/
 	$(INSTALL_CONF) ./files/etc/config/firewall $(1)/etc/config/firewall.1
+	$(INSTALL_CONF) ./files/etc/triggerhappy/triggers.d/reset.conf $(1)/etc/triggerhappy/triggers.d
 	$(INSTALL_CONF) ./files/etc/shadow $(1)/etc/shadow.1
 	$(INSTALL_DATA) ./files/etc/arduino/Caterina-Etheris.hex $(1)/etc/arduino/
 	$(INSTALL_DATA) ./files/etc/arduino/optiboot_atmega328.hex $(1)/etc/arduino/
