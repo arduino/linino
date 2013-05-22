@@ -11,7 +11,7 @@ include $(INCLUDE_DIR)/version.mk
 PKG_NAME:=opkg
 PKG_REV:=618
 PKG_VERSION:=$(PKG_REV)
-PKG_RELEASE:=3
+PKG_RELEASE:=3.dh1
 
 PKG_SOURCE_PROTO:=svn
 PKG_SOURCE_VERSION:=$(PKG_REV)
@@ -37,6 +37,7 @@ define Package/opkg
   TITLE:=opkg package management system
   MAINTAINER:=Jo-Philipp Wich <xm@subsignal.org>
   URL:=http://wiki.openmoko.org/wiki/Opkg
+  DEPENDS+= +libgpgme
 endef
 
 define Package/opkg/description
@@ -59,7 +60,7 @@ EXTRA_CFLAGS += $(TARGET_CPPFLAGS)
 
 CONFIGURE_ARGS += \
 	--disable-curl \
-	--disable-gpg \
+	--enable-gpg \
 	--with-opkgetcdir=/etc \
 	--with-opkglockfile=/var/lock/opkg.lock
 
@@ -70,12 +71,16 @@ MAKE_FLAGS = \
 		LDFLAGS="-Wl,--gc-sections" \
 
 define Package/opkg/install
+	$(INSTALL_DIR) $(1)/usr/lib
 	$(INSTALL_DIR) $(1)/usr/lib/opkg
 	$(INSTALL_DIR) $(1)/bin
 	$(INSTALL_DIR) $(1)/etc
+	$(INSTALL_DIR) $(1)/etc/opkg
 	$(INSTALL_DATA) ./files/opkg.conf $(1)/etc/
 	$(VERSION_SED) $(1)/etc/opkg.conf
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/opkg-cl $(1)/bin/opkg
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/opkg-key $(1)/bin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libopkg.so.* $(1)/usr/lib/
 endef
 
 define Build/InstallDev
