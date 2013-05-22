@@ -11,14 +11,13 @@ PKG_NAME:=etheris-conf
 PKG_VERSION:=1.0.0
 PKG_RELEASE:=1
 
-DEPENDS:=+avahi-daemon +base-files +webpanel +triggerhappy
-
 include $(INCLUDE_DIR)/package.mk
 
 define Package/etheris-conf
   SECTION:=utils
   CATEGORY:=Base system
   TITLE:=Custom Etheris configurations
+  DEPENDS:=+avahi-daemon +base-files +triggerhappy
 endef
 
 define Package/etheris-conf/conffiles

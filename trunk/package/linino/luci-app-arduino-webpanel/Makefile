@@ -18,8 +18,6 @@ PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_VERSION:=luci
 
-DEPENDS:=+luci-ssl
-
 include $(INCLUDE_DIR)/package.mk
 
 define Package/luci-app-arduino-webpanel
@@ -27,6 +25,7 @@ define Package/luci-app-arduino-webpanel
   CATEGORY:=LuCI
   SUBMENU:=3. Applications
   TITLE:= simplified wifi configuration panel
+  DEPENDS:=+luci-ssl +uhttpd-mod-lua
 endef
 
 define Package/luci-app-arduino-webpanel/description

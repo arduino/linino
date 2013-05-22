@@ -15,14 +15,13 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://downloads.arduino.cc/
 #PKG_MD5SUM:=58133f3bb176ca54cfab7432fe22517c
 
-DEPENDS:=+python-mini
-
 include $(INCLUDE_DIR)/package.mk
 
 define Package/webpanel
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=Web Control Panel
+  DEPENDS:=+python-mini
 endef
 
 define Package/webpanel/description
