@@ -6,7 +6,7 @@ IT
 Italy
 Turin
 Arduino SA
-Etheris
+Yún
 arduino.cc
 support@arduino.cc
 EOF

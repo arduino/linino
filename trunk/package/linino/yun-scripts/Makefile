@@ -7,23 +7,23 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=etheris-scripts
+PKG_NAME:=yun-scripts
 PKG_VERSION:=1.0.0
 PKG_RELEASE:=1
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/etheris-scripts
+define Package/yun-scripts
   SECTION:=utils
   CATEGORY:=Base system
-  TITLE:=Custom Etheris scripts
+  TITLE:=Custom Yún scripts
 endef
 
 define Build/Compile
 	# NOOP
 endef
 
-define Package/etheris-scripts/install
+define Package/yun-scripts/install
 	$(INSTALL_DIR) $(1)/usr/bin/
 	$(INSTALL_BIN) ./files/usr/bin/blink-start $(1)/usr/bin/
 	$(INSTALL_BIN) ./files/usr/bin/blink-stop $(1)/usr/bin/
@@ -39,5 +39,5 @@ define Package/etheris-scripts/install
 	$(INSTALL_BIN) ./files/usr/bin/kill-bridge $(1)/usr/bin/
 endef
 
-$(eval $(call BuildPackage,etheris-scripts))
+$(eval $(call BuildPackage,yun-scripts))
 
