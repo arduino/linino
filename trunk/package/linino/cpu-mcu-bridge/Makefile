@@ -36,8 +36,6 @@ define Package/cpu-mcu-bridge/install
 	$(INSTALL_DIR) $(1)/usr/lib/python2.7/bridge
 	$(INSTALL_DIR) $(1)/usr/lib/python2.7/lib-dynload
 
-	$(RM) $(PKG_BUILD_DIR)/json.py*
-
 	$(CP) $(PKG_BUILD_DIR)/{contextlib,tty}.py* $(1)/usr/lib/python2.7/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/termios.so $(1)/usr/lib/python2.7/lib-dynload/
 

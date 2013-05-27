@@ -21,7 +21,6 @@ define Package/yun-conf
 endef
 
 define Package/yun-conf/conffiles
-/etc/config/arduino
 /etc/avahi/services/arduino.service
 /etc/arduino/ssl_certificate.pem
 endef
@@ -36,7 +35,6 @@ define Package/yun-conf/install
 	$(INSTALL_DIR) $(1)/etc/config
 	$(INSTALL_DIR) $(1)/etc/triggerhappy/triggers.d
 	$(INSTALL_CONF) ./files/etc/avahi/services/arduino.service $(1)/etc/avahi/services/
-	$(INSTALL_CONF) ./files/etc/config/arduino $(1)/etc/config/
 	$(INSTALL_CONF) ./files/etc/config/firewall $(1)/etc/config/firewall.1
 	$(INSTALL_CONF) ./files/etc/triggerhappy/triggers.d/reset.conf $(1)/etc/triggerhappy/triggers.d
 	$(INSTALL_CONF) ./files/etc/shadow $(1)/etc/shadow.1
