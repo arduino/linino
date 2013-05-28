@@ -25,7 +25,7 @@ define Package/luci-app-arduino-webpanel
   CATEGORY:=LuCI
   SUBMENU:=3. Applications
   TITLE:= simplified wifi configuration panel
-  DEPENDS:=+luci-ssl +uhttpd-mod-lua
+  DEPENDS:=+luci-ssl +luci-lib-json +luasocket +uhttpd-mod-lua
 endef
 
 define Package/luci-app-arduino-webpanel/description

@@ -22,11 +22,11 @@ endef
 
 define Package/yun-conf/conffiles
 /etc/avahi/services/arduino.service
-/etc/arduino/ssl_certificate.pem
+/etc/config/arduino
 endef
 
 define Build/Compile
-	./create_certificate.sh $(PKG_BUILD_DIR)/ssl_certificate.pem
+	# NOOP
 endef
 
 define Package/yun-conf/install
@@ -35,12 +35,12 @@ define Package/yun-conf/install
 	$(INSTALL_DIR) $(1)/etc/config
 	$(INSTALL_DIR) $(1)/etc/triggerhappy/triggers.d
 	$(INSTALL_CONF) ./files/etc/avahi/services/arduino.service $(1)/etc/avahi/services/
+	$(INSTALL_CONF) ./files/etc/config/arduino $(1)/etc/config/
 	$(INSTALL_CONF) ./files/etc/config/firewall $(1)/etc/config/firewall.1
 	$(INSTALL_CONF) ./files/etc/triggerhappy/triggers.d/reset.conf $(1)/etc/triggerhappy/triggers.d
 	$(INSTALL_CONF) ./files/etc/shadow $(1)/etc/shadow.1
 	$(INSTALL_DATA) ./files/etc/arduino/Caterina-Yun.hex $(1)/etc/arduino/
 	$(INSTALL_DATA) ./files/etc/arduino/optiboot_atmega328.hex $(1)/etc/arduino/
-	$(INSTALL_DATA) $(PKG_BUILD_DIR)/ssl_certificate.pem $(1)/etc/arduino/
 	$(INSTALL_DATA) ./files/etc/banner $(1)/etc/
 endef
 
@@ -68,7 +68,7 @@ if [ -n "$${IPKG_INSTROOT}" ]; then
 	sed -i "s/exit 0//" "$${IPKG_INSTROOT}/etc/rc.local"
 	echo "reset-to-factory && reboot" >> "$${IPKG_INSTROOT}/etc/rc.local"
 	echo "wifi-live-or-reset" >> "$${IPKG_INSTROOT}/etc/rc.local"
-	echo "cd /www/webpanel/ && exec python -B main.py &" >> "$${IPKG_INSTROOT}/etc/rc.local"
+	echo "cd /usr/lib/lua/uploader && exec lua uploader.lua &" >> "$${IPKG_INSTROOT}/etc/rc.local"
 	echo "exit 0" >> "$${IPKG_INSTROOT}/etc/rc.local"
 fi
 endef
