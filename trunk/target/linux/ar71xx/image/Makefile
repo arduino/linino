@@ -833,8 +833,8 @@ define Image/Build/LininoLzma/initramfs
 	$(call MkuImageLzma/initramfs,$(2),$(3) $(4))
 endef
 
-$(eval $(call SingleProfile,LininoLzma,$(fs_64k),LININO_4M,linino-4M,Linino,ttyATH0,115200,$$(linino_mtdlayout_4M),917504,2818048,RKuImage))
-$(eval $(call SingleProfile,LininoLzma,$(fs_64k),LININO_8M,linino-8M,Linino,ttyATH0,115200,$$(linino_mtdlayout_8M),1310720,6619136,RKuImage))
+$(eval $(call SingleProfile,LininoLzma,$(fs_64k),LININO_4M,linino-4M,Linino,ttyATH0,57600,$$(linino_mtdlayout_4M),917504,2818048,RKuImage))
+$(eval $(call SingleProfile,LininoLzma,$(fs_64k),LININO_8M,linino-8M,Linino,ttyATH0,57600,$$(linino_mtdlayout_8M),1310720,6619136,RKuImage))
 
 $(eval $(call SingleProfile,ALFA,$(fs_64k),ALFANX,alfa-nx,ALFA-NX,ttyS0,115200,$$(alfa_mtdlayout_8M),1638400,6291456,vmlinux.gz.uImage,pb9x-2.6.31-jffs2))
 $(eval $(call SingleProfile,ALFA,$(fs_64k),HORNETUB,hornet-ub,HORNET-UB,ttyATH0,115200,$$(alfa_mtdlayout_8M),1638400,6291456,kernel_image,rootfs_image))
