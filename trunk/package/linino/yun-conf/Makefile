@@ -59,6 +59,8 @@ if [ -n "$${IPKG_INSTROOT}" ]; then
 	sed -i "s/option hostname	OpenWrt/option hostname	Arduino/" "$${IPKG_INSTROOT}/etc/config/system"
 	sed -i "s/option ssid     Linino/option ssid     Arduino/" "$${IPKG_INSTROOT}/etc/config/wireless"
 	sed -i "s/192.168.1.1/192.168.240.1/" "$${IPKG_INSTROOT}/lib/functions/uci-defaults.sh"
+	sed -i "s/set network.lan.ifname/#set network.lan.ifname/" "$${IPKG_INSTROOT}/lib/functions/uci-defaults.sh"
+	sed -i "s/set network.lan.type/#set network.lan.type/" "$${IPKG_INSTROOT}/lib/functions/uci-defaults.sh"
 	sed -i "s/\*wpa_supplicant\*/\*wpa_supplicant\*\|\*udhcpc\*/" "$${IPKG_INSTROOT}/lib/upgrade/common.sh"
 
 	#setting default root password

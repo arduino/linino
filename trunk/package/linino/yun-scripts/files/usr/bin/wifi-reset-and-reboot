@@ -7,8 +7,6 @@
 /sbin/uci delete "wireless.@wifi-iface[0].key"
 /sbin/uci delete "wireless.radio0.country"
 
-/sbin/uci set "network.lan.ifname=eth0"
-/sbin/uci set "network.lan.type=bridge"
 /sbin/uci set "network.lan.ipaddr=192.168.240.1"
 /sbin/uci set "network.lan.netmask=255.255.255.0"
 /sbin/uci set "network.lan.proto=static"
