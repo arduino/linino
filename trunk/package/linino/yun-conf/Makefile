@@ -42,6 +42,7 @@ define Package/yun-conf/install
 	$(INSTALL_DATA) ./files/etc/arduino/Caterina-Yun.hex $(1)/etc/arduino/
 	$(INSTALL_DATA) ./files/etc/arduino/optiboot_atmega328.hex $(1)/etc/arduino/
 	$(INSTALL_CONF) ./files/etc/arduino/linino-arduino-release $(1)/etc/arduino/
+	$(INSTALL_CONF) ./files/etc/arduino/gpg_gen_key_batch $(1)/etc/arduino/
 	$(INSTALL_DATA) ./files/etc/banner $(1)/etc/
 endef
 
@@ -62,6 +63,12 @@ if [ -n "$${IPKG_INSTROOT}" ]; then
 	sed -i "s/set network.lan.ifname/#set network.lan.ifname/" "$${IPKG_INSTROOT}/lib/functions/uci-defaults.sh"
 	sed -i "s/set network.lan.type/#set network.lan.type/" "$${IPKG_INSTROOT}/lib/functions/uci-defaults.sh"
 	sed -i "s/\*wpa_supplicant\*/\*wpa_supplicant\*\|\*udhcpc\*/" "$${IPKG_INSTROOT}/lib/upgrade/common.sh"
+
+	sed -i "s/option days		730/option days		36500/" "$${IPKG_INSTROOT}/etc/config/uhttpd"
+	sed -i "s/option country		DE/option country		IT/" "$${IPKG_INSTROOT}/etc/config/uhttpd"
+	sed -i "s/option state		Berlin/option state		Turin/" "$${IPKG_INSTROOT}/etc/config/uhttpd"
+	sed -i "s/option location		Berlin/option location		Turin/" "$${IPKG_INSTROOT}/etc/config/uhttpd"
+	sed -i "s/option commonname	OpenWrt/option commonname	'Arduino LLC'/" "$${IPKG_INSTROOT}/etc/config/uhttpd"
 
 	#setting default root password
 	cp "$${IPKG_INSTROOT}/etc/shadow" "$${IPKG_INSTROOT}/etc/shadow-"
