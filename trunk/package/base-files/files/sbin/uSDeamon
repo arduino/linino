@@ -1,0 +1,11 @@
+#!/bin/sh
+
+TIME=2
+
+# $1 must be a valid parameter for sleep
+if [ "x$1" != "x" ];then
+    TIME=$1
+fi
+
+while [ true ]; do blkid /dev/sda; sleep $TIME; done
+
