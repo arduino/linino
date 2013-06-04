@@ -5,5 +5,7 @@
   <service>
    <type>_arduino._tcp</type>
    <port>80</port>
+   <txt-record>board=yun</txt-record>
+   <txt-record>distro_version=0.1</txt-record>
   </service>
 </service-group>
