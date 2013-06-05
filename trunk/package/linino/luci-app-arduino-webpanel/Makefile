@@ -41,6 +41,7 @@ define Package/luci-app-arduino-webpanel/install
 	$(INSTALL_DIR) $(1)/usr/lib/lua/luci/view/arduino
 	$(INSTALL_DIR) $(1)/www/luci-static/resources/arduino
 
+	find $(PKG_BUILD_DIR)/usr/ -name '*.lua' -exec luac -s -o {} {} \;
 	$(CP) $(PKG_BUILD_DIR)/usr/* $(1)/usr/
 	$(CP) $(PKG_BUILD_DIR)/www/* $(1)/www/
 endef
