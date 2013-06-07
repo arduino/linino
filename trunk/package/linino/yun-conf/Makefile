@@ -34,16 +34,20 @@ define Package/yun-conf/install
 	$(INSTALL_DIR) $(1)/etc/arduino
 	$(INSTALL_DIR) $(1)/etc/config
 	$(INSTALL_DIR) $(1)/etc/triggerhappy/triggers.d
+
 	$(INSTALL_CONF) ./files/etc/avahi/services/arduino.service $(1)/etc/avahi/services/
-	$(INSTALL_CONF) ./files/etc/config/arduino $(1)/etc/config/
-	$(INSTALL_CONF) ./files/etc/config/firewall $(1)/etc/config/firewall.1
 	$(INSTALL_CONF) ./files/etc/triggerhappy/triggers.d/reset.conf $(1)/etc/triggerhappy/triggers.d
 	$(INSTALL_CONF) ./files/etc/shadow $(1)/etc/shadow.1
+	$(INSTALL_DATA) ./files/etc/banner $(1)/etc/
+
+	$(INSTALL_CONF) ./files/etc/config/arduino $(1)/etc/config/
+	$(INSTALL_CONF) ./files/etc/config/firewall $(1)/etc/config/firewall.1
+
 	$(INSTALL_DATA) ./files/etc/arduino/Caterina-Yun.hex $(1)/etc/arduino/
 	$(INSTALL_DATA) ./files/etc/arduino/optiboot_atmega328.hex $(1)/etc/arduino/
 	$(INSTALL_CONF) ./files/etc/arduino/linino-arduino-release $(1)/etc/arduino/
 	$(INSTALL_CONF) ./files/etc/arduino/gpg_gen_key_batch $(1)/etc/arduino/
-	$(INSTALL_DATA) ./files/etc/banner $(1)/etc/
+	$(INSTALL_DATA) ./files/etc/arduino/wifi.csv.gz $(1)/etc/arduino
 endef
 
 define Package/yun-conf/postinst
