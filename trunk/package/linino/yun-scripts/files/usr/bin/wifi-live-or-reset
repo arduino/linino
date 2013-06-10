@@ -20,16 +20,18 @@ update_vars() {
 }
 
 wait_for_iface() {
-        if [ $slept -gt $MAX_SLEEP ]
-        then
-                /bin/dmesg > /last_dmesg_with_wifi_errors.log
+	if [ $slept -gt $MAX_SLEEP ]
+	then
+		/bin/dmesg > /last_dmesg_with_wifi_errors.log
 		/bin/sync
-                /usr/bin/wifi-reset-and-reboot
-                exit 1
-        fi
+		/sbin/uci set "arduino.@arduino[0].wifi_reset_step=timed_out"
+		/sbin/uci commit arduino
+		/usr/bin/wifi-reset-and-reboot
+		exit 1
+	fi
 
-        sleep $SLEEP_TIME
-        slept=$(($slept + $SLEEP_TIME))
+	sleep $SLEEP_TIME
+	slept=$(($slept + $SLEEP_TIME))
 
 	update_vars
 }
