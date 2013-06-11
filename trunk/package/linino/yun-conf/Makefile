@@ -82,7 +82,6 @@ if [ -n "$${IPKG_INSTROOT}" ]; then
 	sed -i "s/exit 0//" "$${IPKG_INSTROOT}/etc/rc.local"
 	echo "reset-to-factory && reboot" >> "$${IPKG_INSTROOT}/etc/rc.local"
 	echo "wifi-live-or-reset" >> "$${IPKG_INSTROOT}/etc/rc.local"
-	echo "cd /usr/lib/lua/uploader && exec lua uploader.lua &" >> "$${IPKG_INSTROOT}/etc/rc.local"
 	echo "exit 0" >> "$${IPKG_INSTROOT}/etc/rc.local"
 fi
 endef
