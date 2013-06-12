@@ -48,6 +48,9 @@ define Package/yun-conf/install
 	$(INSTALL_CONF) ./files/etc/arduino/linino-arduino-release $(1)/etc/arduino/
 	$(INSTALL_CONF) ./files/etc/arduino/gpg_gen_key_batch $(1)/etc/arduino/
 	$(INSTALL_DATA) ./files/etc/arduino/wifi.csv.gz $(1)/etc/arduino
+
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/etc/init.d/network $(1)/etc/init.d/
 endef
 
 define Package/yun-conf/postinst
