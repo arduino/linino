@@ -1,0 +1,6 @@
+#!/bin/sh
+
+cd /usr/lib/lua/ || exit 1
+
+lua merge_sketch_with_bootloader.lua $1
+
