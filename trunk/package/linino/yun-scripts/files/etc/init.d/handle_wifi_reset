@@ -16,6 +16,8 @@ set_or_delete() {
 }
 
 start() {
+	/bin/sleep 5
+
 	STEP=`$UCI get "arduino.@arduino[0].wifi_reset_step"`
 	logger -t "$0" "WiFi step is $STEP"
 
