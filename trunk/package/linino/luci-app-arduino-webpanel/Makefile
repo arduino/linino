@@ -13,10 +13,6 @@ PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://downloads.arduino.cc/
-#PKG_SOURCE_URL:=/home/federico/materiale/works_Arduino/DogStick-webpanel
-#PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
-#PKG_SOURCE_PROTO:=git
-#PKG_SOURCE_VERSION:=luci
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -25,7 +21,7 @@ define Package/luci-app-arduino-webpanel
   CATEGORY:=LuCI
   SUBMENU:=3. Applications
   TITLE:= simplified wifi configuration panel
-  DEPENDS:=+luci +luci-lib-json +luasocket +uhttpd-mod-lua
+  DEPENDS:=+luci +luci-lib-json +uhttpd-mod-lua
 endef
 
 define Package/luci-app-arduino-webpanel/description
