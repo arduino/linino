@@ -23,6 +23,7 @@ endef
 define Package/yun-conf/conffiles
 /etc/avahi/services/arduino.service
 /etc/config/arduino
+/etc/httpd.conf
 endef
 
 define Build/Compile
@@ -40,6 +41,7 @@ define Package/yun-conf/install
 	$(INSTALL_CONF) ./files/etc/shadow $(1)/etc/shadow.1
 	$(INSTALL_DATA) ./files/etc/banner $(1)/etc/
 
+	$(INSTALL_CONF) ./files/etc/httpd.conf $(1)/etc/
 	$(INSTALL_CONF) ./files/etc/config/arduino $(1)/etc/config/
 	$(INSTALL_CONF) ./files/etc/config/firewall $(1)/etc/config/firewall.1
 
