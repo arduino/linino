@@ -24,12 +24,18 @@
 
 // Uncomment to use for DS1 board
 //#define DS1
+// Uncomment to have reset on gpio18 instead of gipo7
+//#define DS2_B
 
 #define DS_GPIO_LED_WLAN		0
 #define DS_GPIO_LED_USB			1
 
 #define DS_GPIO_OE			21
+#ifndef DS2_B
 #define DS_GPIO_AVR_RESET		7
+#else
+#define DS_GPIO_AVR_RESET		18
+#endif
 
 #ifdef DS1
 #define DS_GPIO_OE2			23
@@ -66,11 +72,14 @@ static struct gpio_led ds_leds_gpio[] __initdata = {
                 .gpio           = DS_GPIO_LED_SPD,
                 .active_low     = 0,
         },
+#ifndef DS2_B
         {
                 .name           = "ds:green:fdx",
                 .gpio           = DS_GPIO_LED_FDX,
                 .active_low     = 0,
         },
+#endif 
+
 #endif
 };
 
@@ -108,8 +117,9 @@ static void __init ds_common_setup(void)
 
 static void __init ds_setup(void)
 {
+#ifndef DS2_B
 	u32 t;
-
+#endif
 	ds_common_setup();
 
 	ath79_register_leds_gpio(-1, ARRAY_SIZE(ds_leds_gpio),
@@ -126,17 +136,19 @@ static void __init ds_setup(void)
 	ath79_gpio_function2_setup(AR933X_GPIO_FUNC2_JUMPSTART_DISABLE, 0);
 
 	printk("Setting DogStick2 GPIO\n");
+#ifndef DS2_B
 	t = ath79_reset_rr(AR933X_RESET_REG_BOOTSTRAP);
 	t |= AR933X_BOOTSTRAP_MDIO_GPIO_EN;
 	ath79_reset_wr(AR933X_RESET_REG_BOOTSTRAP, t);
-
-        // Put the avr reset to high 
+        
+	// Put the avr reset to high 
 	if (gpio_request_one(DS_GPIO_AVR_RESET,
                  GPIOF_OUT_INIT_LOW | GPIOF_EXPORT_DIR_FIXED,
                  "OE-1") != 0)
                 printk("Error setting GPIO OE\n");
 	gpio_unexport(DS_GPIO_AVR_RESET);
 	gpio_free(DS_GPIO_AVR_RESET);
+#endif
 
 	// enable OE of level shifter
 	if (gpio_request_one(DS_GPIO_OE,
