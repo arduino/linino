@@ -1,0 +1,31 @@
+--- ./drivers/tty/serial/ar933x_uart.c.ori	2013-06-08 08:28:36.000000000 +0200
++++ ./drivers/tty/serial/ar933x_uart.c	2013-06-08 08:17:41.000000000 +0200
+@@ -191,6 +191,20 @@ static unsigned long ar933x_uart_get_bau
+ 	return t;
+ }
+ 
++#define UART_FIX_BAUDRATE
++
++#ifdef UART_FIX_BAUDRATE
++static void ar933x_uart_get_scale_step(unsigned int clk,
++                                       unsigned int baud,
++                                       unsigned int *scale,
++                                       unsigned int *step)
++{
++	*step = 8192;
++	*scale = ( clk / (16*baud) ) - 1; 
++}
++
++#else
++
+ static void ar933x_uart_get_scale_step(unsigned int clk,
+ 				       unsigned int baud,
+ 				       unsigned int *scale,
+@@ -222,6 +236,7 @@ static void ar933x_uart_get_scale_step(u
+ 		}
+ 	}
+ }
++#endif
+ 
+ static void ar933x_uart_set_termios(struct uart_port *port,
+ 				    struct ktermios *new,
