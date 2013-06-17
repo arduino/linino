@@ -32,6 +32,7 @@ deamon()
 	    for dev in $(ls /dev/sda?); do
 		umount $dev
 	    done
+	    rmdir /mnt/sda?
 	fi
     else
 	# The size is greater than 0, so mark the uSD card as
