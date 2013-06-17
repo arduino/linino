@@ -33,7 +33,6 @@ define Package/yun-scripts/install
 	$(INSTALL_BIN) ./files/usr/bin/run-sysupgrade $(1)/usr/bin/
 	$(INSTALL_BIN) ./files/usr/bin/wifi-live-or-reset $(1)/usr/bin/
 	$(INSTALL_BIN) ./files/usr/bin/wifi-reset-and-reboot $(1)/usr/bin/
-	$(INSTALL_BIN) ./files/usr/bin/reset-to-factory $(1)/usr/bin/
 	$(INSTALL_BIN) ./files/usr/bin/reset-to-factory-anyway $(1)/usr/bin/
 	$(INSTALL_BIN) ./files/usr/bin/run-avrdude $(1)/usr/bin/
 	$(INSTALL_BIN) ./files/usr/bin/merge-sketch-with-bootloader $(1)/usr/bin/
