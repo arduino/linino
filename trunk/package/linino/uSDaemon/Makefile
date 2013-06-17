@@ -29,8 +29,26 @@ define Package/uSDaemon/install
 	$(INSTALL_DIR) $(1)/etc/init.d
 
 	$(INSTALL_BIN) ./files/sbin/uSDeamon $(1)/sbin/
-
 	$(INSTALL_BIN) ./files/etc/init.d/usd $(1)/etc/init.d
+
+	$(INSTALL_DIR) $(1)/etc/config
+	$(INSTALL_CONF) ./files/etc/config/fstab.1 $(1)/etc/config/
+
+	$(INSTALL_DIR) $(1)/etc/hotplug.d/block
+	$(INSTALL_CONF) ./files/etc/hotplug.d/block/40-mount.1 $(1)/etc/hotplug.d/block
+endef
+
+define Package/uSDaemon/postinst
+#!/bin/sh -e
+if [ -n "$${IPKG_INSTROOT}" ]; then
+	#configuring fstab
+	rm "$${IPKG_INSTROOT}/etc/config/fstab"
+	mv "$${IPKG_INSTROOT}/etc/config/fstab.1" "$${IPKG_INSTROOT}/etc/config/fstab"
+
+	#replacing 40-mount script
+	rm "$${IPKG_INSTROOT}/etc/hotplug.d/block/40-mount"
+	mv "$${IPKG_INSTROOT}/etc/hotplug.d/block/40-mount.1" "$${IPKG_INSTROOT}/etc/hotplug.d/block/40-mount"
+fi
 endef
 
 $(eval $(call BuildPackage,uSDaemon))
