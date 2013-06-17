@@ -1,5 +1,0 @@
-config rule
-        option src 'wan'
-        option target 'ACCEPT'
-        option proto 'tcp'
-        option dest_port '22'
