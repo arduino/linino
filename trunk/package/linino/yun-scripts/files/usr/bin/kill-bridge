@@ -1,5 +1,5 @@
 #!/bin/sh
 
-/bin/kill -9 `pgrep -f "python -B bridge.py"`
-/bin/kill -9 `pgrep -f "/bin/ash --login"`
+/bin/kill -9 `/usr/bin/pgrep -f "python -B bridge.py"`
+/bin/kill -9 `/usr/bin/pgrep -f "/bin/ash --login"`
 
