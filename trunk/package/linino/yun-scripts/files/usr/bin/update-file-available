@@ -1,6 +1,6 @@
 #!/bin/sh
 
-for fol in `ls -d /mnt/sda?`
+for fol in `ls -d /mnt/sd??`
 do
 	if [ -d $fol ]
 	then
