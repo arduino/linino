@@ -17,7 +17,7 @@ start() {
 	oi=$(pidof uSDeamon)
 	if [ "x$oi" == "x" ]; then
 		echo "Start uSDeamon"
-		/sbin/uSDeamon &
+		nice -n 10 /sbin/uSDeamon &
 	else
 		echo "uSDeamon is already running ($oi)"
 	fi
