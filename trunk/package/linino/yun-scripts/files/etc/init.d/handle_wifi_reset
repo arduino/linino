@@ -43,14 +43,17 @@ start() {
 		set_or_delete "wireless.@wifi-iface[0].encryption" $ENCRYPTION
 		set_or_delete "wireless.@wifi-iface[0].key" $KEY
 
-		$UCI delete "network.lan.ipaddr"		
-		$UCI delete "network.lan.netmask"		
+		$UCI delete "network.lan.ipaddr"
+		$UCI delete "network.lan.netmask"
+		$UCI delete "dhcp.@dnsmasq[0].address"
 
 		set_or_delete "network.lan.proto" $PROTO
 
 		$UCI set "arduino.@arduino[0].wifi_reset_step=clear"
 
 		$UCI commit
+
+		/bin/sed -i "s/C:192.168/#C:192.168/g" /etc/httpd.conf
 	fi
 }
 
