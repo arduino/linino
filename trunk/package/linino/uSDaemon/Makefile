@@ -28,7 +28,7 @@ define Package/uSDaemon/install
 	$(INSTALL_DIR) $(1)/sbin/
 	$(INSTALL_DIR) $(1)/etc/init.d
 
-	$(INSTALL_BIN) ./files/sbin/uSDeamon $(1)/sbin/
+	$(INSTALL_BIN) ./files/sbin/uSDaemon $(1)/sbin/
 	$(INSTALL_BIN) ./files/etc/init.d/usd $(1)/etc/init.d
 
 	$(INSTALL_DIR) $(1)/etc/config

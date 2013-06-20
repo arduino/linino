@@ -5,26 +5,26 @@ START=86
 STOP=86
 
 status() {
-	oi=$(pidof uSDeamon)
+	oi=$(pidof uSDaemon)
 	if [ "x$oi" == "x" ]; then
-		echo "uSDeamon is not running"
+		echo "uSDaemon is not running"
 	else
-		echo "uSDeamon is running ($oi)"
+		echo "uSDaemon is running ($oi)"
 	fi
 }
 
 start() {
-	oi=$(pidof uSDeamon)
+	oi=$(pidof uSDaemon)
 	if [ "x$oi" == "x" ]; then
-		echo "Start uSDeamon"
-		nice -n 10 /sbin/uSDeamon &
+		echo "Start uSDaemon"
+		nice -n 10 /sbin/uSDaemon &
 	else
-		echo "uSDeamon is already running ($oi)"
+		echo "uSDaemon is already running ($oi)"
 	fi
 }
 
 stop() {
-	kill $(pidof uSDeamon)
+	kill $(pidof uSDaemon)
 }
 
 EXTRA_COMMANDS="status"
