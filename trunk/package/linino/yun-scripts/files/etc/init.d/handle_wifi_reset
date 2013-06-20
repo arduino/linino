@@ -45,7 +45,7 @@ start() {
 
 		$UCI delete "network.lan.ipaddr"
 		$UCI delete "network.lan.netmask"
-		$UCI delete "dhcp.@dnsmasq[0].address"
+		#$UCI delete "dhcp.@dnsmasq[0].address"
 
 		set_or_delete "network.lan.proto" $PROTO
 
@@ -53,7 +53,7 @@ start() {
 
 		$UCI commit
 
-		/bin/sed -i "s/C:192.168/#C:192.168/g" /etc/httpd.conf
+		#/bin/sed -i "s/C:192.168/#C:192.168/g" /etc/httpd.conf
 	fi
 }
 

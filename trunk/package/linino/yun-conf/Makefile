@@ -44,7 +44,7 @@ define Package/yun-conf/install
 	$(INSTALL_CONF) ./files/etc/httpd.conf $(1)/etc/
 	$(INSTALL_CONF) ./files/etc/config/arduino $(1)/etc/config/
 	$(INSTALL_CONF) ./files/etc/config/firewall $(1)/etc/config/firewall.1
-	$(INSTALL_CONF) ./files/etc/config/dhcp $(1)/etc/config/dhcp.1
+	#$(INSTALL_CONF) ./files/etc/config/dhcp $(1)/etc/config/dhcp.1
 
 	$(INSTALL_DATA) ./files/etc/arduino/Caterina-Yun.hex $(1)/etc/arduino/
 	$(INSTALL_DATA) ./files/etc/arduino/optiboot_atmega328.hex $(1)/etc/arduino/
@@ -65,8 +65,8 @@ if [ -n "$${IPKG_INSTROOT}" ]; then
 	mv "$${IPKG_INSTROOT}/etc/config/firewall.1" "$${IPKG_INSTROOT}/etc/config/firewall"
 
 	#configuring dhcp/dnsmasq
-	rm "$${IPKG_INSTROOT}/etc/config/dhcp"
-	mv "$${IPKG_INSTROOT}/etc/config/dhcp.1" "$${IPKG_INSTROOT}/etc/config/dhcp"
+	#rm "$${IPKG_INSTROOT}/etc/config/dhcp"
+	#mv "$${IPKG_INSTROOT}/etc/config/dhcp.1" "$${IPKG_INSTROOT}/etc/config/dhcp"
 
 	#setting hostname, ip address, and wifi ssid
 	sed -i "s/option hostname	OpenWrt/option hostname	Arduino/" "$${IPKG_INSTROOT}/etc/config/system"

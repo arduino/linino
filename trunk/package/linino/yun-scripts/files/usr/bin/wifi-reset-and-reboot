@@ -13,11 +13,11 @@ $UCI set "network.lan.ipaddr=192.168.240.1"
 $UCI set "network.lan.netmask=255.255.255.0"
 $UCI set "network.lan.proto=static"
 
-$UCI add_list "dhcp.@dnsmasq[0].address=/#/192.168.240.1"
+#$UCI add_list "dhcp.@dnsmasq[0].address=/#/192.168.240.1"
 
 $UCI commit
 
-/bin/sed -i "s/#C:192.168/C:192.168/g" /etc/httpd.conf
+#/bin/sed -i "s/#C:192.168/C:192.168/g" /etc/httpd.conf
 
 /sbin/reboot
 
