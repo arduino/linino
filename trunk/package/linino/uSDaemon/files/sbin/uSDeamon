@@ -7,10 +7,26 @@ if [ "x$1" != "x" ];then
 	TIME=$1
 fi
 
+# The user can set its own USB geographical address.
+if [ "$USBDEVICEx" != "x" ];then
+	# This is the default address on
+	USBDEVICE="1-1.4:1.0"
+fi
+
+# Check if the USB storage device exists
+test -d /sys/bus/usb/drivers/usb-storage/$USBDEVICE
+if [ "$?" = "1" ]; then
+	echo "The USB storage device '$USBDEVICE' does not exist"
+	exit
+fi
+
+# Retrieve the block device name associated to the USB storage device
+PATHBLKDEV=$(ls -d /sys/bus/usb/drivers/usb-storage/$USBDEVICE/host?/target*/*/block/sd?)
+BLKDEV=$(basename $PATHBLKDEV)
 
 # On start verify if the SD card is connected. If the size is 0
 # it means that there is not an uSD card 
-size=$(cat /sys/bus/scsi/drivers/sd/0:0:0:0/block/sda/size)
+size=$(cat /sys/block/$BLKDEV/size)
 isconnected="0"
 if [ "$size" != "0" ]; then
 	isconnected="1"
@@ -19,9 +35,9 @@ fi
 deamon()
 {
 	# Check the SD device
-	blkid /dev/sda
+	blkid /dev/$BLKDEV
 	# Check if uSD card is there
-	size=$(cat /sys/bus/scsi/drivers/sd/0:0:0:0/block/sda/size)
+	size=$(cat /sys/block/$BLKDEV/size)
 	if [ "$size" == "0" ]; then
 		# If the previous run the uSD was plugged and now size is
 		# 0, it means that the user un-plugged the uSD card so
@@ -29,10 +45,10 @@ deamon()
 		# as disconnected
 		if [ "$isconnected" == "1" ]; then
 			isconnected="0"
-			for dev in $(ls /dev/sda?); do
+			for dev in $(ls /dev/$BLKDEV?); do
 				umount $dev
 			done
-			rmdir /mnt/sda?
+			rmdir /mnt/$BLKDEV?
 		fi
 	else
 		# The size is greater than 0, so mark the uSD card as
