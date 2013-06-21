@@ -46,6 +46,12 @@ define Package/yun-scripts/install
 	$(INSTALL_BIN) ./files/etc/init.d/delete_uhttpd_cert $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/etc/init.d/handle_wifi_reset $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/etc/init.d/rngd-turn-off $(1)/etc/init.d
+
+	$(INSTALL_DIR) $(1)/arduino
+	$(INSTALL_DIR) $(1)/usr/lib/lua
+
+	$(INSTALL_DATA) ./files/arduino/pretty_wifi_info.lua $(1)/arduino
+	$(INSTALL_DATA) ./files/usr/lib/lua/merge_sketch_with_bootloader.lua $(1)/usr/lib/lua
 endef
 
 $(eval $(call BuildPackage,yun-scripts))
