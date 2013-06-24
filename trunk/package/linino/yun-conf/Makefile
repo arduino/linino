@@ -85,6 +85,7 @@ if [ -n "$${IPKG_INSTROOT}" ]; then
 	sed -i "s/option location		Berlin/option location		Turin/" "$${IPKG_INSTROOT}/etc/config/uhttpd"
 	sed -i "s/option commonname	OpenWrt/option commonname	'Arduino LLC'/" "$${IPKG_INSTROOT}/etc/config/uhttpd"
 	sed -i "s/option rfc1918_filter 1/option rfc1918_filter 0/" "$${IPKG_INSTROOT}/etc/config/uhttpd"
+	sed -i "s/option max_requests 3/option max_requests 2/" "$${IPKG_INSTROOT}/etc/config/uhttpd"
 
 	#setting default root password
 	cp "$${IPKG_INSTROOT}/etc/shadow" "$${IPKG_INSTROOT}/etc/shadow-"
