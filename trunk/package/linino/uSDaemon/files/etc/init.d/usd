@@ -1,8 +1,8 @@
 #!/bin/sh /etc/rc.common
 # Copyright (C) 2013 DogHunter
 
-START=86
-STOP=86
+START=99
+STOP=99
 
 status() {
 	oi=$(pidof uSDaemon)
