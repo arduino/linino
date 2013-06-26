@@ -23,7 +23,7 @@ define Package/spacebrew
   SECTION:=net
   CATEGORY:=Network
   TITLE:= A toolkit for creating interactive spaces
-  DEPENDS:=+python-json
+  DEPENDS:=+python-mini +python-json
 endef
 
 define Package/spacebrew/description
@@ -38,7 +38,7 @@ define Package/spacebrew/install
 	$(INSTALL_DIR) $(1)/usr/lib/python2.7/websocket
 
 	$(CP) $(PKG_BUILD_DIR)/websocket/* $(1)/usr/lib/python2.7/websocket/
-	$(CP) $(PKG_BUILD_DIR)/spacebrew.py $(1)/usr/lib/python2.7/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/spacebrew.py $(1)/usr/lib/python2.7/
 endef
 
 $(eval $(call BuildPackage,spacebrew))
