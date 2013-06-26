@@ -1,0 +1,13 @@
+diff --git a/spacebrew.py b/spacebrew.py
+index a4cb84f..57bd222 100644
+--- a/spacebrew.py
++++ b/spacebrew.py
+@@ -1,7 +1,7 @@
+ #!/usr/bin/python
+ 
+ from websocket import websocket
+-from bridge import json
++import json
+ import time
+ 
+ class Spacebrew(object):
