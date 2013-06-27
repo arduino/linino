@@ -27,9 +27,11 @@ endef
 define Package/uSDaemon/install
 	$(INSTALL_DIR) $(1)/sbin/
 	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_DIR) $(1)/lib/functions
 
 	$(INSTALL_BIN) ./files/sbin/uSDaemon $(1)/sbin/
 	$(INSTALL_BIN) ./files/etc/init.d/usd $(1)/etc/init.d
+	$(INSTALL_DATA) ./files/lib/functions/post_mount.sh $(1)/lib/functions
 
 	$(INSTALL_DIR) $(1)/etc/config
 	$(INSTALL_CONF) ./files/etc/config/fstab.1 $(1)/etc/config/

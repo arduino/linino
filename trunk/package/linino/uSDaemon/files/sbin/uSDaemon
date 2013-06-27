@@ -1,5 +1,7 @@
 #!/bin/sh
 
+. /lib/functions/post_mount.sh
+
 TIME=2
 
 # $1 must be a valid parameter for sleep
@@ -48,6 +50,7 @@ umount_disconnected_devices()
 				umount $dev
 			done
 			rmdir /mnt/$sd_name?
+			post_auto_umount
 		fi
 	done
 }
