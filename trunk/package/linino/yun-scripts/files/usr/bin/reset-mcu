@@ -1,0 +1,7 @@
+#!/bin/sh
+
+echo 7 > /sys/class/gpio/export
+echo 1 > /sys/class/gpio/gpio7/value
+echo 0 > /sys/class/gpio/gpio7/value
+echo 7 > /sys/class/gpio/unexport
+
