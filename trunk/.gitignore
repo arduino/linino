@@ -21,3 +21,6 @@
 *#
 .emacs.desktop*
 TAGS*~
+delete_ours.sh
+update_feeds.sh
+package/linino/yun-conf/files/etc/arduino/arduino_gpg.*
