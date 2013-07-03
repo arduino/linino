@@ -77,6 +77,9 @@ define Package/opkg/install
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_DIR) $(1)/etc/opkg
 	$(INSTALL_DATA) ./files/opkg.conf $(1)/etc/
+	$(INSTALL_DATA) ./files/secring.gpg $(1)/etc/opkg/
+	$(INSTALL_DATA) ./files/trustdb.gpg $(1)/etc/opkg/
+	$(INSTALL_DATA) ./files/trusted.gpg $(1)/etc/opkg/
 	$(VERSION_SED) $(1)/etc/opkg.conf
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/opkg-cl $(1)/bin/opkg
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/opkg-key $(1)/bin/
