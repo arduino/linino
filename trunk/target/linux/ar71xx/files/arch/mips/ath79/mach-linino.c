@@ -25,7 +25,7 @@
 // Uncomment to use for DS1 board
 //#define DS1
 // Uncomment to have reset on gpio18 instead of gipo7
-//#define DS2_B
+#define DS2_B
 
 #define DS_GPIO_LED_WLAN		0
 #define DS_GPIO_LED_USB			1
@@ -40,6 +40,7 @@
 #ifdef DS1
 #define DS_GPIO_OE2			23
 #else
+#define DS_GPIO_OE2                     22
 #define DS_GPIO_UART_ENA		23
 #define DS_GPIO_CONF_BTN		20
 #define DS_GPIO_LED_SPD			22
@@ -165,6 +166,12 @@ static void __init ds_setup(void)
         if (gpio_request_one(DS_GPIO_UART_ENA,
                  GPIOF_OUT_INIT_LOW | GPIOF_EXPORT_DIR_FIXED,
                  "UART-ENA") != 0)
+                printk("Error setting GPIO Uart Enable\n");
+        
+	// enable OE of level shifter
+        if (gpio_request_one(DS_GPIO_OE2,
+                 GPIOF_OUT_INIT_LOW | GPIOF_EXPORT_DIR_FIXED,
+                 "OE-2") != 0)
                 printk("Error setting GPIO OE2\n");
 #endif
 }
