@@ -1,5 +1,15 @@
 #!/bin/sh
 
+# Copyright (C) 2013 DogHunter
+#
+# This is the uSDaemon. It is a little daemon used to automatically discover
+# the uSD card presence in the on-board reader. The default configuration of
+# this daemon *only* look for the specific USB-uSD-reader that is welded at
+# the USB geographical address '1-1.4:1.0'. The user can change the
+# evironment variable 'USBDEVICE' to work with another address. The daemon
+# is limited in this way because external USB devices work with the
+# 'block-mount' package within OpenWRT
+
 . /lib/functions/post_mount.sh
 
 TIME=2
