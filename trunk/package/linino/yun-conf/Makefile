@@ -31,9 +31,6 @@ define Build/Compile
 endef
 
 define Package/yun-conf/install
-	$(INSTALL_DIR) $(1)/arduino
-	$(INSTALL_DIR) $(1)/arduino/temboo
-
 	$(INSTALL_DIR) $(1)/etc/avahi/services
 	$(INSTALL_DIR) $(1)/etc/arduino
 	$(INSTALL_DIR) $(1)/etc/config

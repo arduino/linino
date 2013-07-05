@@ -1,3 +1,5 @@
+#!/usr/bin/lua
+
 local function get_basic_net_info(network, iface, accumulator)
   local net = network:get_network(iface)
   local device = net and net:get_interface()

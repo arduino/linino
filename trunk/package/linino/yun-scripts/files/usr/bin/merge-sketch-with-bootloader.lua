@@ -1,3 +1,5 @@
+#!/usr/bin/lua
+
 if #arg ~= 1 then
   print("Missing sketch file name")
   return 1
