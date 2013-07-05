@@ -11,11 +11,8 @@ PKG_NAME:=temboo
 PKG_VERSION:=1.0.0
 PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=git@github.com:temboo/yun-examples.git
-PKG_SOURCE_SUBDIR:=temboo-$(PKG_VERSION)
-PKG_SOURCE_VERSION:=6fd036f55862d41cf6237615d69008b0218e9d13
-PKG_SOURCE_PROTO:=git
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_SOURCE_URL:=http://downloads.arduino.cc/
 
 include $(INCLUDE_DIR)/package.mk
 
