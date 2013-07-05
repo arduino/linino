@@ -176,5 +176,5 @@ static void __init ds_setup(void)
 #endif
 }
 
-MIPS_MACHINE(ATH79_MACH_Linino, "Linino", "Linino reference board",
+MIPS_MACHINE(ATH79_MACH_Linino, "Linino", "Arduino Yun",
 	     ds_setup);

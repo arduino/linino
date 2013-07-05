@@ -6,12 +6,12 @@
 #
 
 define Profile/Linino
-	NAME:=Linino reference board based on Atheros AR9331
+	NAME:=Arduino Yun based on Atheros AR9331
 	PACKAGES:=kmod-usb-core kmod-usb2
 endef
 
 define Profile/Linino/Description
-	Package set optimized for the Linino reference board.
+	Package set optimized for the Arduino Yun.
 endef
 
 $(eval $(call Profile,Linino))
