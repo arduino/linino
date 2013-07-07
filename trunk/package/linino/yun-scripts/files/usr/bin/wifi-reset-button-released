@@ -5,7 +5,7 @@ logger "wifi reset button released"
 if [ ! -f /tmp/wifi.reset ]
 then
 	logger "no previous /tmp/wifi.reset file found. exiting"
-        exit 0
+	exit 0
 fi
 
 released_at=`date +%s`
@@ -18,14 +18,16 @@ logger "wifi reset button pressed for $pressed_for"
 if [ $pressed_for -gt 28 ]
 then
 	logger "resetting to factory"
-        reset-to-factory-anyway && reboot
+	sleep 2
+	reset-to-factory-anyway && reboot
 	exit 0
-fi   
+fi
  
 if [ $pressed_for -gt 3 ]
 then
 	logger "resetting wifi"
-        wifi-reset-and-reboot
+	sleep 2
+	wifi-reset-and-reboot
 	exit 0
 fi
 
