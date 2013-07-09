@@ -2,5 +2,5 @@
 
 cd /usr/lib/python2.7/bridge
 
-exec nice -n 10 python -B bridge.py 2> /tmp/bridge.py-stderr.log
+exec nice -n 10 python -B bridge.pyc 2> /tmp/bridge.py-stderr.log
 
