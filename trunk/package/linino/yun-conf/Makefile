@@ -51,6 +51,8 @@ define Package/yun-conf/install
 	sed -i "s/DATE/`date`/g" $(1)/etc/arduino/linino-arduino-release
 	$(INSTALL_CONF) ./files/etc/arduino/gpg_gen_key_batch $(1)/etc/arduino/
 	$(INSTALL_DATA) ./files/etc/arduino/wifi_timezones.csv.gz $(1)/etc/arduino
+	$(INSTALL_DATA) ./files/etc/arduino/wifi_error_statuses.csv.gz $(1)/etc/arduino
+	$(INSTALL_DATA) ./files/etc/arduino/wifi_error_reasons.csv.gz $(1)/etc/arduino
 endef
 
 define Package/yun-conf/postinst
