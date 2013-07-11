@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=yun-conf
 PKG_VERSION:=1.0.0
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -35,6 +35,7 @@ define Package/yun-conf/install
 	$(INSTALL_DIR) $(1)/etc/arduino
 	$(INSTALL_DIR) $(1)/etc/config
 	$(INSTALL_DIR) $(1)/etc/triggerhappy/triggers.d
+	$(INSTALL_DIR) $(1)/etc/linino
 
 	$(INSTALL_CONF) ./files/etc/avahi/services/arduino.service $(1)/etc/avahi/services/
 	$(INSTALL_CONF) ./files/etc/triggerhappy/triggers.d/reset.conf $(1)/etc/triggerhappy/triggers.d
@@ -53,6 +54,9 @@ define Package/yun-conf/install
 	$(INSTALL_DATA) ./files/etc/arduino/wifi_timezones.csv.gz $(1)/etc/arduino
 	$(INSTALL_DATA) ./files/etc/arduino/wifi_error_statuses.csv.gz $(1)/etc/arduino
 	$(INSTALL_DATA) ./files/etc/arduino/wifi_error_reasons.csv.gz $(1)/etc/arduino
+
+	$(INSTALL_CONF) ./files/etc/openwrt_version $(1)/etc/
+	$(INSTALL_CONF) ./files/etc/linino/* $(1)/etc/linino/
 endef
 
 define Package/yun-conf/postinst
@@ -70,7 +74,7 @@ if [ -n "$${IPKG_INSTROOT}" ]; then
 	#mv "$${IPKG_INSTROOT}/etc/config/dhcp.1" "$${IPKG_INSTROOT}/etc/config/dhcp"
 
 	#setting hostname, ip address, and wifi ssid
-	sed -i "s/option hostname	OpenWrt/option hostname	Arduino/" "$${IPKG_INSTROOT}/etc/config/system"
+	sed -i "s/option hostname	OpenWrt/option hostname	linino/" "$${IPKG_INSTROOT}/etc/config/system"
 	sed -i "s/option ssid     Linino/option ssid     Arduino/" "$${IPKG_INSTROOT}/etc/config/wireless"
 	sed -i "s/192.168.1.1/192.168.240.1/" "$${IPKG_INSTROOT}/lib/functions/uci-defaults.sh"
 	sed -i "s/set network.lan.ifname/#set network.lan.ifname/" "$${IPKG_INSTROOT}/lib/functions/uci-defaults.sh"
