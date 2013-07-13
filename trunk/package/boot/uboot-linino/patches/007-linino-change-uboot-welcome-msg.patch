@@ -5,7 +5,7 @@
  {
  #if (BOARD_STRING == WAPI)
 -    strcpy(board_string, "AP121 (ar9331) U-boot");
-+    strcpy(board_string, "Arduino Yun (ar9331) U-boot");
++    strcpy(board_string, "Linino Board (ar9331) U-boot");
  #else
      strcpy(board_string, "AP121-2MB (ar9330) U-boot");
  #endif
