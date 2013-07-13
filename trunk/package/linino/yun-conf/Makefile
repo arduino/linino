@@ -56,7 +56,12 @@ define Package/yun-conf/install
 	$(INSTALL_DATA) ./files/etc/arduino/wifi_error_reasons.csv.gz $(1)/etc/arduino
 
 	$(INSTALL_CONF) ./files/etc/openwrt_version $(1)/etc/
-	$(INSTALL_CONF) ./files/etc/linino/* $(1)/etc/linino/
+	$(INSTALL_DATA) ./files/etc/linino/Etheris_115200.hex $(1)/etc/linino/
+	$(INSTALL_DATA) ./files/etc/linino/fuses.txt $(1)/etc/linino/
+	$(INSTALL_DATA) ./files/etc/linino/LININO_CONTRIBUTORS.TXT $(1)/etc/linino/
+	$(INSTALL_DATA) ./files/etc/linino/YunSerialTerminal.hex $(1)/etc/linino/
+	$(INSTALL_BIN) ./files/etc/linino/prog_console.sh $(1)/etc/linino/
+	$(INSTALL_BIN) ./files/etc/linino/test_avrdude.sh $(1)/etc/linino/
 endef
 
 define Package/yun-conf/postinst
@@ -101,4 +106,3 @@ fi
 endef
 
 $(eval $(call BuildPackage,yun-conf))
-
