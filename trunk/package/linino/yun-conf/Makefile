@@ -55,13 +55,7 @@ define Package/yun-conf/install
 	$(INSTALL_DATA) ./files/etc/arduino/wifi_error_statuses.csv.gz $(1)/etc/arduino
 	$(INSTALL_DATA) ./files/etc/arduino/wifi_error_reasons.csv.gz $(1)/etc/arduino
 
-	$(INSTALL_CONF) ./files/etc/openwrt_version $(1)/etc/
-	$(INSTALL_DATA) ./files/etc/linino/Etheris_115200.hex $(1)/etc/linino/
-	$(INSTALL_DATA) ./files/etc/linino/fuses.txt $(1)/etc/linino/
 	$(INSTALL_DATA) ./files/etc/linino/LININO_CONTRIBUTORS.TXT $(1)/etc/linino/
-	$(INSTALL_DATA) ./files/etc/linino/YunSerialTerminal.hex $(1)/etc/linino/
-	$(INSTALL_BIN) ./files/etc/linino/prog_console.sh $(1)/etc/linino/
-	$(INSTALL_BIN) ./files/etc/linino/test_avrdude.sh $(1)/etc/linino/
 endef
 
 define Package/yun-conf/postinst
@@ -79,7 +73,7 @@ if [ -n "$${IPKG_INSTROOT}" ]; then
 	#mv "$${IPKG_INSTROOT}/etc/config/dhcp.1" "$${IPKG_INSTROOT}/etc/config/dhcp"
 
 	#setting hostname, ip address, and wifi ssid
-	sed -i "s/option hostname	OpenWrt/option hostname	linino/" "$${IPKG_INSTROOT}/etc/config/system"
+	sed -i "s/option hostname	OpenWrt/option hostname	Arduino/" "$${IPKG_INSTROOT}/etc/config/system"
 	sed -i "s/option ssid     Linino/option ssid     Arduino/" "$${IPKG_INSTROOT}/etc/config/wireless"
 	sed -i "s/192.168.1.1/192.168.240.1/" "$${IPKG_INSTROOT}/lib/functions/uci-defaults.sh"
 	sed -i "s/set network.lan.ifname/#set network.lan.ifname/" "$${IPKG_INSTROOT}/lib/functions/uci-defaults.sh"
