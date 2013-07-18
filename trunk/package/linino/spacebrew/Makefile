@@ -14,7 +14,7 @@ PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=git://github.com/julioterra/yunSpacebrew.git
 PKG_SOURCE_SUBDIR:=spacebrew-$(PKG_VERSION)
-PKG_SOURCE_VERSION:=9a6869aed92cd155cdb4112c0a273f14fe9a0121
+PKG_SOURCE_VERSION:=999df32c663bcfa7cfb9ce3da84d94d59ce761d7
 PKG_SOURCE_PROTO:=git
 
 include $(INCLUDE_DIR)/package.mk
@@ -36,9 +36,13 @@ endef
 
 define Package/spacebrew/install
 	$(INSTALL_DIR) $(1)/usr/lib/python2.7/websocket
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/linino/websocket/* $(1)/usr/lib/python2.7/websocket/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/linino/websocket/websocket.py $(1)/usr/lib/python2.7/websocket/
 
-	$(CP) $(PKG_BUILD_DIR)/websocket/* $(1)/usr/lib/python2.7/websocket/
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/spacebrew.py $(1)/usr/lib/python2.7/
+	$(INSTALL_DIR) $(1)/usr/lib/python2.7/spacebrew
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/linino/spacebrew/* $(1)/usr/lib/python2.7/spacebrew/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/linino/spacebrew/spacebrew.py $(1)/usr/lib/python2.7/spacebrew/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/linino/spacebrew/getProcPid.py $(1)/usr/lib/python2.7/spacebrew/
 endef
 
 $(eval $(call BuildPackage,spacebrew))
