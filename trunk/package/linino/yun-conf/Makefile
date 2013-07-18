@@ -78,6 +78,7 @@ if [ -n "$${IPKG_INSTROOT}" ]; then
 	sed -i "s/192.168.1.1/192.168.240.1/" "$${IPKG_INSTROOT}/lib/functions/uci-defaults.sh"
 	sed -i "s/set network.lan.ifname/#set network.lan.ifname/" "$${IPKG_INSTROOT}/lib/functions/uci-defaults.sh"
 	sed -i "s/set network.lan.type/#set network.lan.type/" "$${IPKG_INSTROOT}/lib/functions/uci-defaults.sh"
+	sed -i "s/set network.wan.proto='dhcp'/set network.wan.proto='dhcp'\nset network.wan.metric='10'/" "$${IPKG_INSTROOT}/lib/functions/uci-defaults.sh"
 	sed -i "s/\*wpa_supplicant\*/\*wpa_supplicant\*\|\*udhcpc\*/" "$${IPKG_INSTROOT}/lib/upgrade/common.sh"
 
 	sed -i "s/option days		730/option days		36500/" "$${IPKG_INSTROOT}/etc/config/uhttpd"
