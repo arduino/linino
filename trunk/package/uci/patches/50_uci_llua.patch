@@ -1,0 +1,11 @@
+--- a/lua/CMakeLists.txt
++++ b/lua/CMakeLists.txt
+@@ -48,7 +48,7 @@ IF(BUILD_LUA)
+ 		OUTPUT_NAME uci
+ 		PREFIX ""
+ 	)
+-	TARGET_LINK_LIBRARIES(uci_lua uci dl)
++	TARGET_LINK_LIBRARIES(uci_lua uci dl lua)
+ 
+ 	INSTALL(TARGETS uci_lua
+ 		LIBRARY DESTINATION ${LUAPATH}

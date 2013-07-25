@@ -1,0 +1,12 @@
+--- a/libs/sgi-uhttpd/luasrc/sgi/uhttpd.lua
++++ b/libs/sgi-uhttpd/luasrc/sgi/uhttpd.lua
+@@ -93,7 +93,7 @@ function handle_request(env)
+ 
+                if active then
+                        if id == 1 then
+-                               send(env.SERVER_PROTOCOL)
++                               send("Status: ")
+                                send(" ")
+                                send(tostring(data1))
+                                send(" ")
+

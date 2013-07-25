@@ -1,0 +1,11 @@
+--- a/libs/web/Makefile
++++ b/libs/web/Makefile
+@@ -6,7 +6,7 @@ else
+ include standalone.mk
+ endif
+ 
+-TPL_LDFLAGS    =
++TPL_LDFLAGS    = -llua
+ TPL_CFLAGS     =
+ TPL_SO         = parser.so
+ TPL_PO2LMO     = po2lmo

@@ -1,0 +1,11 @@
+--- a/libs/nixio/Makefile
++++ b/libs/nixio/Makefile
+@@ -12,7 +12,7 @@ AXTLS_FILE    = $(AXTLS_DIR)-$(AXTLS_VER
+ #NIXIO_TLS    ?= openssl
+ NIXIO_SHADOW ?= $(shell echo 'int main(void){ return !getspnam("root"); }' | $(CC) $(CFLAGS) -include shadow.h -xc -o/dev/null - 2>/dev/null && echo yes)
+ NIXIO_SO      = nixio.so
+-NIXIO_LDFLAGS =
++NIXIO_LDFLAGS = -llua
+ 
+ ifeq (,$(findstring Darwin,$(OS)))
+ 	NIXIO_LDFLAGS += -lcrypt
