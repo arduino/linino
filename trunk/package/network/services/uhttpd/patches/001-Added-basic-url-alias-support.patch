@@ -1,3 +1,16 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index ec45c52..871dd5e 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -21,7 +21,7 @@ IF(LIBS STREQUAL "LIBS-NOTFOUND")
+ 	SET(LIBS "")
+ ENDIF()
+ 
+-SET(SOURCES main.c listen.c client.c utils.c file.c auth.c cgi.c relay.c proc.c plugin.c)
++SET(SOURCES main.c listen.c client.c utils.c file.c alias.c auth.c cgi.c relay.c proc.c plugin.c)
+ IF(TLS_SUPPORT)
+ 	SET(SOURCES ${SOURCES} tls.c)
+ 	ADD_DEFINITIONS(-DHAVE_TLS)
 diff --git a/alias.c b/alias.c
 new file mode 100644
 index 0000000..029597a
@@ -46,10 +59,42 @@ index 0000000..029597a
 +}
 +
 diff --git a/file.c b/file.c
-index f16b893..8ff2c97 100644
+index f16b893..1398396 100644
 --- a/file.c
 +++ b/file.c
-@@ -801,9 +801,13 @@ void uh_handle_request(struct client *cl)
+@@ -661,9 +661,11 @@ dispatch_find(const char *url, struct path_info *pi)
+ }
+ 
+ static void
+-uh_invoke_script(struct client *cl, struct dispatch_handler *d, struct path_info *pi)
++uh_invoke_script(struct client *cl, struct dispatch_handler *d, char *url, struct path_info *pi)
+ {
+-	char *url = blobmsg_data(blob_data(cl->hdr.head));
++	if (url == NULL) {
++		url = blobmsg_data(blob_data(cl->hdr.head));
++	}
+ 
+ 	n_requests++;
+ 	d->handle_request(cl, url, pi);
+@@ -683,7 +685,7 @@ static void uh_complete_request(struct client *cl)
+ 		list_del(&dr->list);
+ 
+ 		dr->called = true;
+-		uh_invoke_script(dr->cl, dr->d, dr->path ? &dr->pi : NULL);
++		uh_invoke_script(dr->cl, dr->d, NULL, dr->path ? &dr->pi : NULL);
+ 	}
+ }
+ 
+@@ -757,7 +759,7 @@ uh_invoke_handler(struct client *cl, struct dispatch_handler *d, char *url, stru
+ 		return uh_defer_script(cl, d, pi);
+ 
+ 	cl->dispatch.req_free = uh_complete_request;
+-	uh_invoke_script(cl, d, pi);
++	uh_invoke_script(cl, d, url, pi);
+ }
+ 
+ static bool __handle_file_request(struct client *cl, char *url)
+@@ -801,9 +803,13 @@ void uh_handle_request(struct client *cl)
  {
  	struct http_request *req = &cl->request;
  	struct dispatch_handler *d;
@@ -96,16 +141,3 @@ index d6b6985..0fe7be4 100644
  void uh_auth_add(const char *path, const char *user, const char *pass);
  bool uh_auth_check(struct client *cl, struct path_info *pi);
  
-diff --git a/CMakeLists.txt b/CMakeLists.txt
-index ec45c52..871dd5e 100644
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
-@@ -21,7 +21,7 @@ IF(LIBS STREQUAL "LIBS-NOTFOUND")
- 	SET(LIBS "")
- ENDIF()
- 
--SET(SOURCES main.c listen.c client.c utils.c file.c auth.c cgi.c relay.c proc.c plugin.c)
-+SET(SOURCES main.c listen.c client.c utils.c file.c alias.c auth.c cgi.c relay.c proc.c plugin.c)
- IF(TLS_SUPPORT)
- 	SET(SOURCES ${SOURCES} tls.c)
- 	ADD_DEFINITIONS(-DHAVE_TLS)
