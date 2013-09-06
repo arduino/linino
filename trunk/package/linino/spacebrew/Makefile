@@ -14,7 +14,7 @@ PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=git://github.com/julioterra/yunSpacebrew.git
 PKG_SOURCE_SUBDIR:=spacebrew-$(PKG_VERSION)
-PKG_SOURCE_VERSION:=716e528fe7b1e3d2c631b28f95e32f302e4973ab
+PKG_SOURCE_VERSION:=d05bfb3cb609d04e3e2fcbe10367fa7177cf8c2e
 PKG_SOURCE_PROTO:=git
 
 include $(INCLUDE_DIR)/package.mk
@@ -42,10 +42,9 @@ define Package/spacebrew/install
 	$(INSTALL_DIR) $(1)/usr/lib/python2.7/spacebrew
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/linino/spacebrew/* $(1)/usr/lib/python2.7/spacebrew/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/linino/spacebrew/spacebrew.py $(1)/usr/lib/python2.7/spacebrew/
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/linino/spacebrew/getProcPid.py $(1)/usr/lib/python2.7/spacebrew/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/linino/spacebrew/getprocpid.py $(1)/usr/lib/python2.7/spacebrew/
 
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/linino/shell/run-getsbpids $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/linino/shell/run-spacebrew $(1)/usr/bin
 endef
 
