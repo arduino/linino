@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=cpu-mcu-bridge
-PKG_VERSION:=1.0.0
+PKG_VERSION:=1.1.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://downloads.arduino.cc/
-#PKG_MD5SUM:=58133f3bb176ca54cfab7432fe22517c
+PKG_MD5SUM:=c332dfeafbc44ac2e5feed0c18720378
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -34,11 +34,10 @@ endef
 
 define Package/cpu-mcu-bridge/install
 	$(INSTALL_DIR) $(1)/usr/lib/python2.7/bridge
-
-	$(RM) $(PKG_BUILD_DIR)/{contextlib,tty}.py*
-	$(RM) $(PKG_BUILD_DIR)/termios.so
-
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/*.py $(1)/usr/lib/python2.7/bridge
+
+	$(INSTALL_DIR) $(1)/usr/lib/php/bridge
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/php/*.php $(1)/usr/lib/php/bridge
 endef
 
 $(eval $(call BuildPackage,cpu-mcu-bridge))
